@@ -4,7 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Sportplan — a minimalist offline strength-training tracker for iPhone (SwiftUI). No accounts, no server, no subscriptions. iOS 26+, iPhone only, portrait only. The Xcode project does not exist yet; it is created at stage 1 (skeleton). Update the "Build & run" section once it does.
+Sportplan — a minimalist offline strength-training tracker for iPhone (SwiftUI). No accounts, no server, no subscriptions. iOS 26+, iPhone only, portrait only, Swift 6. App target `sportplan`, bundle id `com.rgorbachev.sportplan`, project `sportplan.xcodeproj` (Xcode 27 text format `project.xcproj`; JSON-like, schema at github.com/apple/xcode-project-format; build settings, targets and package references can be edited there directly — a local package product is linked with `{ "kind": "package", "package": "SportplanKit", "product-name": "X" }` in `dependencies` plus a matching `package-product-members` entry with `"build-phase": { "build-phase": "frameworks" }`; unknown keys are silently ignored, so verify with `xcodebuild` after editing).
+
+Layout:
+- `sportplan/` — app target (file-system-synchronized folder: a new `.swift` file under it is added automatically). `SportplanApp.swift`, `di/`, `presentation/`, `Localizable.xcstrings` (source language `ru`).
+- `Packages/SportplanKit/` — local package with `Domain` and `DesignSystem` libraries and their test targets.
+- `sportplanTests/` — app unit tests (Swift Testing).
 
 Source documents:
 - `docs/code-brief.md` — approved scope, architecture, data model.
@@ -89,6 +94,27 @@ GRDB (SQLite) is the only third-party dependency. Schema v1 is described in `doc
 - Distribution uses a free Apple ID (personal team): do not add capabilities it does not support (iCloud/CloudKit, push notifications, App Groups).
 - Tests use Swift Testing (`@Test`). Domain logic is covered by unit tests in the package; repositories are tested against an in-memory GRDB database.
 
+## Design system
+
+- `Palette` tokens are dynamic colors built with `Color(light:dark:)` (hex values from `.design/system/Color`). That initializer is the only place with `#if canImport(UIKit)`, so the package also builds on macOS for `swift test`.
+- `Typography` holds `TypeStyle` values applied with `.appStyle(...)`; numeral styles use tabular digits. Line heights are stored in the tokens but not applied yet.
+- `Spacing` (`xxs` 4 … `xxxl` 40, `emptyState` 56) and `CornerRadius` (`chip` 6, `field` 14, `card` 20, `sheet` 28). Round action buttons use `Circle`/`Capsule`, not a radius token.
+- Fonts: static Unbounded 500/600 and Onest 400/500/600 in `DesignSystem/Resources/Fonts` (with OFL licenses), instanced from the Google Fonts variable files with fontTools. `FontRegistry.registerFonts()` registers them from the package bundle and is called in `SportplanApp.init`; previews call it themselves.
+- `TokenCatalogView` (`#Preview` only) shows all tokens for comparison with the canvas.
+
 ## Build & run
 
-Not available yet — the Xcode project is created at stage 1. Do not invent commands until then.
+```bash
+# Build the app for the simulator
+xcodebuild -project sportplan.xcodeproj -scheme sportplan \
+  -destination 'platform=iOS Simulator,name=iPhone 18 Pro' build
+
+# App unit tests
+xcodebuild test -project sportplan.xcodeproj -scheme sportplan \
+  -destination 'platform=iOS Simulator,name=iPhone 18 Pro'
+
+# Package tests (Domain, DesignSystem) on the macOS host
+cd Packages/SportplanKit && swift test
+```
+
+Installed simulators are iOS 27 only; checking the iOS 26 minimum needs the iOS 26 simulator runtime. No linter is configured.
