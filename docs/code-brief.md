@@ -112,7 +112,7 @@
 ## Стек
 
 - Swift, SwiftUI, Observation (`@Observable`), async/await.
-- GRDB (SQLite) — единственная сторонняя зависимость, через SwiftPM.
+- GRDB 7 (SQLite) — единственная сторонняя зависимость, через SwiftPM («до следующей мажорной»), только в таргете приложения. В приложении `DatabasePool` (WAL) с файлом в Application Support, в тестах in-memory `DatabaseQueue`.
 - Swift Charts для графиков.
 - ActivityKit и Widget Extension для Live Activity.
 - UserNotifications для конца отдыха.
@@ -138,7 +138,7 @@
 ## Модель данных (v1)
 
 Соглашения:
-- Ключи — UUID (стабильны при экспорте и импорте).
+- Ключи — UUID, хранятся текстом (стабильны при экспорте и импорте, читаемы при отладке).
 - Вес — целые **граммы** (`INTEGER`), в домене тип `Weight` с форматированием. Переключатель на lb, если появится, не потребует миграции.
 - Порядок — `position INTEGER`.
 - Даты — UTC; дни для heatmap группируются в Swift по локальному календарю.
@@ -151,20 +151,25 @@ equipment          id, name, kind, base_weight_g (0), weight_step_g, is_archived
 exercise           id, name, description?, equipment_id? → equipment RESTRICT,
                    metric (weight_reps | duration), rest_sec (90), is_archived, created_at
 program            id, name, position, created_at
-program_day        id, program_id → program CASCADE, name, position
+program_day        id, program_id → program CASCADE, name, label?, position
 planned_exercise   id, program_day_id → program_day CASCADE, exercise_id → exercise RESTRICT,
                    position, target_sets, target_reps_min?, target_reps_max?, rest_sec
 workout            id, program_day_id? → program_day SET NULL, program_day_name? (копия),
-                   started_at, finished_at?, note?
+                   program_day_label? (копия), started_at, finished_at?, note?,
+                   rest_started_at?, rest_ends_at?
 workout_exercise   id, workout_id → workout CASCADE, exercise_id → exercise RESTRICT,
                    position, target_sets?, target_reps_min?, target_reps_max?, rest_sec
 set_entry          id, workout_exercise_id → workout_exercise CASCADE, position,
-                   weight_g (0), reps?, duration_sec?, is_warmup, completed_at?
+                   weight_g (0), reps?, duration_sec?, is_warmup, started_at?, completed_at?
 plate              id, weight_g UNIQUE CHECK(250…50000), color_hex
 ```
 
 - Индексы: все FK, `workout(started_at)`, частичный уникальный индекс `workout WHERE finished_at IS NULL` — активная тренировка одна, это гарантирует сама база.
-- Удаление или изменение программы не ломает историю: `workout` хранит копию названия дня, `workout_exercise` — копию целей.
+- Удаление или изменение программы не ломает историю: `workout` хранит копию названия и метки дня, `workout_exercise` — копию целей.
+- День программы: `name` обязательно («Грудь и трицепс»), `label` — необязательная короткая метка («A»). Без метки везде показывается название.
+- Таймер отдыха: `rest_started_at` и `rest_ends_at` у активной тренировки. ±15 с сдвигает конец, «Пропустить» обнуляет оба поля, прогресс «из 2:00» — разница дат.
+- Секундомер подхода на время: `set_entry.started_at` пишется при старте, при остановке — `duration_sec` и `completed_at`; переживает перезапуск.
+- Блины IWF вставляет миграция v1 из константы в `Domain`; «Сбросить к стандарту IWF» использует ту же константу.
 - Рекорды и «прошлый результат» вычисляются запросами и в Swift, отдельно не хранятся (при проблемах с производительностью можно кешировать).
 - Глобальных настроек в БД нет; `UserDefaults` — только для мелочей интерфейса.
 
