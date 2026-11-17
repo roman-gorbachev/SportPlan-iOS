@@ -1,10 +1,10 @@
 import SwiftUI
 
 public enum Typography {
-    public static let numeralHero = TypeStyle(face: .unboundedSemiBold, size: 56, lineHeight: 60, relativeTo: .largeTitle, usesTabularDigits: true)
-    public static let numeralL = TypeStyle(face: .unboundedSemiBold, size: 36, lineHeight: 40, relativeTo: .title, usesTabularDigits: true)
-    public static let numeralM = TypeStyle(face: .unboundedSemiBold, size: 26, lineHeight: 30, relativeTo: .title2, usesTabularDigits: true)
-    public static let numeralS = TypeStyle(face: .unboundedMedium, size: 17, lineHeight: 22, relativeTo: .headline, usesTabularDigits: true)
+    public static let numeralHero = TypeStyle(face: .sofiaSansCondensedSemiBold, size: 56, lineHeight: 60, relativeTo: .largeTitle, usesTabularDigits: true)
+    public static let numeralL = TypeStyle(face: .sofiaSansCondensedSemiBold, size: 36, lineHeight: 40, relativeTo: .title, usesTabularDigits: true)
+    public static let numeralM = TypeStyle(face: .sofiaSansCondensedSemiBold, size: 26, lineHeight: 30, relativeTo: .title2, usesTabularDigits: true)
+    public static let numeralS = TypeStyle(face: .sofiaSansCondensedMedium, size: 17, lineHeight: 22, relativeTo: .headline, usesTabularDigits: true)
 
     public static let largeTitle = TypeStyle(face: .onestSemiBold, size: 34, lineHeight: 41, relativeTo: .largeTitle, usesTabularDigits: false)
     public static let title = TypeStyle(face: .onestSemiBold, size: 22, lineHeight: 28, relativeTo: .title2, usesTabularDigits: false)

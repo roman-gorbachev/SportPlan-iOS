@@ -99,7 +99,7 @@ GRDB (SQLite) is the only third-party dependency. Schema v1 is described in `doc
 - `Palette` tokens are dynamic colors built with `Color(light:dark:)` (hex values from `.design/system/Color`). That initializer is the only place with `#if canImport(UIKit)`, so the package also builds on macOS for `swift test`.
 - `Typography` holds `TypeStyle` values applied with `.appStyle(...)`; numeral styles use tabular digits. Line heights are stored in the tokens but not applied yet.
 - `Spacing` (`xxs` 4 … `xxxl` 40, `emptyState` 56) and `CornerRadius` (`chip` 6, `field` 14, `card` 20, `sheet` 28). Round action buttons use `Circle`/`Capsule`, not a radius token.
-- Fonts: static Unbounded 500/600 and Onest 400/500/600 in `DesignSystem/Resources/Fonts` (with OFL licenses), instanced from the Google Fonts variable files with fontTools. `FontRegistry.registerFonts()` registers them from the package bundle and is called in `SportplanApp.init`; previews call it themselves.
+- Fonts: static Sofia Sans Condensed 500/600 (numerals) and Onest 400/500/600 (text) in `DesignSystem/Resources/Fonts` (with OFL licenses), instanced from the Google Fonts variable files with fontTools. `FontRegistry.registerFonts()` registers them from the package bundle and is called in `SportplanApp.init`; previews call it themselves.
 - `TokenCatalogView` (`#Preview` only) shows all tokens for comparison with the canvas.
 
 ## Build & run
