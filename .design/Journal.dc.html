@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Концепция 02 — Журнал</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Caveat:wght@500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#B8382B}a:hover{color:#1C1F24}
+</style>
+</helmet>
+<div style="width: 1480px; height: 900px; box-sizing: border-box; padding: 64px; display: grid; grid-template-columns: 480px minmax(0, 1fr); column-gap: 56px; background: #EAE5D8; color: #1C1F24; font-family: 'Literata', serif">
+
+<div style="display: flex; flex-direction: column; gap: 40px">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #4F545B">Концепция 02</span>
+<h1 style="margin: 0; font-size: 60px; font-weight: 600; line-height: 1.05; letter-spacing: -0.01em">Журнал</h1>
+<p style="margin: 0; font-size: 18px; line-height: 1.55; color: #2C3036">Тетрадь тренера, а не фитнес-приложение. Линейка, моноширинные цифры и плотная таблица: за секунду видно, что сделано и что было в прошлый раз.</p>
+<p style="margin: 0; font-size: 18px; line-height: 1.55; color: #2C3036">Пометки от руки — на полях и только по делу: подсказка прогрессии, рекорд.</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #4F545B">Шрифты</span>
+<div style="border-top: 1px solid #C9C2B0; padding-top: 18px; display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 46px; font-weight: 500; line-height: 1.1">62,5 × 8</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #4F545B">IBM Plex Mono — цифры, таблицы, метки</span>
+</div>
+<div style="border-top: 1px solid #C9C2B0; padding-top: 18px; display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 28px; font-weight: 600; line-height: 1.25">Жим лёжа, понедельник</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #4F545B">Literata — заголовки и заметки</span>
+</div>
+<div style="border-top: 1px solid #C9C2B0; padding-top: 14px; display: flex; align-items: baseline; gap: 16px">
+<span style="font-family: 'Caveat', cursive; font-size: 34px; font-weight: 600; line-height: 1.1; color: #B8382B">+2,5 кг!</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #4F545B">Caveat — пометки, редко</span>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #4F545B">Формы</span>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #2C3036">Таблицы без скруглений, кнопки — 4, лист — 6. Структуру держит линейка и красная линия полей, а не карточки.</p>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #4F545B">Строка подхода · разминка, выполнено, текущий</span>
+<div style="display: flex; gap: 24px; align-items: flex-start">
+
+<div style="width: 390px; box-sizing: border-box; position: relative; padding: 22px 0 18px; background: #F7F3E9; border: 1px solid #D9D2C1; border-radius: 6px">
+<div aria-hidden="true" style="position: absolute; left: 44px; top: 0; bottom: 0; width: 1px; background: #E2A79F"></div>
+<div style="display: flex; flex-direction: column; gap: 4px; padding: 0 16px 14px 58px">
+<h2 style="margin: 0; font-size: 22px; font-weight: 600">Жим лёжа</h2>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #5A5F66">ПН 17.11 · отдых 2:00</span>
+</div>
+<div style="display: grid; grid-template-columns: 44px 36px minmax(0, 1fr) 52px 72px 48px; align-items: end; padding-right: 10px; height: 28px; border-bottom: 1px solid #1C1F24; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5A5F66">
+<span></span><span style="padding-left: 14px; padding-bottom: 6px">№</span><span style="padding-bottom: 6px">вес, кг</span><span style="padding-bottom: 6px">повт.</span><span style="padding-bottom: 6px">прошлый</span><span></span>
+</div>
+
+<div style="display: grid; grid-template-columns: 44px 36px minmax(0, 1fr) 52px 72px 48px; align-items: center; padding-right: 10px; min-height: 64px; border-bottom: 1px solid #C9D3DF; font-family: 'IBM Plex Mono', monospace">
+<span></span>
+<span style="padding-left: 14px; font-size: 14px; color: #5A5F66">1</span>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 24px; font-weight: 500; line-height: 1.1">40,0</span><span style="font-size: 11px; color: #5A5F66">разминка</span></div>
+<span style="font-size: 24px; font-weight: 500">10</span>
+<span style="font-size: 13px; color: #5A5F66">40×10</span>
+<button aria-label="Подход выполнен" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#1C1F24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="20" height="20" rx="1.5" stroke-width="1.6"></rect><path d="M7.5 13.5l3.8 3.8 7.5-8.6" stroke-width="2.2"></path></svg></button>
+</div>
+
+<div style="display: grid; grid-template-columns: 44px 36px minmax(0, 1fr) 52px 72px 48px; align-items: center; padding-right: 10px; min-height: 64px; border-bottom: 1px solid #C9D3DF; font-family: 'IBM Plex Mono', monospace">
+<span></span>
+<span style="padding-left: 14px; font-size: 14px; color: #5A5F66">2</span>
+<span style="font-size: 24px; font-weight: 500">60,0</span>
+<span style="font-size: 24px; font-weight: 500">8</span>
+<span style="font-size: 13px; color: #5A5F66">60×8</span>
+<button aria-label="Подход выполнен" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#1C1F24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="20" height="20" rx="1.5" stroke-width="1.6"></rect><path d="M7.5 13.5l3.8 3.8 7.5-8.6" stroke-width="2.2"></path></svg></button>
+</div>
+
+<div style="display: grid; grid-template-columns: 44px 36px minmax(0, 1fr) 52px 72px 48px; align-items: center; padding-right: 10px; min-height: 64px; border-bottom: 1px solid #C9D3DF; background: #EFE9D9; font-family: 'IBM Plex Mono', monospace">
+<span style="font-family: 'Caveat', cursive; font-size: 22px; font-weight: 600; color: #B8382B; text-align: center; transform: rotate(-6deg)">+2,5</span>
+<span style="padding-left: 14px; font-size: 14px; font-weight: 600">3</span>
+<span style="font-size: 24px; font-weight: 600">62,5</span>
+<span style="font-size: 24px; font-weight: 600">8</span>
+<span style="font-size: 13px; color: #5A5F66">60×7</span>
+<button aria-label="Отметить подход выполненным" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#1C1F24" aria-hidden="true"><rect x="3" y="3" width="20" height="20" rx="1.5" stroke-width="2"></rect></svg></button>
+</div>
+<p style="margin: 0; padding: 12px 16px 0 58px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.5; color: #5A5F66">в прошлый раз всё выполнено — пробуем 62,5</p>
+</div>
+
+<div style="width: 390px; box-sizing: border-box; position: relative; padding: 22px 0 18px; background: #17191C; border: 1px solid #17191C; border-radius: 6px; color: #ECE8DE">
+<div aria-hidden="true" style="position: absolute; left: 44px; top: 0; bottom: 0; width: 1px; background: #6B3A35"></div>
+<div style="display: flex; flex-direction: column; gap: 4px; padding: 0 16px 14px 58px">
+<h2 style="margin: 0; font-size: 22px; font-weight: 600">Жим лёжа</h2>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #A2A7AE">ПН 17.11 · отдых 2:00</span>
+</div>
+<div style="display: grid; grid-template-columns: 44px 36px minmax(0, 1fr) 52px 72px 48px; align-items: end; padding-right: 10px; height: 28px; border-bottom: 1px solid #ECE8DE; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #A2A7AE">
+<span></span><span style="padding-left: 14px; padding-bottom: 6px">№</span><span style="padding-bottom: 6px">вес, кг</span><span style="padding-bottom: 6px">повт.</span><span style="padding-bottom: 6px">прошлый</span><span></span>
+</div>
+
+<div style="display: grid; grid-template-columns: 44px 36px minmax(0, 1fr) 52px 72px 48px; align-items: center; padding-right: 10px; min-height: 64px; border-bottom: 1px solid #2E343C; font-family: 'IBM Plex Mono', monospace">
+<span></span>
+<span style="padding-left: 14px; font-size: 14px; color: #A2A7AE">1</span>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 24px; font-weight: 500; line-height: 1.1">40,0</span><span style="font-size: 11px; color: #A2A7AE">разминка</span></div>
+<span style="font-size: 24px; font-weight: 500">10</span>
+<span style="font-size: 13px; color: #A2A7AE">40×10</span>
+<button aria-label="Подход выполнен" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#ECE8DE" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="20" height="20" rx="1.5" stroke-width="1.6"></rect><path d="M7.5 13.5l3.8 3.8 7.5-8.6" stroke-width="2.2"></path></svg></button>
+</div>
+
+<div style="display: grid; grid-template-columns: 44px 36px minmax(0, 1fr) 52px 72px 48px; align-items: center; padding-right: 10px; min-height: 64px; border-bottom: 1px solid #2E343C; font-family: 'IBM Plex Mono', monospace">
+<span></span>
+<span style="padding-left: 14px; font-size: 14px; color: #A2A7AE">2</span>
+<span style="font-size: 24px; font-weight: 500">60,0</span>
+<span style="font-size: 24px; font-weight: 500">8</span>
+<span style="font-size: 13px; color: #A2A7AE">60×8</span>
+<button aria-label="Подход выполнен" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#ECE8DE" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="20" height="20" rx="1.5" stroke-width="1.6"></rect><path d="M7.5 13.5l3.8 3.8 7.5-8.6" stroke-width="2.2"></path></svg></button>
+</div>
+
+<div style="display: grid; grid-template-columns: 44px 36px minmax(0, 1fr) 52px 72px 48px; align-items: center; padding-right: 10px; min-height: 64px; border-bottom: 1px solid #2E343C; background: #1F2226; font-family: 'IBM Plex Mono', monospace">
+<span style="font-family: 'Caveat', cursive; font-size: 22px; font-weight: 600; color: #E36F5F; text-align: center; transform: rotate(-6deg)">+2,5</span>
+<span style="padding-left: 14px; font-size: 14px; font-weight: 600">3</span>
+<span style="font-size: 24px; font-weight: 600">62,5</span>
+<span style="font-size: 24px; font-weight: 600">8</span>
+<span style="font-size: 13px; color: #A2A7AE">60×7</span>
+<button aria-label="Отметить подход выполненным" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#ECE8DE" aria-hidden="true"><rect x="3" y="3" width="20" height="20" rx="1.5" stroke-width="2"></rect></svg></button>
+</div>
+<p style="margin: 0; padding: 12px 16px 0 58px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.5; color: #A2A7AE">в прошлый раз всё выполнено — пробуем 62,5</p>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px; margin-top: 24px; font-family: 'IBM Plex Mono', monospace">
+<span style="font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #4F545B">Палитра</span>
+
+<div style="display: grid; grid-template-columns: 120px repeat(5, minmax(0, 1fr)); gap: 12px; align-items: start">
+<span style="font-size: 13px; color: #33373D; padding-top: 10px">Светлая</span>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 40px; border-radius: 3px; background: #F7F3E9; box-shadow: inset 0 0 0 1px #C9C2B0"></div><span style="font-size: 12px; color: #33373D">Бумага · #F7F3E9</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 40px; border-radius: 3px; background: #1C1F24"></div><span style="font-size: 12px; color: #33373D">Чернила · #1C1F24</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 40px; border-radius: 3px; background: #5A5F66"></div><span style="font-size: 12px; color: #33373D">Карандаш · #5A5F66</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 40px; border-radius: 3px; background: #C9D3DF"></div><span style="font-size: 12px; color: #33373D">Линейка · #C9D3DF</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 40px; border-radius: 3px; background: #B8382B"></div><span style="font-size: 12px; color: #33373D">Поля · #B8382B</span></div>
+</div>
+
+<div style="display: grid; grid-template-columns: 120px repeat(5, minmax(0, 1fr)); gap: 12px; align-items: start">
+<span style="font-size: 13px; color: #33373D; padding-top: 10px">Тёмная</span>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 40px; border-radius: 3px; background: #17191C"></div><span style="font-size: 12px; color: #33373D">Графит · #17191C</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 40px; border-radius: 3px; background: #ECE8DE; box-shadow: inset 0 0 0 1px #C9C2B0"></div><span style="font-size: 12px; color: #33373D">Мел · #ECE8DE</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 40px; border-radius: 3px; background: #A2A7AE"></div><span style="font-size: 12px; color: #33373D">Карандаш · #A2A7AE</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 40px; border-radius: 3px; background: #2E343C"></div><span style="font-size: 12px; color: #33373D">Линейка · #2E343C</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 40px; border-radius: 3px; background: #E36F5F"></div><span style="font-size: 12px; color: #33373D">Поля · #E36F5F</span></div>
+</div>
+
+<p style="margin: 0; font-size: 12px; line-height: 1.6; color: #33373D">Состояния: успех — галочка чернилами, рекорд и прогрессия — красный полей с пометкой, разминка — карандаш и подпись, удаление — красный с текстом действия.</p>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1480,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

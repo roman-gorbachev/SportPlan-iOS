@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Дизайн-система — цвет</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&amp;family=Unbounded:wght@500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1F5FBF}a:hover{color:#151515}
+</style>
+</helmet>
+<div style="width: 1320px; height: 1360px; box-sizing: border-box; padding: 64px; display: flex; flex-direction: column; gap: 40px; background: #EAE9E5; color: #151515; font-family: 'Onest', sans-serif">
+
+<div style="display: flex; flex-direction: column; gap: 16px">
+<span style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #55554F">Дизайн-система · 01</span>
+<h1 style="margin: 0; font-family: 'Unbounded', sans-serif; font-size: 48px; font-weight: 600; line-height: 1.05">Цвет</h1>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; padding-top: 8px">
+<p style="margin: 0; font-size: 15px; line-height: 1.5; color: #2E2E2C"><b>Основа нейтральная.</b> Интерфейс почти монохромный: чернила на тёплом сером. Главные действия — чернилами, а не акцентом.</p>
+<p style="margin: 0; font-size: 15px; line-height: 1.5; color: #2E2E2C"><b>Цвет = смысл.</b> Цвета блинов IWF появляются только там, где несут информацию. Цвет никогда не единственный носитель: рядом всегда текст, форма или иконка.</p>
+<p style="margin: 0; font-size: 15px; line-height: 1.5; color: #2E2E2C"><b>Тёмная тема — не инверсия.</b> Поверхности светлеют с высотой, акценты осветлены для контраста. Весь текст — WCAG AA (≥ 4.5:1) на своём фоне.</p>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column">
+<div style="display: grid; grid-template-columns: 240px 250px 250px minmax(0, 1fr); column-gap: 24px; padding: 0 0 10px; border-bottom: 1px solid #151515; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #55554F">
+<span>Токен</span><span>Светлая · контраст</span><span>Тёмная · контраст</span><span>Где используется</span>
+</div>
+<sc-for list="{{tokens}}" as="t" hint-placeholder-count="15">
+<div style="display: grid; grid-template-columns: 240px 250px 250px minmax(0, 1fr); column-gap: 24px; align-items: center; min-height: 54px; border-bottom: 1px solid #D6D5D0">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 15px; font-weight: 600">{{t.name}}</span>
+<span style="font-size: 12px; color: #55554F">{{t.group}}</span>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="width: 56px; height: 34px; flex: none; border-radius: 8px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.12); background: {{t.l}}"></span>
+<span style="font-size: 14px; font-variant-numeric: tabular-nums">{{t.l}}</span>
+<span style="font-size: 13px; color: #55554F; font-variant-numeric: tabular-nums">{{t.lc}}</span>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="width: 56px; height: 34px; flex: none; border-radius: 8px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.12); background: {{t.d}}"></span>
+<span style="font-size: 14px; font-variant-numeric: tabular-nums">{{t.d}}</span>
+<span style="font-size: 13px; color: #55554F; font-variant-numeric: tabular-nums">{{t.dc}}</span>
+</div>
+<span style="font-size: 14px; line-height: 1.4; color: #2E2E2C">{{t.use}}</span>
+</div>
+</sc-for>
+</div>
+
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 600">Блины — по умолчанию IWF</h2>
+<span style="font-size: 13px; line-height: 1.45; color: #55554F">Только графика (стопка на гриф), никогда не цвет текста. Цвет и вес меняются в настройках под свой зал — семантические токены (рекорд, успех, удаление) от этого не зависят.</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px">
+<sc-for list="{{plates}}" as="p" hint-placeholder-count="7">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="height: 30px; border-radius: 6px 6px 0 0; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.12); background: {{p.l}}"></span>
+<span style="height: 30px; margin-top: -6px; border-radius: 0 0 6px 6px; background: #111214; display: flex; align-items: center; justify-content: center"><span style="width: 60%; height: 14px; border-radius: 3px; background: {{p.d}}"></span></span>
+<span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums">{{p.kg}}</span>
+<span style="font-size: 11px; color: #55554F">{{p.role}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 600">Heatmap — 5 уровней по светлоте</h2>
+<span style="font-size: 13px; line-height: 1.45; color: #55554F">Уровень = рабочие подходы за день. Различимы без цвета: шаг светлоты ≥ 15%.</span>
+</div>
+<div style="display: grid; grid-template-columns: 80px repeat(5, minmax(0, 1fr)); gap: 10px; align-items: center">
+<span style="font-size: 13px; color: #3D3D3A">Светлая</span>
+<sc-for list="{{heat}}" as="h" hint-placeholder-count="5"><span style="height: 36px; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08); background: {{h.l}}"></span></sc-for>
+<span style="font-size: 13px; color: #3D3D3A">Тёмная</span>
+<sc-for list="{{heat}}" as="h" hint-placeholder-count="5"><span style="height: 36px; border-radius: 6px; background: {{h.d}}"></span></sc-for>
+<span></span>
+<sc-for list="{{heat}}" as="h" hint-placeholder-count="5"><span style="font-size: 12px; color: #55554F; font-variant-numeric: tabular-nums">{{h.label}}</span></sc-for>
+</div>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1320,"height":1360}}'>
+class Component extends DCLogic {
+renderVals() {
+return {
+tokens: [
+{ name: 'background', group: 'Фон', l: '#F3F2EF', lc: '', d: '#111214', dc: '', use: 'Фон экрана' },
+{ name: 'surface', group: 'Фон', l: '#FFFFFF', lc: '', d: '#1C1D20', dc: '', use: 'Блок упражнения, листы, строки списков' },
+{ name: 'surfaceSunken', group: 'Фон', l: '#EAE9E5', lc: '', d: '#26272B', dc: '', use: 'Лунки степпера, поле заметки, пустая ячейка heatmap' },
+{ name: 'separator', group: 'Линии', l: '#E4E3DF', lc: '', d: '#2E2F33', dc: '', use: 'Линейки между подходами и строками' },
+{ name: 'separatorStrong', group: 'Линии', l: '#CFCEC8', lc: '', d: '#45464B', dc: '', use: 'Обводки чипов, рамки полей, оси графика' },
+{ name: 'textPrimary', group: 'Текст', l: '#151515', lc: '18.3 : 1', d: '#F2F1EE', dc: '14.9 : 1', use: 'Цифры, заголовки, основной текст' },
+{ name: 'textSecondary', group: 'Текст', l: '#5E5E5A', lc: '6.5 : 1', d: '#A3A29C', dc: '6.6 : 1', use: 'Прошлый результат, единицы, подписи' },
+{ name: 'textTertiary', group: 'Текст', l: '#6E6E69', lc: '5.1 : 1', d: '#8A8984', dc: '4.8 : 1', use: 'Плейсхолдеры, неактивное. Не на surfaceSunken' },
+{ name: 'ink', group: 'Действие', l: '#151515', lc: '', d: '#F2F1EE', dc: '', use: 'Главная кнопка, выполненный подход, номер текущего' },
+{ name: 'onInk', group: 'Действие', l: '#FFFFFF', lc: '18.3 : 1', d: '#111214', dc: '16.6 : 1', use: 'Текст и иконки на ink' },
+{ name: 'accent', group: 'Акцент · 20 кг', l: '#1F5FBF', lc: '6.1 : 1', d: '#6A9BEA', dc: '6.0 : 1', use: 'Ссылки, выбор, линия графика, фокус' },
+{ name: 'success', group: 'Состояние · 10 кг', l: '#157A3B', lc: '5.4 : 1', d: '#3DB36E', dc: '6.3 : 1', use: 'Тренировка завершена, «всё выполнено»' },
+{ name: 'record', group: 'Состояние · 15 кг', l: '#F2C200', lc: 'с ink 10.9 : 1', d: '#F2C200', dc: 'с ink 10.9 : 1', use: 'Только заливка бейджа рекорда, текст на нём — #151515' },
+{ name: 'warmup', group: 'Состояние · 5 кг', l: '#5E5E5A', lc: '6.5 : 1', d: '#A3A29C', dc: '6.6 : 1', use: 'Метка «разминка»: обводка separatorStrong + этот текст' },
+{ name: 'destructive', group: 'Состояние · 25 кг', l: '#C42019', lc: '5.9 : 1', d: '#FF6B5E', dc: '6.0 : 1', use: 'Удаление, сброс. Всегда с текстом действия' }
+],
+plates: [
+{ kg: '25', role: 'красный', l: '#D7261E', d: '#E8453C' },
+{ kg: '20', role: 'синий', l: '#1F5FBF', d: '#3D7DE0' },
+{ kg: '15', role: 'жёлтый', l: '#F2C200', d: '#F2C200' },
+{ kg: '10', role: 'зелёный', l: '#1E8A4C', d: '#2BA35E' },
+{ kg: '5', role: 'белый', l: '#FFFFFF', d: '#E6E5E0' },
+{ kg: '2,5', role: 'красный', l: '#D7261E', d: '#E8453C' },
+{ kg: '1,25', role: 'сталь', l: '#A8A8A3', d: '#8A8A85' }
+],
+heat: [
+{ label: '0', l: '#EAE9E5', d: '#26272B' },
+{ label: '1–6', l: '#B9CDEE', d: '#284A80' },
+{ label: '7–12', l: '#7FA5E3', d: '#2F64BC' },
+{ label: '13–18', l: '#3F74CC', d: '#4A7FD6' },
+{ label: '19+', l: '#1A4FA3', d: '#6A9BEA' }
+]
+};
+}
+}
+</script>
+</body>
+</html>

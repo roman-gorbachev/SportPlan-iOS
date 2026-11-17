@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Программы — экран</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&amp;family=Unbounded:wght@500;600&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: {{t.bg}}; color: {{t.tp}}; font-family: 'Onest', sans-serif">
+
+<sc-if value="{{isList}}" hint-placeholder-val="{{true}}">
+<div style="position: absolute; left: 0; top: 0; right: 0; box-sizing: border-box; padding: 62px 12px 0; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: flex-end">
+<button aria-label="Новая программа" style="width: 44px; height: 44px; border-radius: 22px; border: 0; padding: 0; background: {{t.glass}}; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: {{t.glassShadow}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<h1 style="margin: 0; padding: 0 8px; font-size: 34px; font-weight: 600; line-height: 1.2">Программы</h1>
+<a href="#" style="display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 0 14px 0 16px; background: {{t.surf}}; border-radius: 20px; text-decoration: none; color: {{t.tp}}"><span style="flex: 1; font-size: 17px; font-weight: 500">Справочник упражнений</span><span style="font-family: 'Unbounded', sans-serif; font-size: 15px; font-weight: 500; color: {{t.ts}}">24</span><svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="{{t.ts}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l6 6-6 6"></path></svg></a>
+
+<div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden; margin-top: 8px">
+<div style="display: flex; align-items: center; gap: 8px; padding: 14px 6px 10px 16px; border-bottom: 1px solid {{t.sep}}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 22px; font-weight: 600">Сила 3×</span><span style="font-size: 13px; color: {{t.ts}}">3 дня · следующий — B</span></div>
+<button aria-label="Действия с программой «Сила 3×»" style="width: 44px; height: 44px; border-radius: 22px; border: 0; padding: 0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{t.ts}}" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+</div>
+<sc-for list="{{daysA}}" as="d" hint-placeholder-count="3">
+<a href="#" style="display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 0 14px 0 16px; border-bottom: 1px solid {{t.sep}}; text-decoration: none; color: {{t.tp}}"><div style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 500">{{d.name}}</span><span style="font-size: 13px; color: {{t.ts}}">{{d.meta}}</span></div><svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="{{t.ts}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l6 6-6 6"></path></svg></a>
+</sc-for>
+<button style="width: 100%; min-height: 52px; border: 0; padding: 0 16px; background: transparent; display: flex; align-items: center; gap: 10px; font-family: 'Onest', sans-serif; font-size: 17px; color: {{t.accent}}; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{t.accent}}" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>День</button>
+</div>
+
+<div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden; margin-top: 8px">
+<div style="display: flex; align-items: center; gap: 8px; padding: 14px 6px 10px 16px; border-bottom: 1px solid {{t.sep}}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 22px; font-weight: 600">Разгрузка</span><span style="font-size: 13px; color: {{t.ts}}">2 дня</span></div>
+<button aria-label="Действия с программой «Разгрузка»" style="width: 44px; height: 44px; border-radius: 22px; border: 0; padding: 0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{t.ts}}" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+</div>
+<sc-for list="{{daysB}}" as="d" hint-placeholder-count="2">
+<a href="#" style="display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 0 14px 0 16px; border-bottom: 1px solid {{t.sep}}; text-decoration: none; color: {{t.tp}}"><div style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 500">{{d.name}}</span><span style="font-size: 13px; color: {{t.ts}}">{{d.meta}}</span></div><svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="{{t.ts}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l6 6-6 6"></path></svg></a>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}">
+<div style="position: absolute; left: 0; top: 0; right: 0; box-sizing: border-box; padding: 62px 12px 0; display: flex; flex-direction: column; gap: 12px">
+<div style="height: 44px"></div>
+<h1 style="margin: 0; padding: 0 8px; font-size: 34px; font-weight: 600; line-height: 1.2">Программы</h1>
+<a href="#" style="display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 0 14px 0 16px; background: {{t.surf}}; border-radius: 20px; text-decoration: none; color: {{t.tp}}"><span style="flex: 1; font-size: 17px; font-weight: 500">Справочник упражнений</span><span style="font-size: 15px; color: {{t.ts}}">пусто</span><svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="{{t.ts}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l6 6-6 6"></path></svg></a>
+<div style="padding: 56px 8px 0; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 28px; font-weight: 600; line-height: 1.2">Программ пока нет</span>
+<span style="font-size: 15px; line-height: 1.45; color: {{t.ts}}">Программа — это дни и упражнения в них. Начни с одного дня, остальные добавишь потом.</span>
+</div>
+<button style="margin-top: 20px; height: 56px; border-radius: 28px; border: 0; background: {{t.ink}}; color: {{t.onInk}}; font-family: 'Onest', sans-serif; font-size: 17px; font-weight: 600; cursor: pointer">Создать программу</button>
+</div>
+</sc-if>
+
+<sc-if value="{{isDay}}" hint-placeholder-val="{{false}}">
+<div style="position: absolute; left: 0; top: 0; right: 0; box-sizing: border-box; padding: 62px 12px 0; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<button aria-label="Назад к программам" style="width: 44px; height: 44px; border-radius: 22px; border: 0; padding: 0; background: {{t.glass}}; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: {{t.glassShadow}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2L2 10l8 8"></path></svg></button>
+<button style="height: 44px; border-radius: 22px; border: 0; padding: 0 18px; background: {{t.glass}}; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: {{t.glassShadow}}; color: {{t.tp}}; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer">Править</button>
+</div>
+<div style="padding: 6px 8px 2px; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 13px; color: {{t.ts}}">Сила 3× · день A</span>
+<h1 style="margin: 0; font-size: 28px; font-weight: 600; line-height: 1.15">Грудь и трицепс</h1>
+</div>
+<div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden">
+<sc-for list="{{planned}}" as="e" hint-placeholder-count="5">
+<a href="#" style="display: flex; align-items: center; gap: 12px; min-height: 72px; padding: 10px 14px 10px 16px; box-sizing: border-box; border-bottom: 1px solid {{t.sep}}; text-decoration: none; color: {{t.tp}}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<span style="font-size: 17px; font-weight: 600">{{e.name}}</span>
+<div style="display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap"><span style="font-family: 'Unbounded', sans-serif; font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums">{{e.target}}</span><span style="font-size: 13px; color: {{t.ts}}">{{e.meta}}</span></div>
+</div>
+<svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="{{t.ts}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l6 6-6 6"></path></svg>
+</a>
+</sc-for>
+<button style="width: 100%; min-height: 52px; border: 0; padding: 0 16px; background: transparent; display: flex; align-items: center; gap: 10px; font-family: 'Onest', sans-serif; font-size: 17px; color: {{t.accent}}; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{t.accent}}" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Упражнение</button>
+</div>
+<span style="padding: 0 8px; font-size: 13px; line-height: 1.45; color: {{t.ts}}">Тап — подходы, повторы и отдых в этом дне. Порядок — «Править».</span>
+</div>
+</sc-if>
+
+<sc-if value="{{isAx}}" hint-placeholder-val="{{false}}">
+<div style="position: absolute; left: 0; top: 0; right: 0; box-sizing: border-box; padding: 62px 12px 0; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<button aria-label="Назад к программам" style="width: 52px; height: 52px; border-radius: 26px; border: 0; padding: 0; background: {{t.glass}}; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: {{t.glassShadow}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="14" height="24" viewBox="0 0 12 20" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2L2 10l8 8"></path></svg></button>
+<button style="height: 52px; border-radius: 26px; border: 0; padding: 0 22px; background: {{t.glass}}; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: {{t.glassShadow}}; color: {{t.tp}}; font-family: 'Onest', sans-serif; font-size: 22px; font-weight: 500; cursor: pointer">Править</button>
+</div>
+<div style="padding: 6px 8px 2px; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 22px; color: {{t.ts}}">Сила 3× · день A</span>
+<h1 style="margin: 0; font-size: 40px; font-weight: 600; line-height: 1.15">Грудь и трицепс</h1>
+</div>
+<div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden">
+<sc-for list="{{plannedAx}}" as="e" hint-placeholder-count="3">
+<a href="#" style="display: flex; align-items: center; gap: 12px; padding: 16px 14px 16px 16px; border-bottom: 1px solid {{t.sep}}; text-decoration: none; color: {{t.tp}}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<span style="font-size: 28px; font-weight: 600; line-height: 1.2">{{e.name}}</span>
+<span style="font-family: 'Unbounded', sans-serif; font-size: 24px; font-weight: 500; font-variant-numeric: tabular-nums">{{e.target}}</span>
+<span style="font-size: 22px; line-height: 1.3; color: {{t.ts}}">{{e.meta}}</span>
+</div>
+<svg width="11" height="19" viewBox="0 0 8 14" fill="none" stroke="{{t.ts}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l6 6-6 6"></path></svg>
+</a>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<nav aria-label="Вкладки" style="position: absolute; left: 16px; right: 16px; bottom: 24px; display: flex; align-items: center; height: 62px; box-sizing: border-box; padding: 4px; border-radius: 31px; background: {{t.glass}}; backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4); box-shadow: {{t.glassShadow}}">
+<a href="#" style="flex: 1; height: 54px; border-radius: 27px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-decoration: none; color: {{t.tp}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"></path></svg><span style="font-size: 11px; font-weight: 500">Тренировка</span></a>
+<a href="#" aria-current="page" style="flex: 1; height: 54px; border-radius: 27px; background: {{t.tabSel}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-decoration: none; color: {{t.accent}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.accent}}" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"></rect><path d="M8 8h8M8 12h8M8 16h5"></path></svg><span style="font-size: 11px; font-weight: 600">Программы</span></a>
+<a href="#" style="flex: 1; height: 54px; border-radius: 27px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-decoration: none; color: {{t.tp}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg><span style="font-size: 11px; font-weight: 500">История</span></a>
+</nav>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"state":{"editor":"enum","options":["list","empty","day","ax"],"default":"list"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+const light = { bg: '#F3F2EF', surf: '#FFFFFF', sunk: '#EAE9E5', sep: '#E4E3DF', tp: '#151515', ts: '#5E5E5A', ink: '#151515', onInk: '#FFFFFF', accent: '#1F5FBF', glass: 'rgba(255,255,255,0.72)', glassShadow: 'inset 0 0 0 1px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.08)', tabSel: 'rgba(0,0,0,0.06)' };
+const dark = { bg: '#111214', surf: '#1C1D20', sunk: '#26272B', sep: '#2E2F33', tp: '#F2F1EE', ts: '#A3A29C', ink: '#F2F1EE', onInk: '#111214', accent: '#6A9BEA', glass: 'rgba(44,45,50,0.72)', glassShadow: 'inset 0 0 0 1px rgba(255,255,255,0.10), 0 6px 20px rgba(0,0,0,0.4)', tabSel: 'rgba(255,255,255,0.10)' };
+const state = this.props.state ?? 'list';
+const planned = [
+{ name: 'Жим лёжа', target: '4 × 8–12', meta: 'отдых 2:00 · олимпийский гриф' },
+{ name: 'Жим гантелей на наклонной', target: '3 × 10–12', meta: 'отдых 1:30 · гантели' },
+{ name: 'Брусья', target: '3 × 8–12', meta: 'отдых 1:30 · свой вес' },
+{ name: 'Разгибания на блоке', target: '3 × 12–15', meta: 'отдых 1:00 · кроссовер' },
+{ name: 'Планка', target: '3 подхода', meta: 'на время · отдых 1:00' }
+];
+return {
+t: (this.props.dark ?? false) ? dark : light,
+isList: state === 'list',
+isEmpty: state === 'empty',
+isDay: state === 'day',
+isAx: state === 'ax',
+daysA: [
+{ name: 'День A · Грудь и трицепс', meta: '5 упражнений · пн 16.11' },
+{ name: 'День B · Спина и бицепс', meta: '6 упражнений · ср 11.11' },
+{ name: 'День C · Ноги и плечи', meta: '5 упражнений · пт 13.11' }
+],
+daysB: [
+{ name: 'День 1 · Всё тело', meta: '4 упражнения · ещё не было' },
+{ name: 'День 2 · Всё тело', meta: '4 упражнения · ещё не было' }
+],
+planned: planned,
+plannedAx: planned.slice(0, 3)
+};
+}
+}
+</script>
+</body>
+</html>

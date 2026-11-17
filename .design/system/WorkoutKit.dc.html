@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Компоненты — тренировка</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&amp;family=Unbounded:wght@500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1F5FBF}a:hover{color:#151515}
+</style>
+</helmet>
+<div style="width: 1320px; height: 3500px; box-sizing: border-box; padding: 64px; display: flex; flex-direction: column; gap: 56px; background: #EAE9E5; color: #151515; font-family: 'Onest', sans-serif">
+
+<div style="display: flex; flex-direction: column; gap: 16px">
+<span style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #55554F">Дизайн-система · 04</span>
+<h1 style="margin: 0; font-family: 'Unbounded', sans-serif; font-size: 48px; font-weight: 600; line-height: 1.05">Компоненты · тренировка</h1>
+</div>
+
+<div style="display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 40px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 28px">
+<span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; color: #55554F">01</span>
+<h2 style="margin: 0; font-size: 24px; font-weight: 600">Строка подхода</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Упражнение — один блок surface, подходы разделены линейкой separator. Минимальная высота 88.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Номер · вес numeralL · «кг ×» · повторы numeralM · прошлый результат footnote · стопка блинов на сторону · кнопка 48.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Состояния: разминка (чип, добавляет сам пользователь), выполнен (залитая кнопка), рекорд (бейдж), текущий (номер в круге ink, кнопка-обводка ink), план (цифры textSecondary, обводка separatorStrong). Плановые строки создаются при старте по дню и заполняются прошлой тренировкой; невыполненные исчезают при «Завершить».</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Цель повторов — диапазон («8–12») в заголовке упражнения. Тап по цифрам — степпер. Удаление — swipe action.</p>
+</div>
+<div style="display: flex; gap: 40px">
+<sc-for list="{{themes}}" as="t" hint-placeholder-count="2">
+<div style="width: 390px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; color: #3D3D3A">{{t.name}}</span>
+<div style="box-sizing: border-box; padding: 18px 12px 16px; background: {{t.bg}}; border: 1px solid {{t.frame}}; border-radius: 28px; display: flex; flex-direction: column; gap: 10px; color: {{t.tp}}">
+<div style="display: flex; justify-content: space-between; align-items: baseline; padding: 0 8px 4px">
+<span style="font-size: 22px; font-weight: 600">Жим лёжа</span>
+<span style="font-size: 13px; color: {{t.ts}}">8–12 повт. · отдых 2:00</span>
+</div>
+<div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden">
+
+<div style="display: flex; align-items: center; gap: 12px; min-height: 88px; box-sizing: border-box; padding: 12px 10px 12px 12px; border-bottom: 1px solid {{t.sep}}">
+<span style="width: 28px; height: 28px; flex: none; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: {{t.ts}}">1</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<div style="display: flex; align-items: baseline; gap: 5px"><span style="font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">40</span><span style="font-size: 13px; color: {{t.ts}}">кг</span><span style="font-size: 18px; color: {{t.ts}}; margin-left: 2px">×</span><span style="font-family: 'Unbounded', sans-serif; font-size: 26px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums">10</span></div>
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-size: 12px; font-weight: 500; padding: 1px 7px; border: 1px solid {{t.chip}}; border-radius: 6px; color: {{t.ts}}">разминка</span><span style="font-size: 13px; color: {{t.ts}}">было 40 × 10</span></div>
+</div>
+<div role="img" aria-label="На каждую сторону: 10 кг" style="display: flex; align-items: center; gap: 2px; height: 44px"><span style="width: 3px; height: 16px; background: {{t.collar}}; border-radius: 1px"></span><span style="width: 6px; height: 42px; background: {{t.p10}}; border-radius: 2px"></span><span style="width: 12px; height: 6px; background: {{t.sleeve}}; border-radius: 1px"></span></div>
+<button aria-label="Подход выполнен" style="width: 48px; height: 48px; flex: none; border-radius: 24px; border: 0; padding: 0; background: {{t.ink}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.onInk}}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button>
+</div>
+
+<div style="display: flex; align-items: center; gap: 12px; min-height: 88px; box-sizing: border-box; padding: 12px 10px 12px 12px; border-bottom: 1px solid {{t.sep}}">
+<span style="width: 28px; height: 28px; flex: none; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: {{t.ts}}">2</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<div style="display: flex; align-items: baseline; gap: 5px"><span style="font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">60</span><span style="font-size: 13px; color: {{t.ts}}">кг</span><span style="font-size: 18px; color: {{t.ts}}; margin-left: 2px">×</span><span style="font-family: 'Unbounded', sans-serif; font-size: 26px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums">8</span></div>
+<span style="font-size: 13px; color: {{t.ts}}">было 60 × 8</span>
+</div>
+<div role="img" aria-label="На каждую сторону: 20 кг" style="display: flex; align-items: center; gap: 2px; height: 44px"><span style="width: 3px; height: 16px; background: {{t.collar}}; border-radius: 1px"></span><span style="width: 8px; height: 42px; background: {{t.p20}}; border-radius: 2px"></span><span style="width: 12px; height: 6px; background: {{t.sleeve}}; border-radius: 1px"></span></div>
+<button aria-label="Подход выполнен" style="width: 48px; height: 48px; flex: none; border-radius: 24px; border: 0; padding: 0; background: {{t.ink}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.onInk}}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button>
+</div>
+
+<div style="display: flex; align-items: center; gap: 12px; min-height: 88px; box-sizing: border-box; padding: 12px 10px 12px 12px; border-bottom: 1px solid {{t.sep}}">
+<span style="width: 28px; height: 28px; flex: none; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: {{t.ts}}">3</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<div style="display: flex; align-items: baseline; gap: 5px"><span style="font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">65</span><span style="font-size: 13px; color: {{t.ts}}">кг</span><span style="font-size: 18px; color: {{t.ts}}; margin-left: 2px">×</span><span style="font-family: 'Unbounded', sans-serif; font-size: 26px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums">8</span></div>
+<div style="display: flex; align-items: center; gap: 8px"><span style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; padding: 2px 7px; border-radius: 6px; background: {{t.record}}; color: #151515"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#151515" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"></path></svg>Рекорд</span><span style="font-size: 13px; color: {{t.ts}}">было 62,5 × 8</span></div>
+</div>
+<div role="img" aria-label="На каждую сторону: 20 и 2,5 кг" style="display: flex; align-items: center; gap: 2px; height: 44px"><span style="width: 3px; height: 16px; background: {{t.collar}}; border-radius: 1px"></span><span style="width: 8px; height: 42px; background: {{t.p20}}; border-radius: 2px"></span><span style="width: 4px; height: 22px; background: {{t.p25}}; border-radius: 1px"></span><span style="width: 12px; height: 6px; background: {{t.sleeve}}; border-radius: 1px"></span></div>
+<button aria-label="Подход выполнен, новый рекорд" style="width: 48px; height: 48px; flex: none; border-radius: 24px; border: 0; padding: 0; background: {{t.ink}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.onInk}}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button>
+</div>
+
+<div style="display: flex; align-items: center; gap: 12px; min-height: 88px; box-sizing: border-box; padding: 12px 10px 12px 12px; border-bottom: 1px solid {{t.sep}}">
+<span style="width: 28px; height: 28px; flex: none; border-radius: 14px; background: {{t.ink}}; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: {{t.onInk}}">4</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<div style="display: flex; align-items: baseline; gap: 5px"><span style="font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">65</span><span style="font-size: 13px; color: {{t.ts}}">кг</span><span style="font-size: 18px; color: {{t.ts}}; margin-left: 2px">×</span><span style="font-family: 'Unbounded', sans-serif; font-size: 26px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums">8</span></div>
+<span style="font-size: 13px; color: {{t.ts}}">было 62,5 × 7</span>
+</div>
+<div role="img" aria-label="На каждую сторону: 20 и 2,5 кг" style="display: flex; align-items: center; gap: 2px; height: 44px"><span style="width: 3px; height: 16px; background: {{t.collar}}; border-radius: 1px"></span><span style="width: 8px; height: 42px; background: {{t.p20}}; border-radius: 2px"></span><span style="width: 4px; height: 22px; background: {{t.p25}}; border-radius: 1px"></span><span style="width: 12px; height: 6px; background: {{t.sleeve}}; border-radius: 1px"></span></div>
+<button aria-label="Отметить подход выполненным" style="width: 48px; height: 48px; flex: none; border-radius: 24px; border: 2px solid {{t.ink}}; padding: 0; background: transparent; cursor: pointer"></button>
+</div>
+
+<div style="display: flex; align-items: center; gap: 12px; min-height: 88px; box-sizing: border-box; padding: 12px 10px 12px 12px; border-bottom: 1px solid {{t.sep}}">
+<span style="width: 28px; height: 28px; flex: none; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: {{t.ts}}">5</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; color: {{t.ts}}">
+<div style="display: flex; align-items: baseline; gap: 5px"><span style="font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">65</span><span style="font-size: 13px">кг</span><span style="font-size: 18px; margin-left: 2px">×</span><span style="font-family: 'Unbounded', sans-serif; font-size: 26px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums">8</span></div>
+<span style="font-size: 13px">план · было 62,5 × 8</span>
+</div>
+<div role="img" aria-label="На каждую сторону: 20 и 2,5 кг" style="display: flex; align-items: center; gap: 2px; height: 44px; opacity: 0.5"><span style="width: 3px; height: 16px; background: {{t.collar}}; border-radius: 1px"></span><span style="width: 8px; height: 42px; background: {{t.p20}}; border-radius: 2px"></span><span style="width: 4px; height: 22px; background: {{t.p25}}; border-radius: 1px"></span><span style="width: 12px; height: 6px; background: {{t.sleeve}}; border-radius: 1px"></span></div>
+<button aria-label="Отметить подход выполненным" style="width: 48px; height: 48px; flex: none; border-radius: 24px; border: 2px solid {{t.sepS}}; padding: 0; background: transparent; cursor: pointer"></button>
+</div>
+
+<button style="width: 100%; min-height: 52px; border: 0; padding: 0; background: transparent; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 500; color: {{t.tp}}; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Подход</button>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 40px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 28px">
+<span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; color: #55554F">02</span>
+<h2 style="margin: 0; font-size: 24px; font-weight: 600">Степпер и «как в прошлый раз»</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Открывается по тапу на цифры подхода. Кнопки 56 — под большой палец, лунка-капсула концентрична кнопкам.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Шаг веса берётся у оборудования упражнения из «Моего зала» (здесь олимпийский гриф, 2,5 кг), повторов — 1. Удержание — автоповтор с ускорением. Тап по значению — ввод с клавиатуры.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">«Как в прошлый раз» подставляет вес и повторы этого подхода из прошлой тренировки.</p>
+</div>
+<div style="display: flex; gap: 40px">
+<sc-for list="{{themes}}" as="t" hint-placeholder-count="2">
+<div style="width: 390px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; color: #3D3D3A">{{t.name}}</span>
+<div style="box-sizing: border-box; padding: 12px; background: {{t.bg}}; border: 1px solid {{t.frame}}; border-radius: 28px; color: {{t.tp}}">
+<div style="background: {{t.surf}}; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; font-size: 13px; color: {{t.ts}}"><span>Вес, кг</span><span>шаг 2,5 · олимпийский гриф</span></div>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 68px; box-sizing: border-box; padding: 6px; background: {{t.sunk}}; border-radius: 34px">
+<button aria-label="Уменьшить вес на 2,5 кг" style="width: 56px; height: 56px; border-radius: 28px; border: 0; padding: 0; background: {{t.surf}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+<span style="font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">65</span>
+<button aria-label="Увеличить вес на 2,5 кг" style="width: 56px; height: 56px; border-radius: 28px; border: 0; padding: 0; background: {{t.surf}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 13px; color: {{t.ts}}; padding-top: 4px"><span>Повторы</span><span>шаг 1</span></div>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 68px; box-sizing: border-box; padding: 6px; background: {{t.sunk}}; border-radius: 34px">
+<button aria-label="Уменьшить повторы на 1" style="width: 56px; height: 56px; border-radius: 28px; border: 0; padding: 0; background: {{t.surf}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+<span style="font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums">8</span>
+<button aria-label="Увеличить повторы на 1" style="width: 56px; height: 56px; border-radius: 28px; border: 0; padding: 0; background: {{t.surf}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="display: flex; gap: 8px; padding-top: 6px">
+<button style="flex: 1; height: 52px; border-radius: 26px; border: 0; padding: 0 12px; background: {{t.sunk}}; color: {{t.tp}}; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"></path><path d="M4 9h10a6 6 0 0 1 0 12h-3"></path></svg>Как в прошлый раз</button>
+<button style="flex: 1; height: 52px; border-radius: 26px; border: 0; padding: 0 12px; background: {{t.ink}}; color: {{t.onInk}}; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer">Записать</button>
+</div>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 40px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 28px">
+<span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; color: #55554F">03</span>
+<h2 style="margin: 0; font-size: 24px; font-weight: 600">Таймер отдыха</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Обратный отсчёт стартует сам после записи подхода. В приложении — в блоке упражнения и в bottom accessory, только во время отдыха.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Bottom accessory появляется только на время отдыха и уходит, когда таймер закончился или пропущен. Музыки в приложении нет: её закрывает системный плеер на экране блокировки.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Accessory и таб-бар — системный Liquid Glass, читаемые при любой прозрачности: текст только textPrimary и textSecondary.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Live Activity и Dynamic Island живут всю тренировку: упражнение и подход → отсчёт отдыха → «Отдых окончен», если отдых истёк, а приложение свёрнуто. Кнопок нет. Dynamic Island всегда тёмный.</p>
+</div>
+<div style="display: flex; gap: 40px">
+<sc-for list="{{themes}}" as="t" hint-placeholder-count="2">
+<div style="width: 390px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; color: #3D3D3A">{{t.name}}</span>
+<div style="box-sizing: border-box; padding: 12px; background: {{t.bg}}; border: 1px solid {{t.frame}}; border-radius: 28px; display: flex; flex-direction: column; gap: 12px; color: {{t.tp}}">
+
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}; padding: 4px 8px 0">В блоке упражнения</span>
+<div style="background: {{t.surf}}; border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; font-size: 13px; color: {{t.ts}}"><span>Отдых после подхода 3</span><span>из 2:00</span></div>
+<span style="font-family: 'Unbounded', sans-serif; font-size: 56px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">1:45</span>
+<div style="height: 4px; border-radius: 2px; background: {{t.sunk}}"><div style="width: 12.5%; height: 4px; border-radius: 2px; background: {{t.ink}}"></div></div>
+<div style="display: flex; gap: 8px">
+<button style="flex: 1; height: 48px; border-radius: 24px; border: 0; background: {{t.sunk}}; color: {{t.tp}}; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer">−15 с</button>
+<button style="flex: 1; height: 48px; border-radius: 24px; border: 0; background: {{t.sunk}}; color: {{t.tp}}; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer">+15 с</button>
+<button style="flex: 1.3; height: 48px; border-radius: 24px; border: 0; background: {{t.sunk}}; color: {{t.tp}}; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer">Пропустить</button>
+</div>
+</div>
+
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}; padding: 8px 8px 0">Bottom accessory · отдых</span>
+<div style="display: flex; align-items: center; gap: 10px; height: 56px; box-sizing: border-box; padding: 0 6px 0 16px; border-radius: 28px; background: {{t.glass}}; box-shadow: inset 0 0 0 1px {{t.glassLine}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.accent}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2.5M9 2h6"></path></svg>
+<span style="font-family: 'Unbounded', sans-serif; font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums">1:45</span>
+<span style="flex: 1; font-size: 13px; color: {{t.ts}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">отдых · дальше 65 × 8</span>
+<button style="height: 44px; border-radius: 22px; border: 0; padding: 0 12px; background: transparent; color: {{t.tp}}; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer">+15 с</button>
+</div>
+
+<nav aria-label="Вкладки" style="display: flex; align-items: center; justify-content: space-between; height: 62px; box-sizing: border-box; padding: 4px; border-radius: 31px; background: {{t.glass}}; box-shadow: inset 0 0 0 1px {{t.glassLine}}">
+<a href="#" style="flex: 1; height: 54px; border-radius: 27px; background: {{t.sunk}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-decoration: none; color: {{t.accent}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.accent}}" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"></path></svg><span style="font-size: 11px; font-weight: 600">Тренировка</span></a>
+<a href="#" style="flex: 1; height: 54px; border-radius: 27px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-decoration: none; color: {{t.tp}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"></rect><path d="M8 8h8M8 12h8M8 16h5"></path></svg><span style="font-size: 11px; font-weight: 500">Программы</span></a>
+<a href="#" style="flex: 1; height: 54px; border-radius: 27px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-decoration: none; color: {{t.tp}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg><span style="font-size: 11px; font-weight: 500">История</span></a>
+</nav>
+
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}; padding: 8px 8px 0">Live Activity · подход</span>
+<div style="background: {{t.surf}}; border-radius: 24px; padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 600">Жим лёжа</span><span style="font-size: 13px; color: {{t.ts}}">подход 4 · 8–12 повт.</span></div>
+<span style="font-family: 'Unbounded', sans-serif; font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums">65 × 8</span>
+</div>
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}; padding: 8px 8px 0">Live Activity · отдых</span>
+<div style="background: {{t.surf}}; border-radius: 24px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: {{t.ts}}">Отдых</span><span style="font-family: 'Unbounded', sans-serif; font-size: 44px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">1:45</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-end"><span style="font-size: 13px; color: {{t.ts}}">Дальше</span><span style="font-size: 15px; font-weight: 600">Жим лёжа</span><span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">65 × 8</span></div>
+</div>
+<div style="height: 4px; border-radius: 2px; background: {{t.sunk}}"><div style="width: 12.5%; height: 4px; border-radius: 2px; background: {{t.ink}}"></div></div>
+</div>
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}; padding: 8px 8px 0">Live Activity · отдых окончен</span>
+<div style="background: {{t.surf}}; border-radius: 24px; padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 600">Отдых окончен</span><span style="font-size: 13px; color: {{t.ts}}">Пора: жим лёжа, подход 4</span></div>
+<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px"><span style="font-size: 12px; color: {{t.ts}}">прошло</span><span style="font-family: 'Unbounded', sans-serif; font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums">0:12</span></div>
+</div>
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}; padding: 8px 8px 0">Dynamic Island · подход, отдых, окончен</span>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 4px 0 8px">
+<div style="width: 220px; height: 37px; box-sizing: border-box; padding: 0 14px 0 12px; border-radius: 19px; background: #000000; display: flex; align-items: center; justify-content: space-between">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"></path></svg>
+<span style="font-family: 'Unbounded', sans-serif; font-size: 15px; font-weight: 600; color: #FFFFFF; font-variant-numeric: tabular-nums">65 × 8</span>
+</div>
+<div style="width: 220px; height: 37px; box-sizing: border-box; padding: 0 14px 0 12px; border-radius: 19px; background: #000000; display: flex; align-items: center; justify-content: space-between">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A9BEA" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2.5M9 2h6"></path></svg>
+<span style="font-family: 'Unbounded', sans-serif; font-size: 15px; font-weight: 600; color: #FFFFFF; font-variant-numeric: tabular-nums">1:45</span>
+</div>
+<div style="width: 220px; height: 37px; box-sizing: border-box; padding: 0 14px 0 12px; border-radius: 19px; background: #000000; display: flex; align-items: center; justify-content: space-between">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3DB36E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2.5M9 2h6"></path></svg>
+<span style="font-size: 15px; font-weight: 600; color: #FFFFFF">Пора</span>
+</div>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 40px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 28px">
+<span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; color: #55554F">03a</span>
+<h2 style="margin: 0; font-size: 24px; font-weight: 600">Секундомер подхода</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Для упражнений с метрикой «время». Считает вверх прямо в строке подхода; пользователь останавливает — записывается фактическое время.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Не путать с таймером отдыха: другая кнопка (play → stop вместо галочки), цифры в строке, а не в accessory. Отдых после остановки стартует как обычно.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Состояния: готов (было 1:15, кнопка play) → идёт (точка accent, кнопка stop) → записан.</p>
+</div>
+<div style="display: flex; gap: 40px">
+<sc-for list="{{themes}}" as="t" hint-placeholder-count="2">
+<div style="width: 390px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; color: #3D3D3A">{{t.name}}</span>
+<div style="box-sizing: border-box; padding: 16px 12px; background: {{t.bg}}; border: 1px solid {{t.frame}}; border-radius: 28px; display: flex; flex-direction: column; gap: 8px; color: {{t.tp}}">
+<div style="display: flex; justify-content: space-between; align-items: baseline; padding: 0 8px 4px"><span style="font-size: 22px; font-weight: 600">Планка</span><span style="font-size: 13px; color: {{t.ts}}">время · отдых 1:00</span></div>
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}; padding: 8px 8px 0">Готов</span>
+<div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden">
+<div style="display: flex; align-items: center; gap: 12px; min-height: 88px; box-sizing: border-box; padding: 12px 10px 12px 12px">
+<span style="width: 28px; height: 28px; flex: none; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; background: {{t.ink}}; color: {{t.onInk}}">2</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<div style="display: flex; align-items: baseline; gap: 5px"><span style="font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: {{t.ts}}">1:15</span><span style="font-size: 13px; color: {{t.ts}}">мин</span></div>
+<span style="font-size: 13px; color: {{t.ts}}">было 1:15 · нажми, чтобы начать</span>
+</div>
+<button aria-label="Запустить секундомер" style="width: 48px; height: 48px; flex: none; border-radius: 24px; border: 2px solid {{t.ink}}; padding: 0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="{{t.tp}}" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"></path></svg></button>
+</div>
+</div>
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}; padding: 8px 8px 0">Идёт</span>
+<div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden">
+<div style="display: flex; align-items: center; gap: 12px; min-height: 88px; box-sizing: border-box; padding: 12px 10px 12px 12px">
+<span style="width: 28px; height: 28px; flex: none; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; background: {{t.ink}}; color: {{t.onInk}}">2</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<div style="display: flex; align-items: baseline; gap: 5px"><span style="font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: {{t.tp}}">0:47</span><span style="font-size: 13px; color: {{t.ts}}">мин</span></div>
+<span style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: {{t.ts}}"><span style="width: 7px; height: 7px; border-radius: 4px; background: {{t.accent}}"></span>идёт · было 1:15</span>
+</div>
+<button aria-label="Остановить и записать" style="width: 48px; height: 48px; flex: none; border-radius: 24px; border: 0; padding: 0; background: {{t.ink}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="{{t.onInk}}" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"></rect></svg></button>
+</div>
+</div>
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}; padding: 8px 8px 0">Записан</span>
+<div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden">
+<div style="display: flex; align-items: center; gap: 12px; min-height: 88px; box-sizing: border-box; padding: 12px 10px 12px 12px">
+<span style="width: 28px; height: 28px; flex: none; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: {{t.ts}}">2</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<div style="display: flex; align-items: baseline; gap: 5px"><span style="font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: {{t.tp}}">1:32</span><span style="font-size: 13px; color: {{t.ts}}">мин</span></div>
+<div style="display: flex; align-items: center; gap: 8px"><span style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; padding: 2px 7px; border-radius: 6px; background: #F2C200; color: #151515">Рекорд</span><span style="font-size: 13px; color: {{t.ts}}">было 1:15</span></div>
+</div>
+<button aria-label="Подход выполнен, новый рекорд" style="width: 48px; height: 48px; flex: none; border-radius: 24px; border: 0; padding: 0; background: {{t.ink}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.onInk}}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button>
+</div>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 40px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 28px">
+<span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; color: #55554F">08 · 09</span>
+<h2 style="margin: 0; font-size: 24px; font-weight: 600">Подсказка прогрессии и заметка</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Подсказка появляется под заголовком упражнения, только если в прошлый раз выполнены все подходы. Одно действие и крестик, без всплывающих окон.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Заметка — обычное многострочное поле внизу тренировки. Плейсхолдер: «Самочувствие, техника, что поменять».</p>
+</div>
+<div style="display: flex; gap: 40px">
+<sc-for list="{{themes}}" as="t" hint-placeholder-count="2">
+<div style="width: 390px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; color: #3D3D3A">{{t.name}}</span>
+<div style="box-sizing: border-box; padding: 12px; background: {{t.bg}}; border: 1px solid {{t.frame}}; border-radius: 28px; display: flex; flex-direction: column; gap: 14px; color: {{t.tp}}">
+<div style="display: flex; align-items: center; gap: 4px; padding: 6px 4px 6px 14px; background: {{t.sunk}}; border-radius: 14px">
+<span style="flex: 1; font-size: 15px; line-height: 1.4">В прошлый раз всё выполнено — попробуй <b style="font-weight: 600">67,5 кг</b></span>
+<button style="height: 44px; border-radius: 22px; border: 0; padding: 0 10px; background: transparent; color: {{t.accent}}; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer">Поставить</button>
+<button aria-label="Скрыть подсказку" style="width: 44px; height: 44px; border-radius: 22px; border: 0; padding: 0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{t.ts}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 0 2px 4px">
+<label for="note-{{t.key}}" style="font-size: 13px; color: {{t.ts}}; padding-left: 4px">Заметка к тренировке</label>
+<textarea id="note-{{t.key}}" style="box-sizing: border-box; width: 100%; min-height: 96px; resize: none; border: 0; border-radius: 14px; padding: 12px 14px; background: {{t.sunk}}; color: {{t.tp}}; font-family: 'Onest', sans-serif; font-size: 17px; line-height: 24px">Плечо не беспокоило. В следующий раз — пауза на груди.</textarea>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1320,"height":3500}}'>
+class Component extends DCLogic {
+renderVals() {
+return {
+themes: [
+{ key: 'light', name: 'Светлая', bg: '#F3F2EF', surf: '#FFFFFF', sunk: '#EAE9E5', sep: '#E4E3DF', sepS: '#CFCEC8', chip: '#BDBCB6', tp: '#151515', ts: '#5E5E5A', ink: '#151515', onInk: '#FFFFFF', accent: '#1F5FBF', record: '#F2C200', p10: '#1E8A4C', p20: '#1F5FBF', p25: '#D7261E', collar: '#8C8C87', sleeve: '#B5B4AF', glass: 'rgba(255,255,255,0.8)', glassLine: 'rgba(0,0,0,0.08)', frame: '#D6D5D0' },
+{ key: 'dark', name: 'Тёмная', bg: '#111214', surf: '#1C1D20', sunk: '#26272B', sep: '#2E2F33', sepS: '#45464B', chip: '#4A4A47', tp: '#F2F1EE', ts: '#A3A29C', ink: '#F2F1EE', onInk: '#111214', accent: '#6A9BEA', record: '#F2C200', p10: '#2BA35E', p20: '#3D7DE0', p25: '#E8453C', collar: '#6F6F6B', sleeve: '#4A4A47', glass: 'rgba(46,47,52,0.8)', glassLine: 'rgba(255,255,255,0.1)', frame: '#111214' }
+]
+};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Компоненты — история</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&amp;family=Unbounded:wght@500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1F5FBF}a:hover{color:#151515}
+</style>
+</helmet>
+<div style="width: 1320px; height: 2800px; box-sizing: border-box; padding: 64px; display: flex; flex-direction: column; gap: 56px; background: #EAE9E5; color: #151515; font-family: 'Onest', sans-serif">
+
+<div style="display: flex; flex-direction: column; gap: 16px">
+<span style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #55554F">Дизайн-система · 05</span>
+<h1 style="margin: 0; font-family: 'Unbounded', sans-serif; font-size: 48px; font-weight: 600; line-height: 1.05">Компоненты · история</h1>
+</div>
+
+<div style="display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 40px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 28px">
+<span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; color: #55554F">05</span>
+<h2 style="margin: 0; font-size: 24px; font-weight: 600">Heatmap и легенда</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Месяц, неделя с понедельника. Уровень — число рабочих подходов за день: 0 · 1–6 · 7–12 · 13–18 · 19+. Разминка не считается.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Число дня всегда видно: на светлых уровнях — textPrimary, на тёмных — инверсия. Сегодня — обводка ink 2. Будущие дни — только контур. День с рекордом — жёлтая точка.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Ячейка 6 скругление, тап — детали тренировки. VoiceOver: «13 ноября, 19 и больше подходов, рекорд».</p>
+</div>
+<div style="display: flex; gap: 40px">
+<sc-for list="{{themes}}" as="t" hint-placeholder-count="2">
+<div style="width: 390px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; color: #3D3D3A">{{t.name}}</span>
+<div style="box-sizing: border-box; padding: 12px; background: {{t.bg}}; border: 1px solid {{t.frame}}; border-radius: 28px; color: {{t.tp}}">
+<div style="background: {{t.surf}}; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 17px; font-weight: 600">Ноябрь</span><span style="font-size: 13px; color: {{t.ts}}">8 тренировок</span></div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{t.weekdays}}" as="w" hint-placeholder-count="7"><span style="font-size: 11px; font-weight: 500; color: {{t.ts}}; text-align: center">{{w}}</span></sc-for>
+</div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{t.cells}}" as="c" hint-placeholder-count="36">
+<span role="img" aria-label="{{c.label}}" style="position: relative; height: 42px; border-radius: 6px; box-sizing: border-box; padding: 4px 6px; font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; background: {{c.bg}}; color: {{c.fg}}; box-shadow: {{c.shadow}}">{{c.day}}<sc-if value="{{c.record}}" hint-placeholder-val="{{false}}"><span style="position: absolute; right: 5px; bottom: 5px; width: 7px; height: 7px; border-radius: 4px; background: #F2C200; box-shadow: 0 0 0 1.5px {{t.surf}}"></span></sc-if></span>
+</sc-for>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; padding-top: 4px">
+<div style="display: flex; align-items: center; gap: 6px">
+<span style="font-size: 12px; color: {{t.ts}}">0</span>
+<sc-for list="{{t.levels}}" as="l" hint-placeholder-count="5"><span style="width: 14px; height: 14px; border-radius: 4px; background: {{l}}"></span></sc-for>
+<span style="font-size: 12px; color: {{t.ts}}">19+ подходов</span>
+</div>
+<div style="display: flex; align-items: center; gap: 6px"><span style="width: 7px; height: 7px; border-radius: 4px; background: #F2C200"></span><span style="font-size: 12px; color: {{t.ts}}">рекорд</span></div>
+</div>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 40px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 28px">
+<span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; color: #55554F">06</span>
+<h2 style="margin: 0; font-size: 24px; font-weight: 600">График прогресса · с оборудованием</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Swift Charts: LineMark + PointMark цветом accent, без заливки под линией. Сетка — separator, подписи осей — numeralS 12.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Переключатель метрики — системный сегментированный Picker. Последняя точка подписана, точка рекорда — жёлтая с обводкой. Касание — значение и дата в плашке (chartOverlay).</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Расчётный 1ПМ — формула Эпли: вес × (1 + повторы / 30).</p>
+</div>
+<div style="display: flex; gap: 40px">
+<sc-for list="{{themes}}" as="t" hint-placeholder-count="2">
+<div style="width: 390px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; color: #3D3D3A">{{t.name}}</span>
+<div style="box-sizing: border-box; padding: 12px; background: {{t.bg}}; border: 1px solid {{t.frame}}; border-radius: 28px; color: {{t.tp}}">
+<div style="background: {{t.surf}}; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; height: 36px; padding: 2px; box-sizing: border-box; border-radius: 18px; background: {{t.sunk}}">
+<span style="flex: 1; border-radius: 16px; background: {{t.surf}}; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">1ПМ</span>
+<span style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: {{t.ts}}">Макс. вес</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 13px; color: {{t.ts}}">Расчётный 1ПМ · 8 недель</span>
+<div style="display: flex; align-items: baseline; gap: 8px"><span style="font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">82,3</span><span style="font-size: 15px; color: {{t.ts}}">кг</span><span style="font-size: 15px; font-weight: 600; color: {{t.success}}; margin-left: 4px">+10,3</span></div>
+</div>
+<svg width="334" height="190" viewBox="0 0 334 190" role="img" aria-label="Расчётный 1ПМ вырос с 72 до 82,3 кг за 8 недель" style="display: block">
+<line x1="34" y1="160" x2="334" y2="160" stroke="{{t.sepS}}" stroke-width="1"></line>
+<line x1="34" y1="110" x2="334" y2="110" stroke="{{t.sep}}" stroke-width="1"></line>
+<line x1="34" y1="60" x2="334" y2="60" stroke="{{t.sep}}" stroke-width="1"></line>
+<text x="0" y="164" font-family="Unbounded" font-size="11" fill="{{t.ts}}">70</text>
+<text x="0" y="114" font-family="Unbounded" font-size="11" fill="{{t.ts}}">75</text>
+<text x="0" y="64" font-family="Unbounded" font-size="11" fill="{{t.ts}}">80</text>
+<text x="40" y="184" font-family="Onest" font-size="12" fill="{{t.ts}}">сен</text>
+<text x="300" y="184" font-family="Onest" font-size="12" fill="{{t.ts}}">ноя</text>
+<polyline points="44,140 85,120 126,120 167,100 208,90 249,70 290,70 318,37" fill="none" stroke="{{t.accent}}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></polyline>
+<circle cx="44" cy="140" r="3.5" fill="{{t.accent}}"></circle>
+<circle cx="85" cy="120" r="3.5" fill="{{t.accent}}"></circle>
+<circle cx="126" cy="120" r="3.5" fill="{{t.accent}}"></circle>
+<circle cx="167" cy="100" r="3.5" fill="{{t.accent}}"></circle>
+<circle cx="208" cy="90" r="3.5" fill="{{t.accent}}"></circle>
+<circle cx="249" cy="70" r="3.5" fill="{{t.accent}}"></circle>
+<circle cx="290" cy="70" r="3.5" fill="{{t.accent}}"></circle>
+<circle cx="318" cy="37" r="6" fill="#F2C200" stroke="{{t.surf}}" stroke-width="2.5"></circle>
+<text x="318" y="20" text-anchor="middle" font-family="Unbounded" font-size="12" font-weight="600" fill="{{t.tp}}">82,3</text>
+</svg>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<div style="background: {{t.sunk}}; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: {{t.ts}}">Макс. вес</span><span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">65 × 8</span><span style="font-size: 12px; color: {{t.ts}}">13 ноября</span></div>
+<div style="background: {{t.sunk}}; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: {{t.ts}}">Расчётный 1ПМ</span><span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">82,3 кг</span><span style="font-size: 12px; color: {{t.ts}}">по Эпли</span></div>
+</div>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 40px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 28px">
+<span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; color: #55554F">06a</span>
+<h2 style="margin: 0; font-size: 24px; font-weight: 600">График и рекорды · свой вес и время</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Та же карточка, другая метрика. Переключателя нет — у этих типов одна главная величина.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Свой вес: график — макс. повторов за тренировку; рекорды — макс. повторов и макс. отягощение × повторы.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Время: график и рекорд — макс. длительность.</p>
+</div>
+<div style="display: flex; gap: 40px">
+<sc-for list="{{themes}}" as="t" hint-placeholder-count="2">
+<div style="width: 390px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; color: #3D3D3A">{{t.name}}</span>
+<div style="box-sizing: border-box; padding: 12px; background: {{t.bg}}; border: 1px solid {{t.frame}}; border-radius: 28px; display: flex; flex-direction: column; gap: 10px; color: {{t.tp}}">
+<div role="group" aria-label="Подтягивания: максимум повторов вырос с 10 до 14" style="background: {{t.surf}}; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 13px; color: {{t.ts}}">Подтягивания · свой вес · макс. повторов</span>
+<div style="display: flex; align-items: baseline; gap: 8px"><span style="font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">14</span><span style="font-size: 15px; color: {{t.ts}}">повт.</span><span style="font-size: 15px; font-weight: 600; color: {{t.success}}; margin-left: 4px">+4</span></div>
+</div>
+<svg width="334" height="100" viewBox="0 0 334 100" aria-hidden="true" style="display: block">
+<line x1="0" y1="92" x2="334" y2="92" stroke="{{t.sepS}}" stroke-width="1"></line>
+<polyline points="20,80 70,80 120,64 170,48 220,48 270,32 316,14" fill="none" stroke="{{t.accent}}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></polyline>
+<circle cx="20" cy="80" r="3" fill="{{t.accent}}"></circle><circle cx="70" cy="80" r="3" fill="{{t.accent}}"></circle><circle cx="120" cy="64" r="3" fill="{{t.accent}}"></circle><circle cx="170" cy="48" r="3" fill="{{t.accent}}"></circle><circle cx="220" cy="48" r="3" fill="{{t.accent}}"></circle><circle cx="270" cy="32" r="3" fill="{{t.accent}}"></circle><circle cx="316" cy="14" r="5.5" fill="#F2C200" stroke="{{t.surf}}" stroke-width="2.5"></circle>
+</svg>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px"><div style="background: {{t.sunk}}; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: {{t.ts}}">Макс. повторов</span><span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">14</span><span style="font-size: 12px; color: {{t.ts}}">13 ноября</span></div><div style="background: {{t.sunk}}; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: {{t.ts}}">Макс. с отягощением</span><span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">+15 × 6</span><span style="font-size: 12px; color: {{t.ts}}">6 ноября</span></div></div>
+</div>
+<div role="group" aria-label="Планка: максимальная длительность выросла с 1:30 до 2:10" style="background: {{t.surf}}; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 13px; color: {{t.ts}}">Планка · время · макс. длительность</span>
+<div style="display: flex; align-items: baseline; gap: 8px"><span style="font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">2:10</span><span style="font-size: 15px; color: {{t.ts}}">мин</span><span style="font-size: 15px; font-weight: 600; color: {{t.success}}; margin-left: 4px">+0:40</span></div>
+</div>
+<svg width="334" height="100" viewBox="0 0 334 100" aria-hidden="true" style="display: block">
+<line x1="0" y1="92" x2="334" y2="92" stroke="{{t.sepS}}" stroke-width="1"></line>
+<polyline points="20,80 70,72 120,64 170,48 220,40 270,32 316,14" fill="none" stroke="{{t.accent}}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></polyline>
+<circle cx="20" cy="80" r="3" fill="{{t.accent}}"></circle><circle cx="70" cy="72" r="3" fill="{{t.accent}}"></circle><circle cx="120" cy="64" r="3" fill="{{t.accent}}"></circle><circle cx="170" cy="48" r="3" fill="{{t.accent}}"></circle><circle cx="220" cy="40" r="3" fill="{{t.accent}}"></circle><circle cx="270" cy="32" r="3" fill="{{t.accent}}"></circle><circle cx="316" cy="14" r="5.5" fill="#F2C200" stroke="{{t.surf}}" stroke-width="2.5"></circle>
+</svg>
+<div style="background: {{t.sunk}}; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: {{t.ts}}">Макс. длительность</span><span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">2:10</span><span style="font-size: 12px; color: {{t.ts}}">13 ноября</span></div>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 40px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 28px">
+<span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; color: #55554F">07</span>
+<h2 style="margin: 0; font-size: 24px; font-weight: 600">Бейдж рекорда</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Жёлтая заливка record, текст и иконка всегда #151515 — одинаково в обеих темах. Рядом всегда слово «Рекорд»: цвет не единственный носитель смысла.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Три размера: в строке подхода, в итогах тренировки, в списке истории.</p>
+</div>
+<div style="display: flex; gap: 40px">
+<sc-for list="{{themes}}" as="t" hint-placeholder-count="2">
+<div style="width: 390px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; color: #3D3D3A">{{t.name}}</span>
+<div style="box-sizing: border-box; padding: 12px; background: {{t.bg}}; border: 1px solid {{t.frame}}; border-radius: 28px; display: flex; flex-direction: column; gap: 10px; color: {{t.tp}}">
+<div style="background: {{t.surf}}; border-radius: 20px; padding: 16px; display: flex; align-items: center; justify-content: space-between">
+<span style="font-size: 13px; color: {{t.ts}}">В строке подхода</span>
+<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; padding: 2px 7px; border-radius: 6px; background: #F2C200; color: #151515"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#151515" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"></path></svg>Рекорд</span>
+</div>
+<div style="background: #F2C200; color: #151515; border-radius: 20px; padding: 16px; display: flex; align-items: center; gap: 14px">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"></path><path d="M17 5h3a3 3 0 0 1-3 4M7 5H4a3 3 0 0 0 3 4"></path></svg>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 13px; font-weight: 600">Новый рекорд · Жим лёжа</span><span style="font-family: 'Unbounded', sans-serif; font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums">65 × 8</span></div>
+</div>
+<div style="background: {{t.surf}}; border-radius: 20px; padding: 14px 16px; display: flex; align-items: center; gap: 12px">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 600">Пятница, 13 ноября</span><span style="font-size: 13px; color: {{t.ts}}">Грудь и трицепс · 52 мин</span></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: {{t.tp}}"><span style="width: 8px; height: 8px; border-radius: 4px; background: #F2C200"></span>1 рекорд</span>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 40px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 28px">
+<span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; color: #55554F">10</span>
+<h2 style="margin: 0; font-size: 24px; font-weight: 600">Пустые состояния</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Без иллюстраций: крупный заголовок, одна строка подсказки и одно действие. Отступ сверху 56.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Если действия нет (карточка упражнения без данных), вместо цифры — длинное тире numeralL.</p>
+</div>
+<div style="display: flex; gap: 40px">
+<sc-for list="{{themes}}" as="t" hint-placeholder-count="2">
+<div style="width: 390px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; color: #3D3D3A">{{t.name}}</span>
+<div style="box-sizing: border-box; padding: 12px; background: {{t.bg}}; border: 1px solid {{t.frame}}; border-radius: 28px; display: flex; flex-direction: column; gap: 10px; color: {{t.tp}}">
+<div style="padding: 56px 16px 20px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}">История</span>
+<span style="font-size: 28px; font-weight: 600; line-height: 1.2">Здесь будут твои тренировки</span>
+<span style="font-size: 15px; line-height: 1.45; color: {{t.ts}}">Запиши первую — она появится в календаре.</span>
+<button style="align-self: flex-start; margin-top: 10px; height: 52px; border-radius: 26px; border: 0; padding: 0 22px; background: {{t.ink}}; color: {{t.onInk}}; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer">Начать тренировку</button>
+</div>
+<div style="background: {{t.surf}}; border-radius: 20px; padding: 18px 16px; display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 13px; color: {{t.ts}}">Расчётный 1ПМ · Тяга в наклоне</span>
+<span style="font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 600; line-height: 1">—</span>
+<span style="font-size: 13px; color: {{t.ts}}">Сделай подход, и здесь появится график.</span>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1320,"height":2800}}'>
+class Component extends DCLogic {
+buildCells(levels, fgs, t) {
+const work = { 2: 3, 4: 2, 6: 4, 9: 3, 11: 2, 13: 4, 16: 3, 17: 1 };
+const names = ['отдых', '1–6 подходов', '7–12 подходов', '13–18 подходов', '19 и больше подходов'];
+const cells = [];
+for (let i = 0; i < 6; i++) cells.push({ day: '', label: '', bg: 'transparent', fg: t.ts, shadow: 'none', record: false });
+for (let d = 1; d <= 30; d++) {
+const future = d > 17;
+const lv = work[d] || 0;
+const record = d === 13;
+let label = d + ' ноября';
+if (future) label += ', впереди';
+else label += lv ? ', ' + names[lv] : ', отдых';
+if (record) label += ', рекорд';
+if (d === 17) label += ', сегодня';
+cells.push({
+day: String(d),
+label: label,
+bg: future ? 'transparent' : levels[lv],
+fg: future ? t.ts : fgs[lv],
+shadow: d === 17 ? 'inset 0 0 0 2px ' + t.ink : (future ? 'inset 0 0 0 1px ' + t.sep : 'none'),
+record: record
+});
+}
+return cells;
+}
+renderVals() {
+const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+const light = { key: 'light', name: 'Светлая', bg: '#F3F2EF', surf: '#FFFFFF', sunk: '#EAE9E5', sep: '#E4E3DF', sepS: '#CFCEC8', tp: '#151515', ts: '#5E5E5A', ink: '#151515', onInk: '#FFFFFF', accent: '#1F5FBF', success: '#157A3B', frame: '#D6D5D0' };
+const dark = { key: 'dark', name: 'Тёмная', bg: '#111214', surf: '#1C1D20', sunk: '#26272B', sep: '#2E2F33', sepS: '#45464B', tp: '#F2F1EE', ts: '#A3A29C', ink: '#F2F1EE', onInk: '#111214', accent: '#6A9BEA', success: '#3DB36E', frame: '#111214' };
+light.levels = ['#EAE9E5', '#B9CDEE', '#7FA5E3', '#3F74CC', '#1A4FA3'];
+dark.levels = ['#26272B', '#284A80', '#2F64BC', '#4A7FD6', '#6A9BEA'];
+light.cells = this.buildCells(light.levels, ['#151515', '#151515', '#151515', '#FFFFFF', '#FFFFFF'], light);
+dark.cells = this.buildCells(dark.levels, ['#F2F1EE', '#F2F1EE', '#F2F1EE', '#111214', '#111214'], dark);
+light.weekdays = weekdays;
+dark.weekdays = weekdays;
+return { themes: [light, dark] };
+}
+}
+</script>
+</body>
+</html>
