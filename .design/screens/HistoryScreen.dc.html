@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>История — экран</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&amp;family=Sofia+Sans+Condensed:wght@500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: {{t.bg}}; color: {{t.tp}}; font-family: 'Onest', sans-serif">
+
+<sc-if value="{{showList}}" hint-placeholder-val="{{true}}">
+<div style="position: absolute; left: 0; top: 0; right: 0; box-sizing: border-box; padding: 62px 12px 0; display: flex; flex-direction: column; gap: 12px">
+<div style="height: 44px"></div>
+<h1 style="margin: 0; padding: 0 8px; font-size: {{f.large}}px; font-weight: 600; line-height: 1.2">История</h1>
+
+<div style="background: {{t.surf}}; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap"><span style="font-size: {{f.body}}px; font-weight: 600">15 недель</span><span style="font-size: {{f.foot}}px; color: {{t.ts}}">{{countText}}</span></div>
+<div aria-hidden="true" style="display: grid; grid-template-columns: 18px repeat(15, 18px); column-gap: 3px; font-size: 11px; color: {{t.ts}}">
+<span></span>
+<sc-for list="{{months}}" as="m" hint-placeholder-count="15"><span style="white-space: nowrap; overflow: visible">{{m}}</span></sc-for>
+</div>
+<div role="grid" aria-label="Тренировки за 15 недель" style="display: flex; flex-direction: column; gap: 3px">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="7">
+<div role="row" style="display: flex; gap: 3px; align-items: center">
+<span aria-hidden="true" style="width: 18px; font-size: 11px; color: {{t.ts}}">{{r.label}}</span>
+<sc-for list="{{r.cells}}" as="c" hint-placeholder-count="15"><span role="gridcell" aria-label="{{c.label}}" style="width: 18px; height: 18px; box-sizing: border-box; border-radius: 5px; background: {{c.bg}}; box-shadow: {{c.shadow}}"></span></sc-for>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; align-items: center; gap: 6px; padding-top: 2px">
+<span style="font-size: 12px; color: {{t.ts}}">0</span>
+<sc-for list="{{levels}}" as="l" hint-placeholder-count="5"><span style="width: 14px; height: 14px; border-radius: 4px; background: {{l}}"></span></sc-for>
+<span style="font-size: 12px; color: {{t.ts}}">19+ подходов</span>
+</div>
+</div>
+
+<sc-if value="{{hasData}}" hint-placeholder-val="{{true}}">
+<span style="padding: 8px 8px 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}">Ноябрь</span>
+<div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden">
+<sc-for list="{{workouts}}" as="w" hint-placeholder-count="4">
+<a href="#" style="display: flex; align-items: center; gap: 12px; min-height: {{f.rowH}}px; padding: 10px 14px 10px 16px; box-sizing: border-box; border-bottom: 1px solid {{t.sep}}; text-decoration: none; color: {{t.tp}}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0">
+<span style="font-size: {{f.body}}px; font-weight: 600; line-height: 1.25">{{w.title}}</span>
+<span style="font-size: {{f.foot}}px; line-height: 1.3; color: {{t.ts}}">{{w.meta}}</span>
+</div>
+<sc-if value="{{w.record}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; align-items: center; gap: 6px; font-size: {{f.foot}}px; font-weight: 500"><span style="width: 8px; height: 8px; border-radius: 4px; background: #F2C200"></span>{{w.record}}</span></sc-if>
+<svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="{{t.ts}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l6 6-6 6"></path></svg>
+</a>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}">
+<div style="padding: 28px 8px 0; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 28px; font-weight: 600; line-height: 1.2">Здесь будут твои тренировки</span>
+<span style="font-size: 15px; line-height: 1.45; color: {{t.ts}}">Запиши первую — она появится в календаре и в списке.</span>
+</div>
+<button style="margin-top: 16px; height: 56px; border-radius: 28px; border: 0; background: {{t.ink}}; color: {{t.onInk}}; font-family: 'Onest', sans-serif; font-size: 17px; font-weight: 600; cursor: pointer">Начать тренировку</button>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{isWorkout}}" hint-placeholder-val="{{false}}">
+<div style="position: absolute; left: 0; top: 0; right: 0; box-sizing: border-box; padding: 62px 12px 0; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<button aria-label="Назад к истории" style="width: 44px; height: 44px; border-radius: 22px; border: 0; padding: 0; background: {{t.glass}}; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: {{t.glassShadow}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2L2 10l8 8"></path></svg></button>
+<button aria-label="Действия с тренировкой" style="width: 44px; height: 44px; border-radius: 22px; border: 0; padding: 0; background: {{t.glass}}; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: {{t.glassShadow}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{t.tp}}" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+</div>
+<div style="padding: 6px 8px 2px; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 13px; color: {{t.ts}}">Пт 13 ноября · 18:05–18:57 · День C</span>
+<h1 style="margin: 0; font-size: 28px; font-weight: 600; line-height: 1.15">Ноги и плечи</h1>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<div style="background: {{t.surf}}; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: {{t.ts}}">Время</span><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums">52 <span style="font-family: 'Onest', sans-serif; font-size: 13px; font-weight: 500; color: {{t.ts}}">мин</span></span></div>
+<div style="background: {{t.surf}}; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: {{t.ts}}">Подходы</span><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums">19</span></div>
+<div style="background: #F2C200; color: #151515; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 500">Рекорды</span><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums">1</span></div>
+</div>
+<sc-for list="{{details}}" as="e" hint-placeholder-count="3">
+<div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden">
+<a href="#" style="display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 14px 0 16px; border-bottom: 1px solid {{t.sep}}; text-decoration: none; color: {{t.tp}}"><span style="flex: 1; font-size: 17px; font-weight: 600">{{e.name}}</span><span style="font-size: 13px; color: {{t.ts}}">{{e.meta}}</span><svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="{{t.ts}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l6 6-6 6"></path></svg></a>
+<div style="display: flex; flex-direction: column; padding: 6px 0">
+<sc-for list="{{e.sets}}" as="s" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 16px">
+<span style="width: 18px; font-size: 13px; font-weight: 600; color: {{t.ts}}">{{s.n}}</span>
+<span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums; color: {{s.color}}">{{s.v}}</span>
+<sc-if value="{{s.warm}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; font-weight: 500; padding: 1px 7px; border: 1px solid {{t.chip}}; border-radius: 6px; color: {{t.ts}}">разминка</span></sc-if>
+<sc-if value="{{s.rec}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; font-weight: 600; padding: 2px 7px; border-radius: 6px; background: #F2C200; color: #151515">Рекорд</span></sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<nav aria-label="Вкладки" style="position: absolute; left: 16px; right: 16px; bottom: 24px; display: flex; align-items: center; height: 62px; box-sizing: border-box; padding: 4px; border-radius: 31px; background: {{t.glass}}; backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4); box-shadow: {{t.glassShadow}}">
+<a href="#" style="flex: 1; height: 54px; border-radius: 27px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-decoration: none; color: {{t.tp}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"></path></svg><span style="font-size: 11px; font-weight: 500">Тренировка</span></a>
+<a href="#" style="flex: 1; height: 54px; border-radius: 27px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-decoration: none; color: {{t.tp}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"></rect><path d="M8 8h8M8 12h8M8 16h5"></path></svg><span style="font-size: 11px; font-weight: 500">Программы</span></a>
+<a href="#" aria-current="page" style="flex: 1; height: 54px; border-radius: 27px; background: {{t.tabSel}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-decoration: none; color: {{t.accent}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.accent}}" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg><span style="font-size: 11px; font-weight: 600">История</span></a>
+</nav>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"state":{"editor":"enum","options":["list","empty","workout","ax"],"default":"list"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+const light = { bg: '#F3F2EF', surf: '#FFFFFF', sunk: '#EAE9E5', sep: '#E4E3DF', chip: '#BDBCB6', tp: '#151515', ts: '#5E5E5A', ink: '#151515', onInk: '#FFFFFF', accent: '#1F5FBF', glass: 'rgba(255,255,255,0.72)', glassShadow: 'inset 0 0 0 1px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.08)', tabSel: 'rgba(0,0,0,0.06)', levels: ['#EAE9E5', '#B9CDEE', '#7FA5E3', '#3F74CC', '#1A4FA3'] };
+const dark = { bg: '#111214', surf: '#1C1D20', sunk: '#26272B', sep: '#2E2F33', chip: '#4A4A47', tp: '#F2F1EE', ts: '#A3A29C', ink: '#F2F1EE', onInk: '#111214', accent: '#6A9BEA', glass: 'rgba(44,45,50,0.72)', glassShadow: 'inset 0 0 0 1px rgba(255,255,255,0.10), 0 6px 20px rgba(0,0,0,0.4)', tabSel: 'rgba(255,255,255,0.10)', levels: ['#26272B', '#284A80', '#2F64BC', '#4A7FD6', '#6A9BEA'] };
+const t = (this.props.dark ?? false) ? dark : light;
+const state = this.props.state ?? 'list';
+const empty = state === 'empty';
+const ax = state === 'ax';
+const months = ['авг', '', '', '', 'сен', '', '', '', 'окт', '', '', '', 'ноя', '', ''];
+const monthNames = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const names = ['отдых', '1–6 подходов', '7–12 подходов', '13–18 подходов', '19 и больше подходов'];
+const dayLabels = ['Пн', '', 'Ср', '', 'Пт', '', ''];
+const start = new Date(2026, 7, 10);
+const today = 99;
+let count = 0;
+const rows = dayLabels.map((label, r) => {
+const cells = [];
+for (let c = 0; c < 15; c++) {
+const idx = c * 7 + r;
+const d = new Date(start.getTime() + idx * 86400000);
+const dateText = d.getDate() + ' ' + monthNames[d.getMonth()];
+if (idx > today) { cells.push({ bg: 'transparent', shadow: 'inset 0 0 0 1px ' + t.sep, label: dateText + ', впереди' }); continue; }
+let lv = 0;
+const h = (idx * 37) % 10;
+if (!empty && (r === 0 || r === 2 || r === 4) && h >= 2) lv = 1 + ((c * 3 + r * 5) % 4);
+if (!empty && r === 5 && h === 9) lv = 1;
+if (lv) count++;
+cells.push({ bg: t.levels[lv], shadow: idx === today ? 'inset 0 0 0 2px ' + t.ink : 'none', label: dateText + (idx === today ? ', сегодня' : '') + ', ' + names[lv] });
+}
+return { label: label, cells: cells };
+});
+const f = ax ? { large: 40, body: 28, foot: 22, rowH: 96 } : { large: 34, body: 17, foot: 13, rowH: 64 };
+return {
+t: t, f: f,
+showList: state === 'list' || state === 'empty' || ax,
+hasData: !empty,
+isEmpty: empty,
+isWorkout: state === 'workout',
+months: months, rows: rows, levels: t.levels,
+countText: empty ? 'пока пусто' : count + ' тренировок',
+workouts: [
+{ title: 'Пн 16 · День A · Грудь и трицепс', meta: '48 мин · 17 подходов', record: '' },
+{ title: 'Пт 13 · День C · Ноги и плечи', meta: '52 мин · 19 подходов', record: '1' },
+{ title: 'Ср 11 · День B · Спина и бицепс', meta: '55 мин · 20 подходов', record: '' },
+{ title: 'Пн 9 · День A · Грудь и трицепс', meta: '46 мин · 16 подходов', record: '2' }
+],
+details: [
+{ name: 'Присед', meta: '4 × 5', sets: [
+{ n: '1', v: '60 × 8', warm: true, rec: false, color: t.ts },
+{ n: '2', v: '100 × 5', warm: false, rec: false, color: t.tp },
+{ n: '3', v: '100 × 5', warm: false, rec: false, color: t.tp },
+{ n: '4', v: '102,5 × 5', warm: false, rec: true, color: t.tp }
+] },
+{ name: 'Жим стоя', meta: '3 × 6–8', sets: [
+{ n: '1', v: '40 × 8', warm: false, rec: false, color: t.tp },
+{ n: '2', v: '40 × 7', warm: false, rec: false, color: t.tp },
+{ n: '3', v: '40 × 6', warm: false, rec: false, color: t.tp }
+] },
+{ name: 'Планка', meta: '2 подхода', sets: [
+{ n: '1', v: '1:30', warm: false, rec: false, color: t.tp },
+{ n: '2', v: '1:15', warm: false, rec: false, color: t.tp }
+] }
+]
+};
+}
+}
+</script>
+</body>
+</html>

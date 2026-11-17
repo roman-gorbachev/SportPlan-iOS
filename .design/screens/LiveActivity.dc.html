@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Live Activity и Dynamic Island</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&amp;family=Sofia+Sans+Condensed:wght@500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1F5FBF}a:hover{color:#151515}
+</style>
+</helmet>
+<div style="width: 1320px; height: 1560px; box-sizing: border-box; padding: 64px; display: flex; flex-direction: column; gap: 56px; background: #EAE9E5; color: #151515; font-family: 'Onest', sans-serif">
+
+<div style="display: flex; flex-direction: column; gap: 16px">
+<span style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #55554F">Шаг 5</span>
+<h1 style="margin: 0; font-family: 'Sofia Sans Condensed', sans-serif; font-size: 48px; font-weight: 600; line-height: 1.05">Live Activity и Dynamic Island</h1>
+<p style="margin: 0; max-width: 860px; font-size: 15px; line-height: 1.5; color: #2E2E2C">Живут всю тренировку: от «Начать» до «Завершить». Три состояния: подход → отдых → отдых окончен (если приложение свёрнуто). Кнопок нет — всё действие в приложении.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 40px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 28px">
+<span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 17px; font-weight: 500; color: #55554F">14</span>
+<h2 style="margin: 0; font-size: 24px; font-weight: 600">Экран блокировки</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Фон карточки — surface темы системы (activityBackgroundTint), скругление системное. Верхняя строка — контекст: «Тренировка» и сколько она идёт.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Отсчёт отдыха и «прошло» — Text(timerInterval:): цифры идут сами, без обновлений из приложения.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">«Отдых окончен» можно показать без пробуждения приложения: staleDate = конец отдыха, а вид проверяет context.isStale. Проверить на устройстве.</p>
+</div>
+<div style="display: flex; gap: 40px">
+<sc-for list="{{themes}}" as="t" hint-placeholder-count="2">
+<div style="width: 390px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; color: #3D3D3A">{{t.name}}</span>
+<div style="box-sizing: border-box; padding: 20px 12px; background: {{t.wall}}; border-radius: 28px; display: flex; flex-direction: column; gap: 10px; color: {{t.tp}}">
+
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.wallText}}; padding: 0 8px">Подход</span>
+<div style="background: {{t.surf}}; border-radius: 24px; padding: 14px 18px 16px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 12px; color: {{t.ts}}">Тренировка · <span style="font-family: 'Sofia Sans Condensed', sans-serif; font-variant-numeric: tabular-nums">34:12</span></span>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 600">Жим лёжа</span><span style="font-size: 13px; color: {{t.ts}}">подход 4 · 8–12 повт.</span></div>
+<span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 28px; font-weight: 600; font-variant-numeric: tabular-nums">65 × 8</span>
+</div>
+</div>
+
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.wallText}}; padding: 8px 8px 0">Отдых</span>
+<div style="background: {{t.surf}}; border-radius: 24px; padding: 14px 18px 16px; display: flex; flex-direction: column; gap: 12px">
+<span style="font-size: 12px; color: {{t.ts}}">Тренировка · <span style="font-family: 'Sofia Sans Condensed', sans-serif; font-variant-numeric: tabular-nums">35:40</span></span>
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: {{t.ts}}">Отдых</span><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 44px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">1:45</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-end"><span style="font-size: 13px; color: {{t.ts}}">Дальше</span><span style="font-size: 15px; font-weight: 600">Жим лёжа</span><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">65 × 8</span></div>
+</div>
+<div style="height: 4px; border-radius: 2px; background: {{t.sunk}}"><div style="width: 12.5%; height: 4px; border-radius: 2px; background: {{t.ink}}"></div></div>
+</div>
+
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.wallText}}; padding: 8px 8px 0">Отдых окончен</span>
+<div style="background: {{t.surf}}; border-radius: 24px; padding: 14px 18px 16px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 12px; color: {{t.ts}}">Тренировка · <span style="font-family: 'Sofia Sans Condensed', sans-serif; font-variant-numeric: tabular-nums">37:52</span></span>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="display: flex; align-items: center; gap: 6px; font-size: 17px; font-weight: 600"><span style="width: 8px; height: 8px; border-radius: 4px; background: {{t.success}}"></span>Отдых окончен</span><span style="font-size: 13px; color: {{t.ts}}">Пора: жим лёжа, подход 4</span></div>
+<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px"><span style="font-size: 12px; color: {{t.ts}}">прошло</span><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums">0:12</span></div>
+</div>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 40px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 28px">
+<span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 17px; font-weight: 500; color: #55554F">15</span>
+<h2 style="margin: 0; font-size: 24px; font-weight: 600">Dynamic Island</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Всегда чёрный, текст белый и #A3A29C, акценты — тёмные варианты токенов (accent #6A9BEA, success #3DB36E).</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Компактный: слева значок состояния, справа одно значение. Минимальный (рядом другая активность): только значок или кольцо отдыха.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Развёрнутый (долгое нажатие): то же, что на экране блокировки, плюс стопка блинов на сторону в состоянии «подход» — можно глянуть, что вешать, не открывая приложение.</p>
+</div>
+<div style="box-sizing: border-box; padding: 28px; background: #0B0B0C; border-radius: 28px; display: flex; flex-direction: column; gap: 20px; color: #FFFFFF">
+
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #A3A29C">Компактный · подход, отдых, окончен</span>
+<div style="display: flex; gap: 24px; flex-wrap: wrap">
+<div style="width: 230px; height: 37px; box-sizing: border-box; padding: 0 14px 0 12px; border-radius: 19px; background: #000000; box-shadow: inset 0 0 0 1px #1F1F21; display: flex; align-items: center; justify-content: space-between"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"></path></svg><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums">65 × 8</span></div>
+<div style="width: 230px; height: 37px; box-sizing: border-box; padding: 0 14px 0 12px; border-radius: 19px; background: #000000; box-shadow: inset 0 0 0 1px #1F1F21; display: flex; align-items: center; justify-content: space-between"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A9BEA" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2.5M9 2h6"></path></svg><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums">1:45</span></div>
+<div style="width: 230px; height: 37px; box-sizing: border-box; padding: 0 14px 0 12px; border-radius: 19px; background: #000000; box-shadow: inset 0 0 0 1px #1F1F21; display: flex; align-items: center; justify-content: space-between"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3DB36E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2.5M9 2h6"></path></svg><span style="font-size: 15px; font-weight: 600">Пора</span></div>
+</div>
+
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #A3A29C">Минимальный</span>
+<div style="display: flex; gap: 24px">
+<div style="width: 37px; height: 37px; border-radius: 19px; background: #000000; box-shadow: inset 0 0 0 1px #1F1F21; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"></path></svg></div>
+<div style="width: 37px; height: 37px; border-radius: 19px; background: #000000; box-shadow: inset 0 0 0 1px #1F1F21; display: flex; align-items: center; justify-content: center"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="#2E2F33" stroke-width="3"></circle><path d="M12 3a9 9 0 0 1 7.8 13.5" stroke="#6A9BEA" stroke-width="3" stroke-linecap="round"></path></svg></div>
+<div style="width: 37px; height: 37px; border-radius: 19px; background: #000000; box-shadow: inset 0 0 0 1px #1F1F21; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3DB36E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2.5M9 2h6"></path></svg></div>
+</div>
+
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #A3A29C">Развёрнутый</span>
+<div style="display: grid; grid-template-columns: repeat(2, 371px); gap: 20px">
+
+<div role="img" aria-label="Подход: жим лёжа, 65 на 8, на сторону 20 и 2,5 килограмма" style="box-sizing: border-box; height: 160px; padding: 18px 22px; border-radius: 44px; background: #000000; box-shadow: inset 0 0 0 1px #1F1F21; display: flex; flex-direction: column; justify-content: space-between">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"></path></svg>Жим лёжа</span><span style="font-size: 13px; color: #A3A29C">подход 4 · 8–12</span></div>
+<div style="display: flex; justify-content: space-between; align-items: flex-end">
+<span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 40px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">65 × 8</span>
+<div style="display: flex; align-items: center; gap: 2px; height: 46px"><span style="width: 3px; height: 16px; background: #6F6F6B; border-radius: 1px"></span><span style="width: 9px; height: 44px; background: #3D7DE0; border-radius: 2px"></span><span style="width: 5px; height: 24px; background: #E8453C; border-radius: 1px"></span><span style="width: 14px; height: 6px; background: #4A4A47; border-radius: 1px"></span></div>
+</div>
+</div>
+
+<div role="img" aria-label="Отдых: 1 минута 45 секунд, дальше жим лёжа 65 на 8" style="box-sizing: border-box; height: 160px; padding: 18px 22px; border-radius: 44px; background: #000000; box-shadow: inset 0 0 0 1px #1F1F21; display: flex; flex-direction: column; justify-content: space-between">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6A9BEA" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2.5M9 2h6"></path></svg>Отдых</span><span style="font-size: 13px; color: #A3A29C">дальше 65 × 8</span></div>
+<span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 40px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">1:45</span>
+<div style="height: 4px; border-radius: 2px; background: #2E2F33"><div style="width: 12.5%; height: 4px; border-radius: 2px; background: #6A9BEA"></div></div>
+</div>
+
+<div role="img" aria-label="Отдых окончен 12 секунд назад, пора: жим лёжа, подход 4" style="box-sizing: border-box; height: 160px; padding: 18px 22px; border-radius: 44px; background: #000000; box-shadow: inset 0 0 0 1px #1F1F21; display: flex; flex-direction: column; justify-content: space-between">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3DB36E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2.5M9 2h6"></path></svg>Отдых окончен</span><span style="font-size: 13px; color: #A3A29C">прошло <span style="font-family: 'Sofia Sans Condensed', sans-serif; color: #FFFFFF; font-variant-numeric: tabular-nums">0:12</span></span></div>
+<span style="font-size: 22px; font-weight: 600; line-height: 1.25">Пора: жим лёжа,<br>подход 4 · 65 × 8</span>
+</div>
+
+</div>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1320,"height":1560}}'>
+class Component extends DCLogic {
+renderVals() {
+return {
+themes: [
+{ name: 'Светлая', wall: '#C9C6BE', wallText: '#2E2E2C', surf: '#FFFFFF', sunk: '#EAE9E5', tp: '#151515', ts: '#5E5E5A', ink: '#151515', success: '#157A3B' },
+{ name: 'Тёмная', wall: '#2B2C30', wallText: '#C9C8C2', surf: '#1C1D20', sunk: '#26272B', tp: '#F2F1EE', ts: '#A3A29C', ink: '#F2F1EE', success: '#3DB36E' }
+]
+};
+}
+}
+</script>
+</body>
+</html>

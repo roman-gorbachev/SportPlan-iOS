@@ -8,7 +8,7 @@
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&amp;family=Unbounded:wght@500;600&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&amp;family=Sofia+Sans+Condensed:wght@500;600;700&amp;display=swap">
 <style>
 body{margin:0}
 </style>
@@ -109,7 +109,7 @@ body{margin:0}
 <span style="padding: 4px 8px 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}">Оборудование · мой зал</span>
 <div role="radiogroup" aria-label="Оборудование" style="background: {{t.surf}}; border-radius: 20px; overflow: hidden">
 <sc-for list="{{gear}}" as="g" hint-placeholder-count="3">
-<button role="radio" aria-checked="{{g.checked}}" style="width: 100%; display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 16px; border: 0; border-bottom: 1px solid {{t.sep}}; background: transparent; color: {{t.tp}}; text-align: left; font-family: 'Onest', sans-serif; cursor: pointer"><span style="flex: 1; font-size: 17px">{{g.name}}</span><span style="font-family: 'Unbounded', sans-serif; font-size: 13px; color: {{t.ts}}; font-variant-numeric: tabular-nums">{{g.nums}}</span><span style="width: 20px; display: flex; justify-content: center"><sc-if value="{{g.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{t.accent}}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></sc-if></span></button>
+<button role="radio" aria-checked="{{g.checked}}" style="width: 100%; display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 16px; border: 0; border-bottom: 1px solid {{t.sep}}; background: transparent; color: {{t.tp}}; text-align: left; font-family: 'Onest', sans-serif; cursor: pointer"><span style="flex: 1; font-size: 17px">{{g.name}}</span><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 13px; color: {{t.ts}}; font-variant-numeric: tabular-nums">{{g.nums}}</span><span style="width: 20px; display: flex; justify-content: center"><sc-if value="{{g.on}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{t.accent}}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></sc-if></span></button>
 </sc-for>
 <button style="width: 100%; min-height: 52px; border: 0; padding: 0 16px; background: transparent; display: flex; align-items: center; gap: 10px; font-family: 'Onest', sans-serif; font-size: 17px; color: {{t.accent}}; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{t.accent}}" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Новый гриф</button>
 </div>
@@ -121,12 +121,12 @@ body{margin:0}
 <button role="radio" aria-checked="false" style="flex: 1; border: 0; border-radius: 19px; background: transparent; color: {{t.ts}}; font-family: 'Onest', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer">Время</button>
 </div>
 </div>
-<a href="#" style="display: flex; align-items: center; justify-content: space-between; height: 44px; padding: 0 14px; border-radius: 22px; background: {{t.surf}}; text-decoration: none; color: {{t.tp}}"><span style="font-size: 14px; color: {{t.ts}}">отдых</span><span style="font-family: 'Unbounded', sans-serif; font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums">2:00</span></a>
+<a href="#" style="display: flex; align-items: center; justify-content: space-between; height: 44px; padding: 0 14px; border-radius: 22px; background: {{t.surf}}; text-decoration: none; color: {{t.tp}}"><span style="font-size: 14px; color: {{t.ts}}">отдых</span><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums">1:30</span></a>
 </div>
 <span style="padding: 4px 8px 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}">В день A · Грудь и трицепс</span>
 <div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden">
-<a href="#" style="display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 16px; border-bottom: 1px solid {{t.sep}}; text-decoration: none; color: {{t.tp}}"><span style="font-size: 17px">Подходы</span><span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">4</span></a>
-<a href="#" style="display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 16px; text-decoration: none; color: {{t.tp}}"><span style="font-size: 17px">Повторы</span><span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">8–12</span></a>
+<a href="#" style="display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 16px; border-bottom: 1px solid {{t.sep}}; text-decoration: none; color: {{t.tp}}"><span style="font-size: 17px">Подходы</span><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">4</span></a>
+<a href="#" style="display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 16px; text-decoration: none; color: {{t.tp}}"><span style="font-size: 17px">Повторы</span><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">8–12</span></a>
 </div>
 <button style="align-self: flex-start; min-height: 44px; border: 0; padding: 0 8px; background: transparent; display: flex; align-items: center; gap: 8px; font-family: 'Onest', sans-serif; font-size: 15px; color: {{t.accent}}; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{t.accent}}" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Описание</button>
 </sc-if>

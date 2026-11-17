@@ -25,9 +25,9 @@ a{color:#1F5FBF}a:hover{color:#151515}
 <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 28px">
 <span style="font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 500; color: #55554F">05</span>
 <h2 style="margin: 0; font-size: 24px; font-weight: 600">Heatmap и легенда</h2>
-<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Месяц, неделя с понедельника. Уровень — число рабочих подходов за день: 0 · 1–6 · 7–12 · 13–18 · 19+. Разминка не считается.</p>
-<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Число дня всегда видно: на светлых уровнях — textPrimary, на тёмных — инверсия. Сегодня — обводка ink 2. Будущие дни — только контур. День с рекордом — жёлтая точка.</p>
-<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Ячейка 6 скругление, тап — детали тренировки. VoiceOver: «13 ноября, 19 и больше подходов, рекорд».</p>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Сетка в стиле GitHub за последние 15 недель: колонки — недели, строки — дни с понедельника. Уровень — число рабочих подходов за день: 0 · 1–6 · 7–12 · 13–18 · 19+. Разминка не считается.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Ячейка 18 pt, скругление 5, зазор 3 — 15 недель помещаются в ширину iPhone. Сегодня — обводка ink 2, будущие дни — только контур. Подписи: месяцы сверху, Пн / Ср / Пт слева.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Тап по ячейке — тренировки этого дня. VoiceOver читает каждую ячейку: «13 ноября, 19 и больше подходов». Рекорды отмечаются в списке тренировок ниже, не в сетке.</p>
 </div>
 <div style="display: flex; gap: 40px">
 <sc-for list="{{themes}}" as="t" hint-placeholder-count="2">
@@ -35,22 +35,23 @@ a{color:#1F5FBF}a:hover{color:#151515}
 <span style="font-size: 13px; font-weight: 600; color: #3D3D3A">{{t.name}}</span>
 <div style="box-sizing: border-box; padding: 12px; background: {{t.bg}}; border: 1px solid {{t.frame}}; border-radius: 28px; color: {{t.tp}}">
 <div style="background: {{t.surf}}; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
-<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 17px; font-weight: 600">Ноябрь</span><span style="font-size: 13px; color: {{t.ts}}">8 тренировок</span></div>
-<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px">
-<sc-for list="{{t.weekdays}}" as="w" hint-placeholder-count="7"><span style="font-size: 11px; font-weight: 500; color: {{t.ts}}; text-align: center">{{w}}</span></sc-for>
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 17px; font-weight: 600">15 недель</span><span style="font-size: 13px; color: {{t.ts}}">{{t.count}} тренировок</span></div>
+<div aria-hidden="true" style="display: grid; grid-template-columns: 18px repeat(15, 18px); column-gap: 3px; font-size: 11px; color: {{t.ts}}">
+<span></span>
+<sc-for list="{{t.months}}" as="m" hint-placeholder-count="15"><span style="white-space: nowrap; overflow: visible">{{m}}</span></sc-for>
 </div>
-<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px">
-<sc-for list="{{t.cells}}" as="c" hint-placeholder-count="36">
-<span role="img" aria-label="{{c.label}}" style="position: relative; height: 42px; border-radius: 6px; box-sizing: border-box; padding: 4px 6px; font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; background: {{c.bg}}; color: {{c.fg}}; box-shadow: {{c.shadow}}">{{c.day}}<sc-if value="{{c.record}}" hint-placeholder-val="{{false}}"><span style="position: absolute; right: 5px; bottom: 5px; width: 7px; height: 7px; border-radius: 4px; background: #F2C200; box-shadow: 0 0 0 1.5px {{t.surf}}"></span></sc-if></span>
+<div role="grid" aria-label="Тренировки за 15 недель" style="display: flex; flex-direction: column; gap: 3px">
+<sc-for list="{{t.rows}}" as="r" hint-placeholder-count="7">
+<div role="row" style="display: flex; gap: 3px; align-items: center">
+<span aria-hidden="true" style="width: 18px; font-size: 11px; color: {{t.ts}}">{{r.label}}</span>
+<sc-for list="{{r.cells}}" as="c" hint-placeholder-count="15"><span role="gridcell" aria-label="{{c.label}}" style="width: 18px; height: 18px; box-sizing: border-box; border-radius: 5px; background: {{c.bg}}; box-shadow: {{c.shadow}}"></span></sc-for>
+</div>
 </sc-for>
 </div>
-<div style="display: flex; align-items: center; justify-content: space-between; padding-top: 4px">
-<div style="display: flex; align-items: center; gap: 6px">
+<div style="display: flex; align-items: center; gap: 6px; padding-top: 2px">
 <span style="font-size: 12px; color: {{t.ts}}">0</span>
 <sc-for list="{{t.levels}}" as="l" hint-placeholder-count="5"><span style="width: 14px; height: 14px; border-radius: 4px; background: {{l}}"></span></sc-for>
 <span style="font-size: 12px; color: {{t.ts}}">19+ подходов</span>
-</div>
-<div style="display: flex; align-items: center; gap: 6px"><span style="width: 7px; height: 7px; border-radius: 4px; background: #F2C200"></span><span style="font-size: 12px; color: {{t.ts}}">рекорд</span></div>
 </div>
 </div>
 </div>
@@ -218,41 +219,39 @@ a{color:#1F5FBF}a:hover{color:#151515}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1320,"height":2800}}'>
 class Component extends DCLogic {
-buildCells(levels, fgs, t) {
-const work = { 2: 3, 4: 2, 6: 4, 9: 3, 11: 2, 13: 4, 16: 3, 17: 1 };
+buildRows(t) {
+const monthNames = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 const names = ['отдых', '1–6 подходов', '7–12 подходов', '13–18 подходов', '19 и больше подходов'];
+const start = new Date(2026, 7, 10);
+const today = 99;
+let count = 0;
+const rows = ['Пн', '', 'Ср', '', 'Пт', '', ''].map((label, r) => {
 const cells = [];
-for (let i = 0; i < 6; i++) cells.push({ day: '', label: '', bg: 'transparent', fg: t.ts, shadow: 'none', record: false });
-for (let d = 1; d <= 30; d++) {
-const future = d > 17;
-const lv = work[d] || 0;
-const record = d === 13;
-let label = d + ' ноября';
-if (future) label += ', впереди';
-else label += lv ? ', ' + names[lv] : ', отдых';
-if (record) label += ', рекорд';
-if (d === 17) label += ', сегодня';
-cells.push({
-day: String(d),
-label: label,
-bg: future ? 'transparent' : levels[lv],
-fg: future ? t.ts : fgs[lv],
-shadow: d === 17 ? 'inset 0 0 0 2px ' + t.ink : (future ? 'inset 0 0 0 1px ' + t.sep : 'none'),
-record: record
-});
+for (let c = 0; c < 15; c++) {
+const idx = c * 7 + r;
+const d = new Date(start.getTime() + idx * 86400000);
+const dateText = d.getDate() + ' ' + monthNames[d.getMonth()];
+if (idx > today) { cells.push({ bg: 'transparent', shadow: 'inset 0 0 0 1px ' + t.sep, label: dateText + ', впереди' }); continue; }
+let lv = 0;
+const h = (idx * 37) % 10;
+if ((r === 0 || r === 2 || r === 4) && h >= 2) lv = 1 + ((c * 3 + r * 5) % 4);
+if (r === 5 && h === 9) lv = 1;
+if (lv) count++;
+cells.push({ bg: t.levels[lv], shadow: idx === today ? 'inset 0 0 0 2px ' + t.ink : 'none', label: dateText + (idx === today ? ', сегодня' : '') + ', ' + names[lv] });
 }
-return cells;
+return { label: label, cells: cells };
+});
+t.rows = rows;
+t.count = count;
+t.months = ['авг', '', '', '', 'сен', '', '', '', 'окт', '', '', '', 'ноя', '', ''];
 }
 renderVals() {
-const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 const light = { key: 'light', name: 'Светлая', bg: '#F3F2EF', surf: '#FFFFFF', sunk: '#EAE9E5', sep: '#E4E3DF', sepS: '#CFCEC8', tp: '#151515', ts: '#5E5E5A', ink: '#151515', onInk: '#FFFFFF', accent: '#1F5FBF', success: '#157A3B', frame: '#D6D5D0' };
 const dark = { key: 'dark', name: 'Тёмная', bg: '#111214', surf: '#1C1D20', sunk: '#26272B', sep: '#2E2F33', sepS: '#45464B', tp: '#F2F1EE', ts: '#A3A29C', ink: '#F2F1EE', onInk: '#111214', accent: '#6A9BEA', success: '#3DB36E', frame: '#111214' };
 light.levels = ['#EAE9E5', '#B9CDEE', '#7FA5E3', '#3F74CC', '#1A4FA3'];
 dark.levels = ['#26272B', '#284A80', '#2F64BC', '#4A7FD6', '#6A9BEA'];
-light.cells = this.buildCells(light.levels, ['#151515', '#151515', '#151515', '#FFFFFF', '#FFFFFF'], light);
-dark.cells = this.buildCells(dark.levels, ['#F2F1EE', '#F2F1EE', '#F2F1EE', '#111214', '#111214'], dark);
-light.weekdays = weekdays;
-dark.weekdays = weekdays;
+this.buildRows(light);
+this.buildRows(dark);
 return { themes: [light, dark] };
 }
 }

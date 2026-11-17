@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Карточка упражнения — экран</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&amp;family=Sofia+Sans+Condensed:wght@500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: {{t.bg}}; color: {{t.tp}}; font-family: 'Onest', sans-serif">
+<div style="position: absolute; left: 0; top: 0; right: 0; box-sizing: border-box; padding: 62px 12px 0; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<button aria-label="Назад" style="width: {{f.btn}}px; height: {{f.btn}}px; border-radius: 26px; border: 0; padding: 0; background: {{t.glass}}; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: {{t.glassShadow}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2L2 10l8 8"></path></svg></button>
+<button aria-label="Изменить или архивировать упражнение" style="width: {{f.btn}}px; height: {{f.btn}}px; border-radius: 26px; border: 0; padding: 0; background: {{t.glass}}; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: {{t.glassShadow}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{t.tp}}" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+</div>
+<div style="padding: 6px 8px 2px; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: {{f.foot}}px; color: {{t.ts}}">{{x.meta}}</span>
+<h1 style="margin: 0; font-size: {{f.title}}px; font-weight: 600; line-height: 1.15">{{x.name}}</h1>
+</div>
+
+<div style="background: {{t.surf}}; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 14px">
+<sc-if value="{{x.seg}}" hint-placeholder-val="{{true}}">
+<div role="radiogroup" aria-label="Метрика графика" style="display: flex; height: 36px; padding: 2px; box-sizing: border-box; border-radius: 18px; background: {{t.sunk}}">
+<button role="radio" aria-checked="true" style="flex: 1; border: 0; border-radius: 16px; background: {{t.surf}}; color: {{t.tp}}; font-family: 'Onest', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer">Расчётный 1ПМ</button>
+<button role="radio" aria-checked="false" style="flex: 1; border: 0; border-radius: 16px; background: transparent; color: {{t.ts}}; font-family: 'Onest', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer">Макс. вес</button>
+</div>
+</sc-if>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: {{f.foot}}px; color: {{t.ts}}">{{x.cap}}</span>
+<div style="display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap"><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: {{f.num}}px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">{{x.big}}</span><span style="font-size: {{f.unit}}px; color: {{t.ts}}">{{x.unit}}</span><span style="font-size: {{f.unit}}px; font-weight: 600; color: {{t.success}}; margin-left: 4px">{{x.delta}}</span></div>
+</div>
+<sc-if value="{{hasData}}" hint-placeholder-val="{{true}}">
+<svg width="334" height="190" viewBox="0 0 334 190" role="img" aria-label="{{x.aria}}" style="display: block">
+<defs><marker id="dot-{{key}}" viewBox="0 0 8 8" refX="4" refY="4" markerUnits="userSpaceOnUse" markerWidth="7" markerHeight="7"><circle cx="4" cy="4" r="4" fill="{{t.accent}}"></circle></marker></defs>
+<line x1="44" y1="{{x.g0}}" x2="334" y2="{{x.g0}}" stroke="{{t.sepS}}" stroke-width="1"></line>
+<line x1="44" y1="{{x.g1}}" x2="334" y2="{{x.g1}}" stroke="{{t.sep}}" stroke-width="1"></line>
+<line x1="44" y1="{{x.g2}}" x2="334" y2="{{x.g2}}" stroke="{{t.sep}}" stroke-width="1"></line>
+<text x="0" y="{{x.l0y}}" font-family="Sofia Sans Condensed" font-size="11" fill="{{t.ts}}">{{x.l0}}</text>
+<text x="0" y="{{x.l1y}}" font-family="Sofia Sans Condensed" font-size="11" fill="{{t.ts}}">{{x.l1}}</text>
+<text x="0" y="{{x.l2y}}" font-family="Sofia Sans Condensed" font-size="11" fill="{{t.ts}}">{{x.l2}}</text>
+<text x="48" y="184" font-family="Onest" font-size="12" fill="{{t.ts}}">сен</text>
+<text x="300" y="184" font-family="Onest" font-size="12" fill="{{t.ts}}">ноя</text>
+<polyline points="{{x.points}}" fill="none" stroke="{{t.accent}}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-start="url(#dot-{{key}})" marker-mid="url(#dot-{{key}})"></polyline>
+<circle cx="{{x.lx}}" cy="{{x.ly}}" r="6" fill="#F2C200" stroke="{{t.surf}}" stroke-width="2.5"></circle>
+<text x="{{x.lx}}" y="{{x.lty}}" text-anchor="middle" font-family="Sofia Sans Condensed" font-size="12" font-weight="600" fill="{{t.tp}}">{{x.big}}</text>
+</svg>
+</sc-if>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}">
+<span style="font-size: 15px; line-height: 1.45; color: {{t.ts}}">Сделай первый подход — здесь появятся график и рекорды.</span>
+</sc-if>
+</div>
+
+<sc-if value="{{hasData}}" hint-placeholder-val="{{true}}">
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{x.records}}" as="r" hint-placeholder-count="2">
+<div style="background: {{t.surf}}; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: {{f.cap}}px; color: {{t.ts}}">{{r.a}}</span><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: {{f.rec}}px; font-weight: 500; font-variant-numeric: tabular-nums">{{r.b}}</span><span style="font-size: {{f.cap}}px; color: {{t.ts}}">{{r.c}}</span></div>
+</sc-for>
+</div>
+<span style="padding: 8px 8px 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}">Подходы по тренировкам</span>
+<div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden">
+<sc-for list="{{x.history}}" as="h" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 4px; padding: 12px 16px; border-bottom: 1px solid {{t.sep}}">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-size: {{f.foot}}px; font-weight: 600">{{h.date}}</span><sc-if value="{{h.rec}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; font-weight: 600; padding: 1px 7px; border-radius: 6px; background: #F2C200; color: #151515">Рекорд</span></sc-if></div>
+<span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: {{f.sets}}px; font-weight: 500; line-height: 1.4; font-variant-numeric: tabular-nums">{{h.sets}}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+
+<nav aria-label="Вкладки" style="position: absolute; left: 16px; right: 16px; bottom: 24px; display: flex; align-items: center; height: 62px; box-sizing: border-box; padding: 4px; border-radius: 31px; background: {{t.glass}}; backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4); box-shadow: {{t.glassShadow}}">
+<a href="#" style="flex: 1; height: 54px; border-radius: 27px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-decoration: none; color: {{t.tp}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"></path></svg><span style="font-size: 11px; font-weight: 500">Тренировка</span></a>
+<a href="#" style="flex: 1; height: 54px; border-radius: 27px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-decoration: none; color: {{t.tp}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"></rect><path d="M8 8h8M8 12h8M8 16h5"></path></svg><span style="font-size: 11px; font-weight: 500">Программы</span></a>
+<a href="#" aria-current="page" style="flex: 1; height: 54px; border-radius: 27px; background: {{t.tabSel}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-decoration: none; color: {{t.accent}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.accent}}" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg><span style="font-size: 11px; font-weight: 600">История</span></a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"state":{"editor":"enum","options":["weighted","bodyweight","timed","empty","ax"],"default":"weighted"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+const light = { bg: '#F3F2EF', surf: '#FFFFFF', sunk: '#EAE9E5', sep: '#E4E3DF', sepS: '#CFCEC8', tp: '#151515', ts: '#5E5E5A', accent: '#1F5FBF', success: '#157A3B', glass: 'rgba(255,255,255,0.72)', glassShadow: 'inset 0 0 0 1px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.08)', tabSel: 'rgba(0,0,0,0.06)' };
+const dark = { bg: '#111214', surf: '#1C1D20', sunk: '#26272B', sep: '#2E2F33', sepS: '#45464B', tp: '#F2F1EE', ts: '#A3A29C', accent: '#6A9BEA', success: '#3DB36E', glass: 'rgba(44,45,50,0.72)', glassShadow: 'inset 0 0 0 1px rgba(255,255,255,0.10), 0 6px 20px rgba(0,0,0,0.4)', tabSel: 'rgba(255,255,255,0.10)' };
+const isDark = this.props.dark ?? false;
+const state = this.props.state ?? 'weighted';
+const weighted = { name: 'Жим лёжа', meta: 'олимпийский гриф · повторы', seg: true, cap: 'Расчётный 1ПМ · 8 недель', big: '82,3', unit: 'кг', delta: '+10,3',
+aria: 'Расчётный 1ПМ вырос с 72 до 82,3 кг за 8 недель',
+points: '50,140 90,120 130,120 170,100 210,90 250,70 290,70 318,37', lx: 318, ly: 37, lty: 20,
+g0: 160, g1: 110, g2: 60, l0: '70', l1: '75', l2: '80', l0y: 164, l1y: 114, l2y: 64,
+records: [{ a: 'Макс. вес', b: '65 × 8', c: '16 ноября' }, { a: 'Расчётный 1ПМ', b: '82,3 кг', c: 'по Эпли' }],
+history: [
+{ date: 'Пн 16 ноября', rec: true, sets: '65 × 8 · 65 × 8 · 62,5 × 9' },
+{ date: 'Пн 9 ноября', rec: false, sets: '62,5 × 8 · 62,5 × 8 · 62,5 × 7' },
+{ date: 'Пн 2 ноября', rec: false, sets: '60 × 10 · 60 × 9 · 60 × 8' }
+] };
+const data = {
+weighted: weighted,
+ax: weighted,
+bodyweight: { name: 'Подтягивания', meta: 'свой вес · повторы', seg: false, cap: 'Макс. повторов · 8 недель', big: '14', unit: 'повт.', delta: '+4',
+aria: 'Максимум повторов вырос с 10 до 14 за 8 недель',
+points: '50,135 90,135 130,110 170,85 210,85 250,60 290,60 318,35', lx: 318, ly: 35, lty: 18,
+g0: 160, g1: 110, g2: 60, l0: '9', l1: '11', l2: '13', l0y: 164, l1y: 114, l2y: 64,
+records: [{ a: 'Макс. повторов', b: '14', c: '11 ноября' }, { a: 'Макс. отягощение', b: '+15 × 6', c: '6 ноября' }],
+history: [
+{ date: 'Ср 11 ноября', rec: true, sets: '14 · 12 · 11' },
+{ date: 'Пт 6 ноября', rec: true, sets: '+15 × 6 · +15 × 5' },
+{ date: 'Ср 4 ноября', rec: false, sets: '13 · 12 · 10' }
+] },
+timed: { name: 'Планка', meta: 'свой вес · время', seg: false, cap: 'Макс. длительность · 8 недель', big: '2:10', unit: 'мин', delta: '+0:40',
+aria: 'Максимальная длительность выросла с 1:30 до 2:10 за 8 недель',
+points: '50,145 90,130 130,115 170,85 210,70 250,55 290,55 318,25', lx: 318, ly: 25, lty: 12,
+g0: 160, g1: 100, g2: 40, l0: '1:25', l1: '1:45', l2: '2:05', l0y: 164, l1y: 104, l2y: 44,
+records: [{ a: 'Макс. длительность', b: '2:10', c: '13 ноября' }],
+history: [
+{ date: 'Пт 13 ноября', rec: true, sets: '2:10 · 1:45' },
+{ date: 'Пт 6 ноября', rec: false, sets: '2:00 · 1:40' },
+{ date: 'Пт 30 октября', rec: false, sets: '1:55 · 1:30' }
+] },
+empty: { name: 'Тяга штанги в наклоне', meta: 'олимпийский гриф · повторы', seg: false, cap: 'Расчётный 1ПМ', big: '—', unit: '', delta: '', records: [], history: [] }
+};
+const ax = state === 'ax';
+return {
+t: isDark ? dark : light,
+key: isDark ? 'dark' : 'light',
+x: data[state] || weighted,
+hasData: state !== 'empty',
+isEmpty: state === 'empty',
+f: ax ? { btn: 52, foot: 22, title: 40, num: 56, unit: 22, cap: 20, rec: 24, sets: 22 } : { btn: 44, foot: 13, title: 28, num: 36, unit: 15, cap: 12, rec: 17, sets: 15 }
+};
+}
+}
+</script>
+</body>
+</html>

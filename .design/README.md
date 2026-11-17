@@ -16,7 +16,8 @@
 | `Main`, `Journal`, `Print` | Шаг 1: три концепции (история) |
 | `Hybrid` | Выбранное направление «Блины, крупно» |
 | `system/Color` | Цветовые токены светлой и тёмной темы, контраст, блины IWF, уровни heatmap |
-| `system/Type` | Шкала шрифтов (Unbounded + Onest, Dynamic Type), отступы 4pt, скругления, линии |
+| `system/Type` | Шкала шрифтов (Sofia Sans Condensed + Onest, Dynamic Type), отступы 4pt, скругления, линии |
+| `system/FontChoice` | Выбор шрифта для цифр: Sofia Sans Condensed (выбран), альтернативы и почему не Unbounded |
 | `system/Foundations` | SF Symbols, движение и Reduce Motion, haptics |
 | `system/WorkoutKit` | Строка подхода, степпер, таймер отдыха, секундомер подхода, Live Activity и Dynamic Island на всю тренировку, подсказка прогрессии, заметка |
 | `system/LoadTypes` | Строка подхода по оборудованию и метрике |
@@ -26,6 +27,11 @@
 | `screens/*Light`, `*Dark` | Состояния экрана «Тренировка», собранные из `WorkoutScreen` |
 | `screens/ProgramsScreen` | Вкладка «Программы»: `state` list / empty / day / ax |
 | `screens/ExerciseFlow` | Справочник упражнений и добавление: `state` library / libraryEmpty / archive / type / details |
-| `screens/Prog*`, `Lib*`, `Add*`, `Archive*` | Состояния этих экранов в светлой и тёмной теме |
+| `screens/HistoryScreen` | Вкладка «История»: `state` list / empty / workout / ax |
+| `screens/ExerciseCard` | Карточка упражнения: `state` weighted / bodyweight / timed / empty / ax |
+| `screens/SettingsScreen` | Настройки и «Мой зал»: `state` main / import / gym / gymEmpty / ax |
+| `screens/LiveActivity` | Live Activity на экране блокировки и Dynamic Island (компактный, минимальный, развёрнутый) в трёх состояниях |
+| `screens/AppIcon` | Три варианта иконки: обычная, тёмная, тонированная, мелкие размеры |
+| `screens/Prog*`, `Lib*`, `Add*`, `Archive*`, `Hist*`, `Card*`, `Set*` | Состояния этих экранов в светлой и тёмной теме |
 
 Для кода главное — `system/Color` и `system/Type`: в них все токены (имена вроде `textPrimary`, `surfaceSunken`, `numeralL` совпадают с тем, что стоит завести в модуле дизайн-токенов).
