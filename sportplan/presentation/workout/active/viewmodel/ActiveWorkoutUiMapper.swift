@@ -8,6 +8,7 @@ enum ActiveWorkoutUiMapper {
 
     static func makeData(
         workout: ActiveWorkout,
+        rest: RestPeriod?,
         plates: [Plate],
         note: String,
         editor: SetEditorUiData?,
@@ -17,12 +18,21 @@ enum ActiveWorkoutUiMapper {
         let currentSetId = workout.exercises.lazy.flatMap(\.sets).first { entry in
             return !entry.isCompleted
         }?.id
+        let restTimer = rest.map { rest in
+            return RestTimerMapper.makeItem(workout: workout, rest: rest)
+        }
+        let restExerciseId = workout.restTrigger?.exercise.id
         return ActiveWorkoutUiData(
             title: workout.workout.programDay?.name ?? String(localized: "workout.active.untitled"),
             subtitle: subtitle(workout),
             startedAt: workout.workout.startedAt,
             exercises: workout.exercises.map { item in
-                return makeExercise(item, plates: plates, currentSetId: currentSetId)
+                return makeExercise(
+                    item,
+                    plates: plates,
+                    currentSetId: currentSetId,
+                    restTimer: item.id == restExerciseId ? restTimer : nil
+                )
             },
             note: note,
             editor: editor,
@@ -40,7 +50,7 @@ enum ActiveWorkoutUiMapper {
         } ?? stepCaption
         let title = entry.isWarmup
             ? String(localized: "workout.editor.warmup")
-            : String(localized: "workout.editor.title \(setNumber(of: entry, in: item))")
+            : String(localized: "workout.editor.title \(item.number(of: entry) ?? firstSetNumber)")
         return SetEditorUiData(
             id: entry.id,
             title: title,
@@ -55,7 +65,7 @@ enum ActiveWorkoutUiMapper {
             ),
             reps: (draft.reps ?? Self.missingReps).formatted(),
             canDecrementReps: draft.canDecrementReps,
-            canCopyPrevious: item.setBefore(entry) != nil,
+            canCopyLastWorkout: item.previousResult(for: entry) != nil,
             saveTitle: entry.isCompleted ? String(localized: "workout.editor.save") : String(localized: "workout.editor.record")
         )
     }
@@ -77,7 +87,12 @@ enum ActiveWorkoutUiMapper {
         }
     }
 
-    private static func makeExercise(_ item: ActiveWorkoutExercise, plates: [Plate], currentSetId: UUID?) -> ActiveExerciseItem {
+    private static func makeExercise(
+        _ item: ActiveWorkoutExercise,
+        plates: [Plate],
+        currentSetId: UUID?,
+        restTimer: RestTimerItem?
+    ) -> ActiveExerciseItem {
         return ActiveExerciseItem(
             id: item.id,
             name: item.exercise.exercise.name,
@@ -90,7 +105,8 @@ enum ActiveWorkoutUiMapper {
                     plates: plates,
                     isCurrent: entry.id == currentSetId
                 )
-            }
+            },
+            restTimer: restTimer
         )
     }
 
@@ -227,12 +243,5 @@ enum ActiveWorkoutUiMapper {
             return String(localized: "workout.editor.weight")
         }
         return String(localized: "workout.editor.dumbbellWeight")
-    }
-
-    private static func setNumber(of entry: SetEntry, in item: ActiveWorkoutExercise) -> Int {
-        let index = item.sets.firstIndex { candidate in
-            return candidate.id == entry.id
-        } ?? item.sets.endIndex
-        return index + firstSetNumber
     }
 }

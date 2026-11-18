@@ -6,7 +6,7 @@ import Observation
 final class ActiveWorkoutViewModel {
     private static let noteSaveDelay = Duration.milliseconds(600)
 
-    @ObservationIgnored private let observeActiveWorkout: ObserveActiveWorkoutUseCase
+    @ObservationIgnored private let store: ActiveWorkoutStore
     @ObservationIgnored private let loadPlates: LoadPlatesUseCase
     @ObservationIgnored private let addSet: AddSetUseCase
     @ObservationIgnored private let updateSet: UpdateSetUseCase
@@ -17,8 +17,11 @@ final class ActiveWorkoutViewModel {
     @ObservationIgnored private let updateWorkoutNote: UpdateWorkoutNoteUseCase
     @ObservationIgnored private let finishWorkout: FinishWorkoutUseCase
     @ObservationIgnored private let cancelWorkout: CancelWorkoutUseCase
+    @ObservationIgnored private let adjustRest: AdjustRestUseCase
+    @ObservationIgnored private let skipRest: SkipRestUseCase
     @ObservationIgnored private var hasLoaded = false
     @ObservationIgnored private var workout: ActiveWorkout?
+    @ObservationIgnored private var rest: RestPeriod?
     @ObservationIgnored private var plates: [Plate] = []
     @ObservationIgnored private var editingSetId: UUID?
     @ObservationIgnored private var editorDraft: SetEntryDraft?
@@ -30,7 +33,7 @@ final class ActiveWorkoutViewModel {
     private(set) var activeWorkoutUiState: ActiveWorkoutUiState = .loading
 
     init(
-        observeActiveWorkout: ObserveActiveWorkoutUseCase,
+        store: ActiveWorkoutStore,
         loadPlates: LoadPlatesUseCase,
         addSet: AddSetUseCase,
         updateSet: UpdateSetUseCase,
@@ -40,9 +43,11 @@ final class ActiveWorkoutViewModel {
         removeSet: RemoveSetUseCase,
         updateWorkoutNote: UpdateWorkoutNoteUseCase,
         finishWorkout: FinishWorkoutUseCase,
-        cancelWorkout: CancelWorkoutUseCase
+        cancelWorkout: CancelWorkoutUseCase,
+        adjustRest: AdjustRestUseCase,
+        skipRest: SkipRestUseCase
     ) {
-        self.observeActiveWorkout = observeActiveWorkout
+        self.store = store
         self.loadPlates = loadPlates
         self.addSet = addSet
         self.updateSet = updateSet
@@ -53,6 +58,8 @@ final class ActiveWorkoutViewModel {
         self.updateWorkoutNote = updateWorkoutNote
         self.finishWorkout = finishWorkout
         self.cancelWorkout = cancelWorkout
+        self.adjustRest = adjustRest
+        self.skipRest = skipRest
     }
 
     var pickerTarget: ExercisePickerTarget? {
@@ -63,23 +70,12 @@ final class ActiveWorkoutViewModel {
     }
 
     func observe() async {
-        do {
-            for try await workout in observeActiveWorkout.execute() {
-                if workout?.id != self.workout?.id {
-                    resetTransientState()
-                }
-                self.workout = workout
-                hasLoaded = true
-                if let editingSetId, workout?.exercise(containingSetId: editingSetId) == nil {
-                    closeEditor()
-                }
-                publish()
-            }
-        } catch {
-            guard !Task.isCancelled else {
-                return
-            }
-            activeWorkoutUiState = .error(error: error)
+        let store = store
+        let snapshots = Observations {
+            return store.snapshot
+        }
+        for await snapshot in snapshots {
+            apply(snapshot)
         }
     }
 
@@ -153,8 +149,8 @@ final class ActiveWorkoutViewModel {
         }
     }
 
-    func copyPreviousSet() {
-        guard let editingSetId, case let (item, entry)? = locate(setId: editingSetId), let previous = item.setBefore(entry) else {
+    func copyLastWorkoutSet() {
+        guard let editingSetId, case let (item, entry)? = locate(setId: editingSetId), let previous = item.previousResult(for: entry) else {
             return
         }
         editorDraft = SetEntryDraft(previous)
@@ -172,6 +168,18 @@ final class ActiveWorkoutViewModel {
             } else {
                 try await self.completeSet.execute(setId: editingSetId, draft: editorDraft)
             }
+        }
+    }
+
+    func adjustRest(seconds: Int) async {
+        await perform {
+            try await self.adjustRest.execute(seconds: seconds)
+        }
+    }
+
+    func skipRest() async {
+        await perform {
+            try await self.skipRest.execute()
         }
     }
 
@@ -248,6 +256,29 @@ final class ActiveWorkoutViewModel {
         publish()
     }
 
+    private func apply(_ snapshot: ActiveWorkoutSnapshot) {
+        switch snapshot.state {
+        case .loading:
+            return
+        case let .error(error):
+            activeWorkoutUiState = .error(error: error)
+            return
+        case .noWorkout, .active:
+            break
+        }
+        let workout = snapshot.state.workout
+        if workout?.id != self.workout?.id {
+            resetTransientState()
+        }
+        self.workout = workout
+        rest = snapshot.rest
+        hasLoaded = true
+        if let editingSetId, workout?.exercise(containingSetId: editingSetId) == nil {
+            closeEditor()
+        }
+        publish()
+    }
+
     private func finish() async {
         noteSaveTask?.cancel()
         if let noteDraft, let workoutId = workout?.id {
@@ -314,6 +345,7 @@ final class ActiveWorkoutViewModel {
         }
         activeWorkoutUiState = .success(data: ActiveWorkoutUiMapper.makeData(
             workout: workout,
+            rest: rest,
             plates: plates,
             note: noteDraft ?? workout.workout.note ?? "",
             editor: editor,

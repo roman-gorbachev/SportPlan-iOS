@@ -15,8 +15,10 @@ enum ActiveWorkoutUserAction {
     case decrementWeight
     case incrementReps
     case decrementReps
-    case copyPreviousSet
+    case copyLastWorkoutSet
     case saveEditor
+    case adjustRest(seconds: Int)
+    case skipRest
     case confirm(ActiveWorkoutConfirmation)
     case dismissConfirmation
     case dismissError

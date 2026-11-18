@@ -91,10 +91,14 @@ struct WorkoutRoute: View {
             viewModel.incrementEditorReps()
         case .decrementReps:
             viewModel.decrementEditorReps()
-        case .copyPreviousSet:
-            viewModel.copyPreviousSet()
+        case .copyLastWorkoutSet:
+            viewModel.copyLastWorkoutSet()
         case .saveEditor:
             run { await viewModel.saveEditor() }
+        case let .adjustRest(seconds):
+            run { await viewModel.adjustRest(seconds: seconds) }
+        case .skipRest:
+            run { await viewModel.skipRest() }
         case .confirm(let confirmation):
             run { await viewModel.confirm(confirmation) }
         case .dismissConfirmation:

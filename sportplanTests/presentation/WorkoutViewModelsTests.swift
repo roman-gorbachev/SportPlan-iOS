@@ -8,6 +8,7 @@ import Testing
 struct WorkoutViewModelsTests {
     private static let pollInterval = Duration.milliseconds(10)
     private static let pollAttempts = 300
+    private static let shortRestSeconds = 1
 
     private struct Fixture {
         let database: AppDatabase
@@ -16,6 +17,9 @@ struct WorkoutViewModelsTests {
         let plank: Exercise
         let start: WorkoutStartViewModel
         let active: ActiveWorkoutViewModel
+        let store: ActiveWorkoutStore
+        let restTimer: RestTimerViewModel
+        let scheduler: RecordingRestNotificationScheduler
     }
 
     private static func makeFixture(plannedExercises: (Exercise, Exercise) -> [Exercise]) async throws -> Fixture {
@@ -50,8 +54,10 @@ struct WorkoutViewModelsTests {
             startWorkoutFromDay: StartWorkoutFromDayUseCase(workoutRepository: workouts, programRepository: programs, now: now),
             startEmptyWorkout: StartEmptyWorkoutUseCase(repository: workouts, now: now)
         )
+        let store = ActiveWorkoutStore(observeActiveWorkout: ObserveActiveWorkoutUseCase(repository: workouts))
+        let adjustRest = AdjustRestUseCase(repository: workouts, scheduler: scheduler, now: now)
         let active = ActiveWorkoutViewModel(
-            observeActiveWorkout: ObserveActiveWorkoutUseCase(repository: workouts),
+            store: store,
             loadPlates: LoadPlatesUseCase(repository: PlateRepositoryImpl(database: database)),
             addSet: AddSetUseCase(repository: workouts),
             updateSet: UpdateSetUseCase(repository: workouts),
@@ -61,9 +67,21 @@ struct WorkoutViewModelsTests {
             removeSet: RemoveSetUseCase(repository: workouts),
             updateWorkoutNote: UpdateWorkoutNoteUseCase(repository: workouts),
             finishWorkout: FinishWorkoutUseCase(repository: workouts, scheduler: scheduler, now: now),
-            cancelWorkout: CancelWorkoutUseCase(repository: workouts, scheduler: scheduler)
+            cancelWorkout: CancelWorkoutUseCase(repository: workouts, scheduler: scheduler),
+            adjustRest: adjustRest,
+            skipRest: SkipRestUseCase(repository: workouts, scheduler: scheduler)
         )
-        return Fixture(database: database, day: day, bench: bench, plank: plank, start: start, active: active)
+        return Fixture(
+            database: database,
+            day: day,
+            bench: bench,
+            plank: plank,
+            start: start,
+            active: active,
+            store: store,
+            restTimer: RestTimerViewModel(store: store, adjustRest: adjustRest),
+            scheduler: scheduler
+        )
     }
 
     private static func until(
@@ -95,6 +113,20 @@ struct WorkoutViewModelsTests {
         return data
     }
 
+    private static func restingItem(_ viewModel: RestTimerViewModel, expectingIdle: Bool = false) async throws -> RestTimerItem? {
+        for _ in 0..<pollAttempts {
+            switch viewModel.restTimerUiState {
+            case let .resting(data) where !expectingIdle:
+                return data
+            case .idle where expectingIdle:
+                return nil
+            default:
+                try await Task.sleep(for: pollInterval)
+            }
+        }
+        throw WorkoutError.noActiveWorkout
+    }
+
     private static func isNoWorkout(_ state: ActiveWorkoutUiState) -> Bool {
         guard case .noWorkout = state else {
             return false
@@ -111,7 +143,15 @@ struct WorkoutViewModelsTests {
 
     private static func startObserving(_ fixture: Fixture) -> [Task<Void, Never>] {
         let active = fixture.active
+        let store = fixture.store
+        let restTimer = fixture.restTimer
         return [
+            Task {
+                await store.observe()
+            },
+            Task {
+                await restTimer.observe()
+            },
             Task {
                 await active.observe()
             },
@@ -155,7 +195,7 @@ struct WorkoutViewModelsTests {
         var editor = try #require(try await Self.data(fixture.active).editor)
         #expect(editor.weight.value == "20")
         #expect(!editor.weight.canDecrement)
-        #expect(!editor.canCopyPrevious)
+        #expect(!editor.canCopyLastWorkout)
         for _ in 0..<4 {
             fixture.active.incrementEditorWeight()
         }
@@ -170,11 +210,114 @@ struct WorkoutViewModelsTests {
         #expect(saved.exercises.first?.sets[1].state == .current)
 
         fixture.active.openEditor(setId: rows[1].id)
-        fixture.active.copyPreviousSet()
+        editor = try #require(try await Self.data(fixture.active).editor)
+        #expect(!editor.canCopyLastWorkout)
+        fixture.active.copyLastWorkoutSet()
+        editor = try #require(try await Self.data(fixture.active).editor)
+        #expect(editor.weight.value == "20")
+        #expect(editor.saveTitle == "Записать")
+    }
+
+    @Test func copyTakesTheSameSetFromTheLastWorkout() async throws {
+        let fixture = try await Self.makeFixture { bench, _ in return [bench] }
+        let tasks = Self.startObserving(fixture)
+        defer {
+            tasks.forEach { task in task.cancel() }
+        }
+        await fixture.start.start(dayId: fixture.day.id)
+        let rows = try #require(try await Self.data(fixture.active).exercises.first).sets
+        fixture.active.openEditor(setId: rows[0].id)
+        for _ in 0..<4 {
+            fixture.active.incrementEditorWeight()
+        }
+        fixture.active.incrementEditorReps()
+        await fixture.active.saveEditor()
+        _ = try await Self.data(fixture.active) { data in
+            return data.exercises.first?.sets.first?.state == .completed
+        }
+        await fixture.active.requestFinish()
+        guard case let .finish(incompleteSetCount)? = try await Self.data(fixture.active).confirmation else {
+            Issue.record("Finish confirmation expected")
+            return
+        }
+        await fixture.active.confirm(.finish(incompleteSetCount: incompleteSetCount))
+        #expect(try await Self.until(fixture.active, condition: Self.isNoWorkout) != nil)
+
+        await fixture.start.start(dayId: fixture.day.id)
+        let next = try #require(try await Self.data(fixture.active).exercises.first).sets
+        fixture.active.openEditor(setId: next[0].id)
+        fixture.active.decrementEditorWeight()
+        fixture.active.decrementEditorReps()
+        var editor = try #require(try await Self.data(fixture.active).editor)
+        #expect(editor.canCopyLastWorkout)
+        #expect(editor.weight.value != "30")
+        fixture.active.copyLastWorkoutSet()
         editor = try #require(try await Self.data(fixture.active).editor)
         #expect(editor.weight.value == "30")
         #expect(editor.reps == "9")
-        #expect(editor.saveTitle == "Записать")
+    }
+
+    @Test func completingASetShowsTheRestTimerThatCanBeAdjustedAndSkipped() async throws {
+        let fixture = try await Self.makeFixture { bench, _ in return [bench] }
+        let tasks = Self.startObserving(fixture)
+        defer {
+            tasks.forEach { task in task.cancel() }
+        }
+        await fixture.start.start(dayId: fixture.day.id)
+        let rows = try #require(try await Self.data(fixture.active).exercises.first).sets
+        let restSeconds = try await fixture.database.reader.read { db in
+            return try Int.fetchOne(db, sql: "SELECT rest_sec FROM workout_exercise") ?? .zero
+        }
+
+        await fixture.active.tapSetAction(setId: rows[0].id)
+        var data = try await Self.data(fixture.active) { data in
+            return data.exercises.first?.restTimer != nil
+        }
+        var panel = try #require(data.exercises.first?.restTimer)
+        #expect(panel.title == "Отдых после подхода 1")
+        #expect(panel.totalText == "из \(RestFormatting.clock(seconds: restSeconds))")
+        #expect(panel.nextText.hasPrefix("отдых · дальше"))
+        #expect(fixture.scheduler.scheduled?.setNumber == 2)
+        #expect(try await Self.restingItem(fixture.restTimer) != nil)
+
+        await fixture.active.adjustRest(seconds: RestPeriod.adjustmentStepSeconds)
+        let extendedTotal = "из \(RestFormatting.clock(seconds: restSeconds + RestPeriod.adjustmentStepSeconds))"
+        data = try await Self.data(fixture.active) { data in
+            return data.exercises.first?.restTimer?.totalText == extendedTotal
+        }
+        panel = try #require(data.exercises.first?.restTimer)
+        #expect(panel.endsAt.timeIntervalSince(panel.startedAt) == TimeInterval(restSeconds + RestPeriod.adjustmentStepSeconds))
+
+        await fixture.active.skipRest()
+        _ = try await Self.data(fixture.active) { data in
+            return data.exercises.first?.restTimer == nil
+        }
+        #expect(try await Self.restingItem(fixture.restTimer, expectingIdle: true) == nil)
+        #expect(fixture.scheduler.scheduled == nil)
+    }
+
+    @Test func restEndsOnItsOwn() async throws {
+        let fixture = try await Self.makeFixture { bench, _ in return [bench] }
+        let tasks = Self.startObserving(fixture)
+        defer {
+            tasks.forEach { task in task.cancel() }
+        }
+        await fixture.start.start(dayId: fixture.day.id)
+        let rows = try #require(try await Self.data(fixture.active).exercises.first).sets
+        let shortRest = Self.shortRestSeconds
+        try await fixture.database.writer.write { db in
+            try db.execute(sql: "UPDATE workout_exercise SET rest_sec = ?", arguments: [shortRest])
+        }
+
+        await fixture.active.tapSetAction(setId: rows[0].id)
+        _ = try await Self.data(fixture.active) { data in
+            return data.exercises.first?.restTimer != nil
+        }
+        _ = try await Self.data(fixture.active) { data in
+            return data.exercises.first?.sets.first?.state == .completed && data.exercises.first?.restTimer == nil
+        }
+        #expect(try await Self.restingItem(fixture.restTimer, expectingIdle: true) == nil)
+        #expect(fixture.restTimer.restFinishedCount == 1)
     }
 
     @Test func stopwatchRecordsTheDuration() async throws {

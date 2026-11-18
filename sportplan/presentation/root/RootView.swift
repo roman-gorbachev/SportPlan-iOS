@@ -4,10 +4,16 @@ import SwiftUI
 struct RootView: View {
     let container: AppDIContainer
 
+    @State private var restTimerViewModel: RestTimerViewModel
     @State private var selectedTab: AppTab = .workout
     @State private var workoutRouter = TabRouter()
     @State private var programsRouter = TabRouter()
     @State private var historyRouter = TabRouter()
+
+    init(container: AppDIContainer) {
+        self.container = container
+        _restTimerViewModel = State(initialValue: container.buildRestTimerViewModel())
+    }
 
     var body: some View {
         return TabView(selection: $selectedTab) {
@@ -22,5 +28,9 @@ struct RootView: View {
             }
         }
         .tint(Palette.accent)
+        .modifier(RestTimerAccessoryModifier(viewModel: restTimerViewModel, onOpen: { selectedTab = .workout }))
+        .task {
+            await container.observeActiveWorkout()
+        }
     }
 }

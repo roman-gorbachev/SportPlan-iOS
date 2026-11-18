@@ -54,7 +54,7 @@ struct ProgramDayViewModelsTests {
             observeExerciseLibrary: ObserveExerciseLibraryUseCase(repository: exercises),
             observeProgramDay: ObserveProgramDayUseCase(repository: programs),
             addExerciseToDay: AddExerciseToDayUseCase(programRepository: programs, exerciseRepository: exercises),
-            observeActiveWorkout: ObserveActiveWorkoutUseCase(repository: workouts),
+            workoutStore: ActiveWorkoutStore(observeActiveWorkout: ObserveActiveWorkoutUseCase(repository: workouts)),
             addExerciseToWorkout: AddExerciseToWorkoutUseCase(
                 workoutRepository: workouts,
                 exerciseRepository: exercises,

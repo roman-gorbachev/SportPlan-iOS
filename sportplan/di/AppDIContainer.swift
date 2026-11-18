@@ -88,6 +88,8 @@ final class AppDIContainer {
     private lazy var skipRestUseCase = SkipRestUseCase(repository: workoutRepository, scheduler: restNotificationCenter)
     private lazy var loadPlatesUseCase = LoadPlatesUseCase(repository: plateRepository)
 
+    private lazy var activeWorkoutStore = ActiveWorkoutStore(observeActiveWorkout: observeActiveWorkoutUseCase)
+
     init() {
         do {
             appDatabase = try AppDatabase.makePersistent()
@@ -103,6 +105,10 @@ final class AppDIContainer {
 }
 
 extension AppDIContainer {
+    func observeActiveWorkout() async {
+        await activeWorkoutStore.observe()
+    }
+
     func buildSettingsViewModel() -> SettingsViewModel {
         return SettingsViewModel(observeGymEquipment: observeGymEquipmentUseCase, appVersion: appVersion)
     }
@@ -164,7 +170,7 @@ extension AppDIContainer {
             observeExerciseLibrary: observeExerciseLibraryUseCase,
             observeProgramDay: observeProgramDayUseCase,
             addExerciseToDay: addExerciseToDayUseCase,
-            observeActiveWorkout: observeActiveWorkoutUseCase,
+            workoutStore: activeWorkoutStore,
             addExerciseToWorkout: addExerciseToWorkoutUseCase
         )
     }
@@ -179,7 +185,7 @@ extension AppDIContainer {
 
     func buildActiveWorkoutViewModel() -> ActiveWorkoutViewModel {
         return ActiveWorkoutViewModel(
-            observeActiveWorkout: observeActiveWorkoutUseCase,
+            store: activeWorkoutStore,
             loadPlates: loadPlatesUseCase,
             addSet: addSetUseCase,
             updateSet: updateSetUseCase,
@@ -189,8 +195,14 @@ extension AppDIContainer {
             removeSet: removeSetUseCase,
             updateWorkoutNote: updateWorkoutNoteUseCase,
             finishWorkout: finishWorkoutUseCase,
-            cancelWorkout: cancelWorkoutUseCase
+            cancelWorkout: cancelWorkoutUseCase,
+            adjustRest: adjustRestUseCase,
+            skipRest: skipRestUseCase
         )
+    }
+
+    func buildRestTimerViewModel() -> RestTimerViewModel {
+        return RestTimerViewModel(store: activeWorkoutStore, adjustRest: adjustRestUseCase)
     }
 
     func buildLibraryViewModel() -> LibraryViewModel {

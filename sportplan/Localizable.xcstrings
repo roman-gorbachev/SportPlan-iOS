@@ -2004,6 +2004,39 @@
         }
       }
     },
+    "rest.accessory.next %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "отдых · дальше %@"
+          }
+        }
+      }
+    },
+    "rest.accessory.open.accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открыть тренировку"
+          }
+        }
+      }
+    },
+    "rest.accessory.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "отдых"
+          }
+        }
+      }
+    },
     "rest.notification.finish" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2033,6 +2066,105 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Отдых окончен"
+          }
+        }
+      }
+    },
+    "rest.panel.extend" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+15 с"
+          }
+        }
+      }
+    },
+    "rest.panel.extend.accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продлить отдых на 15 секунд"
+          }
+        }
+      }
+    },
+    "rest.panel.shorten" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "−15 с"
+          }
+        }
+      }
+    },
+    "rest.panel.shorten.accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сократить отдых на 15 секунд"
+          }
+        }
+      }
+    },
+    "rest.panel.skip" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пропустить"
+          }
+        }
+      }
+    },
+    "rest.panel.title %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отдых после подхода %lld"
+          }
+        }
+      }
+    },
+    "rest.panel.titleGeneric" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отдых"
+          }
+        }
+      }
+    },
+    "rest.panel.total %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "из %@"
+          }
+        }
+      }
+    },
+    "rest.remaining.accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отдых, осталось"
           }
         }
       }
@@ -2437,7 +2569,7 @@
         }
       }
     },
-    "workout.editor.copyPrevious" : {
+    "workout.editor.copyLastWorkout" : {
       "extractionState" : "manual",
       "localizations" : {
         "ru" : {

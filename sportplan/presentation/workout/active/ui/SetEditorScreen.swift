@@ -63,13 +63,13 @@ struct SetEditorScreen: View {
     @ViewBuilder
     private var buttons: some View {
         Button {
-            onAction(.copyPreviousSet)
+            onAction(.copyLastWorkoutSet)
         } label: {
-            return Label(String(localized: "workout.editor.copyPrevious"), systemImage: "arrow.uturn.down")
+            return Label(String(localized: "workout.editor.copyLastWorkout"), systemImage: "arrow.uturn.down")
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(SunkenButtonStyle())
-        .disabled(!data.canCopyPrevious)
+        .disabled(!data.canCopyLastWorkout)
         Button {
             onAction(.saveEditor)
         } label: {
@@ -96,7 +96,7 @@ struct SetEditorScreen: View {
         ),
         reps: "8",
         canDecrementReps: true,
-        canCopyPrevious: true,
+        canCopyLastWorkout: true,
         saveTitle: "Записать"
     )
     return Color.clear

@@ -5,4 +5,5 @@ struct ActiveExerciseItem: Identifiable {
     let name: String
     let summary: String
     let sets: [SetRowItem]
+    let restTimer: RestTimerItem?
 }

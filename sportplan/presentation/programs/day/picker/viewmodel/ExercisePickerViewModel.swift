@@ -8,7 +8,7 @@ final class ExercisePickerViewModel {
     @ObservationIgnored private let observeExerciseLibrary: ObserveExerciseLibraryUseCase
     @ObservationIgnored private let observeProgramDay: ObserveProgramDayUseCase
     @ObservationIgnored private let addExerciseToDay: AddExerciseToDayUseCase
-    @ObservationIgnored private let observeActiveWorkout: ObserveActiveWorkoutUseCase
+    @ObservationIgnored private let workoutStore: ActiveWorkoutStore
     @ObservationIgnored private let addExerciseToWorkout: AddExerciseToWorkoutUseCase
     @ObservationIgnored private var library: ExerciseLibrary?
     @ObservationIgnored private var addedExerciseIds: Set<UUID>?
@@ -23,14 +23,14 @@ final class ExercisePickerViewModel {
         observeExerciseLibrary: ObserveExerciseLibraryUseCase,
         observeProgramDay: ObserveProgramDayUseCase,
         addExerciseToDay: AddExerciseToDayUseCase,
-        observeActiveWorkout: ObserveActiveWorkoutUseCase,
+        workoutStore: ActiveWorkoutStore,
         addExerciseToWorkout: AddExerciseToWorkoutUseCase
     ) {
         self.target = target
         self.observeExerciseLibrary = observeExerciseLibrary
         self.observeProgramDay = observeProgramDay
         self.addExerciseToDay = addExerciseToDay
-        self.observeActiveWorkout = observeActiveWorkout
+        self.workoutStore = workoutStore
         self.addExerciseToWorkout = addExerciseToWorkout
     }
 
@@ -62,8 +62,12 @@ final class ExercisePickerViewModel {
                     updateAddedExercises(detail?.exerciseIds ?? [])
                 }
             case .workout:
-                for try await workout in observeActiveWorkout.execute() {
-                    updateAddedExercises(workout?.exerciseIds ?? [])
+                let store = workoutStore
+                let exerciseIds = Observations {
+                    return store.state.workout?.exerciseIds ?? []
+                }
+                for await ids in exerciseIds {
+                    updateAddedExercises(ids)
                 }
             }
         } catch {

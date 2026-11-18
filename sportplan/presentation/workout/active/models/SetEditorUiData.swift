@@ -7,6 +7,6 @@ struct SetEditorUiData: Identifiable {
     let weight: SetEditorWeightField
     let reps: String
     let canDecrementReps: Bool
-    let canCopyPrevious: Bool
+    let canCopyLastWorkout: Bool
     let saveTitle: String
 }
