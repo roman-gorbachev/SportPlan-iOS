@@ -2,6 +2,7 @@ import Foundation
 
 public struct ActiveWorkoutExercise: Identifiable, Hashable, Sendable {
     private static let firstPosition = 0
+    private static let firstSetNumber = 1
 
     public let workoutExercise: WorkoutExercise
     public let exercise: LibraryExercise
@@ -46,6 +47,19 @@ public struct ActiveWorkoutExercise: Identifiable, Hashable, Sendable {
         return sets.first { entry in
             return entry.id == id
         }
+    }
+
+    public var firstIncompleteSet: SetEntry? {
+        return sets.first { entry in
+            return !entry.isCompleted
+        }
+    }
+
+    public func number(of entry: SetEntry) -> Int? {
+        guard let index = sets.firstIndex(where: { candidate in return candidate.id == entry.id }) else {
+            return nil
+        }
+        return index + Self.firstSetNumber
     }
 
     public func previousResult(for entry: SetEntry) -> SetEntry? {

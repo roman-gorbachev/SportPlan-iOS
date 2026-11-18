@@ -5,6 +5,7 @@ final class AppDIContainer {
     private static let appVersionKey = "CFBundleShortVersionString"
 
     private let appDatabase: AppDatabase
+    private let restNotificationCenter = RestNotificationCenter()
 
     private lazy var equipmentRepository: any EquipmentRepository = EquipmentRepositoryImpl(database: appDatabase)
     private lazy var exerciseRepository: any ExerciseRepository = ExerciseRepositoryImpl(database: appDatabase)
@@ -60,13 +61,31 @@ final class AppDIContainer {
     )
     private lazy var addSetUseCase = AddSetUseCase(repository: workoutRepository)
     private lazy var updateSetUseCase = UpdateSetUseCase(repository: workoutRepository)
-    private lazy var completeSetUseCase = CompleteSetUseCase(repository: workoutRepository, now: { return Date() })
+    private lazy var completeSetUseCase = CompleteSetUseCase(
+        repository: workoutRepository,
+        scheduler: restNotificationCenter,
+        now: { return Date() }
+    )
     private lazy var startTimedSetUseCase = StartTimedSetUseCase(repository: workoutRepository, now: { return Date() })
-    private lazy var stopTimedSetUseCase = StopTimedSetUseCase(repository: workoutRepository, now: { return Date() })
+    private lazy var stopTimedSetUseCase = StopTimedSetUseCase(
+        repository: workoutRepository,
+        scheduler: restNotificationCenter,
+        now: { return Date() }
+    )
     private lazy var removeSetUseCase = RemoveSetUseCase(repository: workoutRepository)
     private lazy var updateWorkoutNoteUseCase = UpdateWorkoutNoteUseCase(repository: workoutRepository)
-    private lazy var finishWorkoutUseCase = FinishWorkoutUseCase(repository: workoutRepository, now: { return Date() })
-    private lazy var cancelWorkoutUseCase = CancelWorkoutUseCase(repository: workoutRepository)
+    private lazy var finishWorkoutUseCase = FinishWorkoutUseCase(
+        repository: workoutRepository,
+        scheduler: restNotificationCenter,
+        now: { return Date() }
+    )
+    private lazy var cancelWorkoutUseCase = CancelWorkoutUseCase(repository: workoutRepository, scheduler: restNotificationCenter)
+    private lazy var adjustRestUseCase = AdjustRestUseCase(
+        repository: workoutRepository,
+        scheduler: restNotificationCenter,
+        now: { return Date() }
+    )
+    private lazy var skipRestUseCase = SkipRestUseCase(repository: workoutRepository, scheduler: restNotificationCenter)
     private lazy var loadPlatesUseCase = LoadPlatesUseCase(repository: plateRepository)
 
     init() {
@@ -75,6 +94,7 @@ final class AppDIContainer {
         } catch {
             fatalError("Unable to open the database: \(error)")
         }
+        restNotificationCenter.activate()
     }
 
     private var appVersion: String {

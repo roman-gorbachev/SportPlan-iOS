@@ -114,6 +114,15 @@ final class FakeWorkoutRepository: WorkoutRepository {
         }
     }
 
+    func updateRest(workoutId: UUID, rest: RestPeriod?) async throws {
+        state.withLock { state in
+            guard let index = state.workouts.firstIndex(where: { workout in return workout.id == workoutId }) else {
+                return
+            }
+            state.workouts[index].rest = rest
+        }
+    }
+
     func finish(workoutId: UUID, at date: Date) async throws {
         state.withLock { state in
             state.sets.removeAll { entry in
@@ -128,6 +137,7 @@ final class FakeWorkoutRepository: WorkoutRepository {
                 return
             }
             state.workouts[index].finishedAt = date
+            state.workouts[index].rest = nil
         }
     }
 

@@ -108,7 +108,7 @@ struct WorkoutUseCaseTests {
         clock.advance(by: 60)
 
         let draft = SetEntryDraft(weight: Weight(kilograms: 62.5), reps: 7, durationSeconds: nil)
-        try await CompleteSetUseCase(repository: workouts, now: clock.now).execute(setId: entry.id, draft: draft)
+        try await CompleteSetUseCase(repository: workouts, scheduler: FakeRestNotificationScheduler(), now: clock.now).execute(setId: entry.id, draft: draft)
 
         let stored = try #require(workouts.sets.first)
         #expect(stored.weight == Weight(kilograms: 62.5))
@@ -131,13 +131,13 @@ struct WorkoutUseCaseTests {
         try await StartTimedSetUseCase(repository: workouts, now: clock.now).execute(setId: entry.id)
         #expect(workouts.sets.first?.state == .running)
         clock.advance(by: 74.6)
-        try await StopTimedSetUseCase(repository: workouts, now: clock.now).execute(setId: entry.id)
+        try await StopTimedSetUseCase(repository: workouts, scheduler: FakeRestNotificationScheduler(), now: clock.now).execute(setId: entry.id)
 
         let stored = try #require(workouts.sets.first)
         #expect(stored.state == .completed)
         #expect(stored.durationSeconds == 75)
         await #expect(throws: WorkoutError.invalidSet) {
-            try await StopTimedSetUseCase(repository: workouts, now: clock.now).execute(setId: entry.id)
+            try await StopTimedSetUseCase(repository: workouts, scheduler: FakeRestNotificationScheduler(), now: clock.now).execute(setId: entry.id)
         }
     }
 
@@ -176,7 +176,7 @@ struct WorkoutUseCaseTests {
         #expect(try await Self.active(workouts).incompleteSetCount == 2)
 
         let clock = TestClock()
-        try await FinishWorkoutUseCase(repository: workouts, now: clock.now).execute()
+        try await FinishWorkoutUseCase(repository: workouts, scheduler: FakeRestNotificationScheduler(), now: clock.now).execute()
 
         #expect(try await workouts.activeWorkout() == nil)
         #expect(workouts.workouts.first?.finishedAt == DomainFixtures.referenceDate)
@@ -187,17 +187,17 @@ struct WorkoutUseCaseTests {
     @Test func finishWithoutCompletedSetsDiscardsTheWorkout() async throws {
         let workouts = FakeWorkoutRepository()
         try await Self.startEmpty(workouts)
-        try await FinishWorkoutUseCase(repository: workouts, now: TestClock().now).execute()
+        try await FinishWorkoutUseCase(repository: workouts, scheduler: FakeRestNotificationScheduler(), now: TestClock().now).execute()
         #expect(workouts.workouts.isEmpty)
     }
 
     @Test func cancelRemovesEverything() async throws {
         let workouts = FakeWorkoutRepository()
         try await Self.startEmpty(workouts)
-        try await CancelWorkoutUseCase(repository: workouts).execute()
+        try await CancelWorkoutUseCase(repository: workouts, scheduler: FakeRestNotificationScheduler()).execute()
         #expect(workouts.workouts.isEmpty)
         await #expect(throws: WorkoutError.noActiveWorkout) {
-            try await CancelWorkoutUseCase(repository: workouts).execute()
+            try await CancelWorkoutUseCase(repository: workouts, scheduler: FakeRestNotificationScheduler()).execute()
         }
     }
 

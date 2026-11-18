@@ -48,4 +48,31 @@ public struct ActiveWorkout: Identifiable, Hashable, Sendable {
             return item.set(id: setId) != nil
         }
     }
+
+    public var restTrigger: WorkoutSetReference? {
+        let completed = exercises.flatMap { item in
+            return item.sets.compactMap { entry -> (WorkoutSetReference, Date)? in
+                guard let completedAt = entry.completedAt else {
+                    return nil
+                }
+                return (WorkoutSetReference(exercise: item, entry: entry), completedAt)
+            }
+        }
+        return completed.max { lhs, rhs in
+            return lhs.1 < rhs.1
+        }?.0
+    }
+
+    public func nextPlannedSet(after reference: WorkoutSetReference) -> WorkoutSetReference? {
+        guard let index = exercises.firstIndex(where: { item in return item.id == reference.exercise.id }) else {
+            return nil
+        }
+        let ordered = exercises[index...] + exercises[..<index]
+        for item in ordered {
+            if let entry = item.firstIncompleteSet {
+                return WorkoutSetReference(exercise: item, entry: entry)
+            }
+        }
+        return nil
+    }
 }

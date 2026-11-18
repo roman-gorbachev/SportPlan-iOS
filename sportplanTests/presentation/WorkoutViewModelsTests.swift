@@ -44,6 +44,7 @@ struct WorkoutViewModelsTests {
         }
         let workouts = WorkoutRepositoryImpl(database: database)
         let now: @Sendable () -> Date = { return Date() }
+        let scheduler = RecordingRestNotificationScheduler()
         let start = WorkoutStartViewModel(
             observePrograms: ObserveProgramsUseCase(repository: programs),
             startWorkoutFromDay: StartWorkoutFromDayUseCase(workoutRepository: workouts, programRepository: programs, now: now),
@@ -54,13 +55,13 @@ struct WorkoutViewModelsTests {
             loadPlates: LoadPlatesUseCase(repository: PlateRepositoryImpl(database: database)),
             addSet: AddSetUseCase(repository: workouts),
             updateSet: UpdateSetUseCase(repository: workouts),
-            completeSet: CompleteSetUseCase(repository: workouts, now: now),
+            completeSet: CompleteSetUseCase(repository: workouts, scheduler: scheduler, now: now),
             startTimedSet: StartTimedSetUseCase(repository: workouts, now: now),
-            stopTimedSet: StopTimedSetUseCase(repository: workouts, now: now),
+            stopTimedSet: StopTimedSetUseCase(repository: workouts, scheduler: scheduler, now: now),
             removeSet: RemoveSetUseCase(repository: workouts),
             updateWorkoutNote: UpdateWorkoutNoteUseCase(repository: workouts),
-            finishWorkout: FinishWorkoutUseCase(repository: workouts, now: now),
-            cancelWorkout: CancelWorkoutUseCase(repository: workouts)
+            finishWorkout: FinishWorkoutUseCase(repository: workouts, scheduler: scheduler, now: now),
+            cancelWorkout: CancelWorkoutUseCase(repository: workouts, scheduler: scheduler)
         )
         return Fixture(database: database, day: day, bench: bench, plank: plank, start: start, active: active)
     }

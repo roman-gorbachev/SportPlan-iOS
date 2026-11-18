@@ -2004,6 +2004,39 @@
         }
       }
     },
+    "rest.notification.finish" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Можно завершать тренировку"
+          }
+        }
+      }
+    },
+    "rest.notification.next %@ %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пора: %1$@, подход %2$lld"
+          }
+        }
+      }
+    },
+    "rest.notification.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отдых окончен"
+          }
+        }
+      }
+    },
     "settings.gym.empty" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -253,6 +253,32 @@ struct WorkoutRepositoryImplTests {
         #expect(programs.first?.days.first?.exerciseNames == [])
     }
 
+    @Test func restIsStoredAndClearedOnFinish() async throws {
+        let context = try await Self.makeContext()
+        let workout = Self.makeWorkout(day: nil)
+        let item = Self.makeExercise(workoutId: workout.id, exerciseId: context.bench.id, position: 0)
+        try await context.repository.start(workout, exercises: [item], sets: [
+            Self.makeSet(workoutExerciseId: item.id, position: 0, kilograms: 60, reps: 8, completed: true),
+        ])
+        let rest = RestPeriod(startedAt: DatabaseFixtures.referenceDate, seconds: 120)
+        try await context.repository.updateRest(workoutId: workout.id, rest: rest)
+        #expect(try await context.repository.activeWorkout()?.workout.rest == rest)
+
+        try await context.repository.updateRest(workoutId: workout.id, rest: nil)
+        #expect(try await context.repository.activeWorkout()?.workout.rest == nil)
+
+        try await context.repository.updateRest(workoutId: workout.id, rest: rest)
+        try await context.repository.finish(workoutId: workout.id, at: DatabaseFixtures.referenceDate.addingTimeInterval(600))
+        let stored = try await context.database.reader.read { db in
+            return try WorkoutRecord.fetchOne(db)
+        }
+        #expect(stored?.restStartedAt == nil)
+        #expect(stored?.restEndsAt == nil)
+        await #expect(throws: WorkoutError.noActiveWorkout) {
+            try await context.repository.updateRest(workoutId: workout.id, rest: rest)
+        }
+    }
+
     @Test func cancelRemovesTheWorkoutWithRows() async throws {
         let context = try await Self.makeContext()
         let workout = Self.makeWorkout(day: nil)

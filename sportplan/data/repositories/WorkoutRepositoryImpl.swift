@@ -115,6 +115,22 @@ nonisolated final class WorkoutRepositoryImpl: WorkoutRepository {
         }
     }
 
+    func updateRest(workoutId: UUID, rest: RestPeriod?) async throws {
+        try await database.writer.write { db in
+            let updated = try WorkoutRecord
+                .filter(Column("id") == workoutId.databaseText)
+                .filter(Column("finished_at") == nil)
+                .updateAll(
+                    db,
+                    Column("rest_started_at").set(to: rest?.startedAt),
+                    Column("rest_ends_at").set(to: rest?.endsAt)
+                )
+            guard updated > 0 else {
+                throw WorkoutError.noActiveWorkout
+            }
+        }
+    }
+
     func finish(workoutId: UUID, at date: Date) async throws {
         try await database.writer.write { db in
             let id = workoutId.databaseText
@@ -137,7 +153,12 @@ nonisolated final class WorkoutRepositoryImpl: WorkoutRepository {
             let updated = try WorkoutRecord
                 .filter(Column("id") == id)
                 .filter(Column("finished_at") == nil)
-                .updateAll(db, Column("finished_at").set(to: date))
+                .updateAll(
+                    db,
+                    Column("finished_at").set(to: date),
+                    Column("rest_started_at").set(to: nil as Date?),
+                    Column("rest_ends_at").set(to: nil as Date?)
+                )
             guard updated > 0 else {
                 throw WorkoutError.noActiveWorkout
             }
