@@ -3,8 +3,6 @@ import Domain
 import SwiftUI
 
 struct RestTimerPanel: View {
-    private static let skipButtonWeight: CGFloat = 1.3
-
     let data: RestTimerItem
     let onAdjust: (Int) -> Void
     let onSkip: () -> Void
@@ -47,8 +45,12 @@ struct RestTimerPanel: View {
                 ) {
                     onAdjust(RestPeriod.adjustmentStepSeconds)
                 }
-                panelButton(title: String(localized: "rest.panel.skip"), accessibilityLabel: nil, action: onSkip)
-                    .layoutPriority(Self.skipButtonWeight)
+                Button(action: onSkip) {
+                    return Text(String(localized: "rest.panel.skip"))
+                        .lineLimit(1)
+                        .fixedSize()
+                }
+                .buttonStyle(SunkenButtonStyle())
             }
         }
         .padding(.vertical, Spacing.xs)
