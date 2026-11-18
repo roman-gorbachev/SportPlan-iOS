@@ -9,6 +9,8 @@ final class AppDIContainer {
     private lazy var equipmentRepository: any EquipmentRepository = EquipmentRepositoryImpl(database: appDatabase)
     private lazy var exerciseRepository: any ExerciseRepository = ExerciseRepositoryImpl(database: appDatabase)
     private lazy var programRepository: any ProgramRepository = ProgramRepositoryImpl(database: appDatabase)
+    private lazy var workoutRepository: any WorkoutRepository = WorkoutRepositoryImpl(database: appDatabase)
+    private lazy var plateRepository: any PlateRepository = PlateRepositoryImpl(database: appDatabase)
 
     private lazy var observeGymEquipmentUseCase = ObserveGymEquipmentUseCase(repository: equipmentRepository)
     private lazy var loadEquipmentEditorUseCase = LoadEquipmentEditorUseCase(repository: equipmentRepository)
@@ -43,6 +45,29 @@ final class AppDIContainer {
     )
     private lazy var removePlannedExerciseUseCase = RemovePlannedExerciseUseCase(repository: programRepository)
     private lazy var reorderPlannedExercisesUseCase = ReorderPlannedExercisesUseCase(repository: programRepository)
+
+    private lazy var observeActiveWorkoutUseCase = ObserveActiveWorkoutUseCase(repository: workoutRepository)
+    private lazy var startWorkoutFromDayUseCase = StartWorkoutFromDayUseCase(
+        workoutRepository: workoutRepository,
+        programRepository: programRepository,
+        now: { return Date() }
+    )
+    private lazy var startEmptyWorkoutUseCase = StartEmptyWorkoutUseCase(repository: workoutRepository, now: { return Date() })
+    private lazy var addExerciseToWorkoutUseCase = AddExerciseToWorkoutUseCase(
+        workoutRepository: workoutRepository,
+        exerciseRepository: exerciseRepository,
+        equipmentRepository: equipmentRepository
+    )
+    private lazy var addSetUseCase = AddSetUseCase(repository: workoutRepository)
+    private lazy var updateSetUseCase = UpdateSetUseCase(repository: workoutRepository)
+    private lazy var completeSetUseCase = CompleteSetUseCase(repository: workoutRepository, now: { return Date() })
+    private lazy var startTimedSetUseCase = StartTimedSetUseCase(repository: workoutRepository, now: { return Date() })
+    private lazy var stopTimedSetUseCase = StopTimedSetUseCase(repository: workoutRepository, now: { return Date() })
+    private lazy var removeSetUseCase = RemoveSetUseCase(repository: workoutRepository)
+    private lazy var updateWorkoutNoteUseCase = UpdateWorkoutNoteUseCase(repository: workoutRepository)
+    private lazy var finishWorkoutUseCase = FinishWorkoutUseCase(repository: workoutRepository, now: { return Date() })
+    private lazy var cancelWorkoutUseCase = CancelWorkoutUseCase(repository: workoutRepository)
+    private lazy var loadPlatesUseCase = LoadPlatesUseCase(repository: plateRepository)
 
     init() {
         do {
@@ -118,7 +143,33 @@ extension AppDIContainer {
             target: target,
             observeExerciseLibrary: observeExerciseLibraryUseCase,
             observeProgramDay: observeProgramDayUseCase,
-            addExerciseToDay: addExerciseToDayUseCase
+            addExerciseToDay: addExerciseToDayUseCase,
+            observeActiveWorkout: observeActiveWorkoutUseCase,
+            addExerciseToWorkout: addExerciseToWorkoutUseCase
+        )
+    }
+
+    func buildWorkoutStartViewModel() -> WorkoutStartViewModel {
+        return WorkoutStartViewModel(
+            observePrograms: observeProgramsUseCase,
+            startWorkoutFromDay: startWorkoutFromDayUseCase,
+            startEmptyWorkout: startEmptyWorkoutUseCase
+        )
+    }
+
+    func buildActiveWorkoutViewModel() -> ActiveWorkoutViewModel {
+        return ActiveWorkoutViewModel(
+            observeActiveWorkout: observeActiveWorkoutUseCase,
+            loadPlates: loadPlatesUseCase,
+            addSet: addSetUseCase,
+            updateSet: updateSetUseCase,
+            completeSet: completeSetUseCase,
+            startTimedSet: startTimedSetUseCase,
+            stopTimedSet: stopTimedSetUseCase,
+            removeSet: removeSetUseCase,
+            updateWorkoutNote: updateWorkoutNoteUseCase,
+            finishWorkout: finishWorkoutUseCase,
+            cancelWorkout: cancelWorkoutUseCase
         )
     }
 

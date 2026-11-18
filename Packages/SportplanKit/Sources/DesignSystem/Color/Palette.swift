@@ -22,6 +22,8 @@ public enum Palette {
     public static let onRecord = Color(hex: 0x151515)
     public static let warmup = Color(light: 0x5E5E5A, dark: 0xA3A29C)
     public static let destructive = Color(light: 0xC42019, dark: 0xFF6B5E)
+    public static let plateCollar = Color(light: 0x8C8C87, dark: 0x6F6F6B)
+    public static let plateSleeve = Color(light: 0xB5B4AF, dark: 0x4A4A47)
 
     public static let heatmapLevels: [Color] = [
         Color(light: 0xEAE9E5, dark: 0x26272B),

@@ -1,0 +1,12 @@
+import Foundation
+
+struct SetEditorUiData: Identifiable {
+    let id: UUID
+    let title: String
+    let exerciseName: String
+    let weight: SetEditorWeightField
+    let reps: String
+    let canDecrementReps: Bool
+    let canCopyPrevious: Bool
+    let saveTitle: String
+}

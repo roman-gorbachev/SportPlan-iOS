@@ -663,6 +663,28 @@
         }
       }
     },
+    "format.dotSeparator" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " · "
+          }
+        }
+      }
+    },
+    "format.listSeparator" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ", "
+          }
+        }
+      }
+    },
     "goals.remove" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1083,6 +1105,17 @@
         }
       }
     },
+    "picker.add.workout.accessibility %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить «%@» в тренировку"
+          }
+        }
+      }
+    },
     "picker.empty.message" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1090,6 +1123,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Создай первое упражнение — оно сразу встанет в день."
+          }
+        }
+      }
+    },
+    "picker.empty.message.workout" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создай первое упражнение, потом добавь его в тренировку."
           }
         }
       }
@@ -1116,6 +1160,17 @@
         }
       }
     },
+    "picker.hint.workout" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тап — упражнение сразу встанет в тренировку, подходы как в прошлый раз. Уже добавленные отмечены."
+          }
+        }
+      }
+    },
     "picker.inDay" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1138,6 +1193,28 @@
         }
       }
     },
+    "picker.inWorkout" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "в тренировке"
+          }
+        }
+      }
+    },
+    "picker.inWorkout.accessibility %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«%@» уже в тренировке"
+          }
+        }
+      }
+    },
     "picker.new" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1156,6 +1233,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "В день %@"
+          }
+        }
+      }
+    },
+    "picker.title.workout" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В тренировку"
           }
         }
       }
@@ -1683,6 +1771,17 @@
         }
       }
     },
+    "programs.days.next %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "следующий — %@"
+          }
+        }
+      }
+    },
     "programs.days.none" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2017,17 +2116,6 @@
         }
       }
     },
-    "stub.workout" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Здесь появится активная тренировка."
-          }
-        }
-      }
-    },
     "tab.history" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2057,6 +2145,923 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Тренировка"
+          }
+        }
+      }
+    },
+    "workout.active.addExercise" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить упражнение"
+          }
+        }
+      }
+    },
+    "workout.active.addSet" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подход"
+          }
+        }
+      }
+    },
+    "workout.active.addWarmup" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разминка"
+          }
+        }
+      }
+    },
+    "workout.active.cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отменить тренировку"
+          }
+        }
+      }
+    },
+    "workout.active.elapsed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Время тренировки"
+          }
+        }
+      }
+    },
+    "workout.active.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Упражнений пока нет. Добавь первое — подходы подставятся из прошлой тренировки."
+          }
+        }
+      }
+    },
+    "workout.active.error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить изменение. Попробуй ещё раз."
+          }
+        }
+      }
+    },
+    "workout.active.finish" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершить"
+          }
+        }
+      }
+    },
+    "workout.active.menu" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Меню тренировки"
+          }
+        }
+      }
+    },
+    "workout.active.progress %lld %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld из %2$lld"
+          }
+        }
+      }
+    },
+    "workout.active.reps %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ повт."
+          }
+        }
+      }
+    },
+    "workout.active.untitled" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тренировка"
+          }
+        }
+      }
+    },
+    "workout.confirm.cancel.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тренировка и все её подходы будут удалены."
+          }
+        }
+      }
+    },
+    "workout.confirm.cancel.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отменить тренировку?"
+          }
+        }
+      }
+    },
+    "workout.confirm.discard.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ни один подход не выполнен — тренировка не сохранится."
+          }
+        }
+      }
+    },
+    "workout.confirm.discard.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершить без подходов?"
+          }
+        }
+      }
+    },
+    "workout.confirm.finish.message %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld невыполненных подхода будут удалены."
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld невыполненных подходов будут удалены."
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld невыполненный подход будет удалён."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld невыполненного подхода будут удалены."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "workout.confirm.finish.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершить тренировку?"
+          }
+        }
+      }
+    },
+    "workout.confirm.keepGoing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продолжить"
+          }
+        }
+      }
+    },
+    "workout.day.label %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "День %@"
+          }
+        }
+      }
+    },
+    "workout.editor.addedWeight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отягощение, кг"
+          }
+        }
+      }
+    },
+    "workout.editor.copyPrevious" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Как предыдущий"
+          }
+        }
+      }
+    },
+    "workout.editor.dumbbellWeight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вес одной гантели, кг"
+          }
+        }
+      }
+    },
+    "workout.editor.record" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Записать"
+          }
+        }
+      }
+    },
+    "workout.editor.reps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повторы"
+          }
+        }
+      }
+    },
+    "workout.editor.reps.decrement %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уменьшить повторы на %lld"
+          }
+        }
+      }
+    },
+    "workout.editor.reps.increment %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Увеличить повторы на %lld"
+          }
+        }
+      }
+    },
+    "workout.editor.repsStep %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "шаг %lld"
+          }
+        }
+      }
+    },
+    "workout.editor.save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохранить"
+          }
+        }
+      }
+    },
+    "workout.editor.step %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "шаг %@"
+          }
+        }
+      }
+    },
+    "workout.editor.title %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подход %lld"
+          }
+        }
+      }
+    },
+    "workout.editor.warmup" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разминка"
+          }
+        }
+      }
+    },
+    "workout.editor.weight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вес, кг"
+          }
+        }
+      }
+    },
+    "workout.editor.weight.decrement %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уменьшить вес на %@ кг"
+          }
+        }
+      }
+    },
+    "workout.editor.weight.increment %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Увеличить вес на %@ кг"
+          }
+        }
+      }
+    },
+    "workout.empty.createProgram" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создать программу"
+          }
+        }
+      }
+    },
+    "workout.empty.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создай программу или начни пустую тренировку — упражнения добавишь по ходу."
+          }
+        }
+      }
+    },
+    "workout.empty.start" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начать пустую тренировку"
+          }
+        }
+      }
+    },
+    "workout.empty.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Программ пока нет"
+          }
+        }
+      }
+    },
+    "workout.never" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ещё не было"
+          }
+        }
+      }
+    },
+    "workout.note.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Самочувствие, техника, что поменять"
+          }
+        }
+      }
+    },
+    "workout.note.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Заметка к тренировке"
+          }
+        }
+      }
+    },
+    "workout.plates.perSide %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На каждую сторону: %@ кг"
+          }
+        }
+      }
+    },
+    "workout.plates.remainder %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%@"
+          }
+        }
+      }
+    },
+    "workout.plates.remainder.spoken %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "не хватает блинов на %@ кг"
+          }
+        }
+      }
+    },
+    "workout.set.addedWeight %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%@"
+          }
+        }
+      }
+    },
+    "workout.set.complete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отметить подход выполненным"
+          }
+        }
+      }
+    },
+    "workout.set.completed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подход выполнен"
+          }
+        }
+      }
+    },
+    "workout.set.delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить"
+          }
+        }
+      }
+    },
+    "workout.set.edit.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открывает степперы веса и повторов"
+          }
+        }
+      }
+    },
+    "workout.set.kg" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "кг"
+          }
+        }
+      }
+    },
+    "workout.set.minutes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "мин"
+          }
+        }
+      }
+    },
+    "workout.set.noDuration" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0:00"
+          }
+        }
+      }
+    },
+    "workout.set.noDuration.accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "длительность не записана"
+          }
+        }
+      }
+    },
+    "workout.set.noValue" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "—"
+          }
+        }
+      }
+    },
+    "workout.set.number %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подход %lld"
+          }
+        }
+      }
+    },
+    "workout.set.oneDumbbell" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "одна гантель"
+          }
+        }
+      }
+    },
+    "workout.set.planned" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "план"
+          }
+        }
+      }
+    },
+    "workout.set.previous %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "было %@"
+          }
+        }
+      }
+    },
+    "workout.set.reps.spoken %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld повтора"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld повторов"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld повтор"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld повтора"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "workout.set.repsUnit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "повт."
+          }
+        }
+      }
+    },
+    "workout.set.running" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "идёт"
+          }
+        }
+      }
+    },
+    "workout.set.startStopwatch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запустить секундомер"
+          }
+        }
+      }
+    },
+    "workout.set.stopStopwatch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Остановить и записать"
+          }
+        }
+      }
+    },
+    "workout.set.tapToStart" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "нажми, чтобы начать"
+          }
+        }
+      }
+    },
+    "workout.set.times" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "×"
+          }
+        }
+      }
+    },
+    "workout.set.value %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ × %2$@"
+          }
+        }
+      }
+    },
+    "workout.set.warmup" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "разминка"
+          }
+        }
+      }
+    },
+    "workout.set.weight.spoken %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ кг"
+          }
+        }
+      }
+    },
+    "workout.start.begin" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начать"
+          }
+        }
+      }
+    },
+    "workout.start.begin.accessibility %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начать «%@»"
+          }
+        }
+      }
+    },
+    "workout.start.day.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начинает тренировку по этому дню"
+          }
+        }
+      }
+    },
+    "workout.start.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пустая тренировка"
+          }
+        }
+      }
+    },
+    "workout.start.error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось начать тренировку. Попробуй ещё раз."
+          }
+        }
+      }
+    },
+    "workout.start.exercises.more %@ %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ и ещё %2$lld"
+          }
+        }
+      }
+    },
+    "workout.start.exercises.none" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В дне пока нет упражнений"
+          }
+        }
+      }
+    },
+    "workout.start.lastTime %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "последний раз %@"
+          }
+        }
+      }
+    },
+    "workout.start.next %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Следующий по программе «%@»"
+          }
+        }
+      }
+    },
+    "workout.start.otherDays" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Другие дни"
           }
         }
       }

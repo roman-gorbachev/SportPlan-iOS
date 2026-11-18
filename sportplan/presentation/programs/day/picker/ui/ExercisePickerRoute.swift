@@ -54,7 +54,7 @@ struct ExercisePickerRoute: View {
             await viewModel.observeLibrary()
         }
         .task {
-            await viewModel.observeDay()
+            await viewModel.observeAddedExercises()
         }
         .sheet(item: $addTarget) { target in
             return AddExerciseRoute(

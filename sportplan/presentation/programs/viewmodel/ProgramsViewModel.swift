@@ -95,21 +95,35 @@ final class ProgramsViewModel {
     }
 
     private static func makeItem(_ summary: ProgramSummary) -> ProgramItem {
-        let daySummary = summary.days.isEmpty
-            ? String(localized: "programs.days.none")
-            : String(localized: "programs.days.count \(summary.days.count)")
         return ProgramItem(
             id: summary.id,
             name: summary.program.name,
-            summary: daySummary,
+            summary: programSummary(summary),
             days: summary.days.map { day in
+                let exercises = String(localized: "programs.day.exercises \(day.exerciseCount)")
+                let lastWorkout = WorkoutFormatting.lastWorkoutText(day.lastWorkoutAt)
                 return ProgramDayItem(
                     id: day.id,
                     label: day.day.label,
                     name: day.day.name,
-                    summary: String(localized: "programs.day.exercises \(day.exerciseCount)")
+                    summary: String(localized: "format.dotSeparated \(exercises) \(lastWorkout)")
                 )
             }
         )
+    }
+
+    private static func programSummary(_ summary: ProgramSummary) -> String {
+        guard !summary.days.isEmpty else {
+            return String(localized: "programs.days.none")
+        }
+        let days = String(localized: "programs.days.count \(summary.days.count)")
+        let hasHistory = summary.days.contains { day in
+            return day.lastWorkoutAt != nil
+        }
+        guard hasHistory, let nextDay = summary.nextDay else {
+            return days
+        }
+        let next = String(localized: "programs.days.next \(ProgramFormatting.dayShortTitle(nextDay.day))")
+        return String(localized: "format.dotSeparated \(days) \(next)")
     }
 }

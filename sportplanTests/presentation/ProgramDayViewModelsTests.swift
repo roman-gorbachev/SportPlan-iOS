@@ -48,11 +48,18 @@ struct ProgramDayViewModelsTests {
     private static func makePicker(dayId: UUID, database: AppDatabase) -> ExercisePickerViewModel {
         let programs = ProgramRepositoryImpl(database: database)
         let exercises = ExerciseRepositoryImpl(database: database)
+        let workouts = WorkoutRepositoryImpl(database: database)
         return ExercisePickerViewModel(
-            target: ExercisePickerTarget(dayId: dayId, shortTitle: "A", fullTitle: "A · Грудь и трицепс"),
+            target: ExercisePickerTarget(destination: .day(id: dayId, shortTitle: "A", fullTitle: "A · Грудь и трицепс")),
             observeExerciseLibrary: ObserveExerciseLibraryUseCase(repository: exercises),
             observeProgramDay: ObserveProgramDayUseCase(repository: programs),
-            addExerciseToDay: AddExerciseToDayUseCase(programRepository: programs, exerciseRepository: exercises)
+            addExerciseToDay: AddExerciseToDayUseCase(programRepository: programs, exerciseRepository: exercises),
+            observeActiveWorkout: ObserveActiveWorkoutUseCase(repository: workouts),
+            addExerciseToWorkout: AddExerciseToWorkoutUseCase(
+                workoutRepository: workouts,
+                exerciseRepository: exercises,
+                equipmentRepository: EquipmentRepositoryImpl(database: database)
+            )
         )
     }
 
@@ -137,7 +144,7 @@ struct ProgramDayViewModelsTests {
             await viewModel.observeLibrary()
         }
         let dayTask = Task {
-            await viewModel.observeDay()
+            await viewModel.observeAddedExercises()
         }
         defer {
             libraryTask.cancel()
@@ -148,12 +155,12 @@ struct ProgramDayViewModelsTests {
             return !data.sections.isEmpty
         })
         let items = initial.sections.flatMap(\.exercises)
-        #expect(items.first { item in return item.id == fixture.bench.id }?.isInDay == true)
-        #expect(items.first { item in return item.id == fixture.plank.id }?.isInDay == false)
+        #expect(items.first { item in return item.id == fixture.bench.id }?.isAdded == true)
+        #expect(items.first { item in return item.id == fixture.plank.id }?.isAdded == false)
 
         await viewModel.add(exerciseId: fixture.plank.id)
         let updated = try await Self.pickerUntil(viewModel) { data in
-            return data.sections.flatMap(\.exercises).allSatisfy(\.isInDay)
+            return data.sections.flatMap(\.exercises).allSatisfy(\.isAdded)
         }
         #expect(updated != nil)
         let plannedCount = try await fixture.database.reader.read { db in

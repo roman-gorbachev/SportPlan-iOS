@@ -74,7 +74,7 @@ struct ProgramDayRoute: View {
         .sheet(item: $pickerTarget) { target in
             return ExercisePickerRoute(
                 viewModel: makePickerViewModel(target),
-                makeAddExerciseViewModel: { addTarget in return makeAddExerciseViewModel(addTarget, AddExerciseDayContext(dayId: target.dayId, title: target.fullTitle)) },
+                makeAddExerciseViewModel: { addTarget in return makeAddExerciseViewModel(addTarget, target.dayContext) },
                 makeEquipmentEditorViewModel: makeEquipmentEditorViewModel,
                 onClose: { pickerTarget = nil }
             )

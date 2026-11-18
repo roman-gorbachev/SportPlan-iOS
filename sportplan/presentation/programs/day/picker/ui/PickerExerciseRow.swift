@@ -3,6 +3,7 @@ import SwiftUI
 
 struct PickerExerciseRow: View {
     let item: PickerExerciseItem
+    let addedLabel: String
     let action: () -> Void
 
     var body: some View {
@@ -11,14 +12,14 @@ struct PickerExerciseRow: View {
                 VStack(alignment: .leading, spacing: Spacing.xxs) {
                     Text(item.name)
                         .appStyle(Typography.body)
-                        .foregroundStyle(item.isInDay ? Palette.textSecondary : Palette.textPrimary)
+                        .foregroundStyle(item.isAdded ? Palette.textSecondary : Palette.textPrimary)
                     Text(item.detail)
                         .appStyle(Typography.footnote)
                         .foregroundStyle(Palette.textSecondary)
                 }
                 Spacer(minLength: Spacing.s)
-                if item.isInDay {
-                    Label(String(localized: "picker.inDay"), systemImage: "checkmark")
+                if item.isAdded {
+                    Label(addedLabel, systemImage: "checkmark")
                         .appStyle(Typography.callout)
                         .foregroundStyle(Palette.textSecondary)
                 } else {
@@ -30,9 +31,9 @@ struct PickerExerciseRow: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .disabled(item.isInDay)
+        .disabled(item.isAdded)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(item.isInDay ? String(localized: "picker.inDay.accessibility \(item.name)") : String(localized: "picker.add.accessibility \(item.name)"))
+        .accessibilityLabel(item.accessibilityLabel)
         .accessibilityAddTraits(.isButton)
     }
 }

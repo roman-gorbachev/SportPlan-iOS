@@ -1,11 +1,16 @@
 import Foundation
 
 struct ExercisePickerTarget: Hashable, Identifiable {
-    let dayId: UUID
-    let shortTitle: String
-    let fullTitle: String
+    let destination: ExercisePickerDestination
 
-    var id: UUID {
-        return dayId
+    var id: ExercisePickerDestination {
+        return destination
+    }
+
+    var dayContext: AddExerciseDayContext? {
+        guard case let .day(id, _, fullTitle) = destination else {
+            return nil
+        }
+        return AddExerciseDayContext(dayId: id, title: fullTitle)
     }
 }

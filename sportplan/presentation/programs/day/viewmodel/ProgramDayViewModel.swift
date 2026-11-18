@@ -56,11 +56,11 @@ final class ProgramDayViewModel {
         guard let detail else {
             return nil
         }
-        return ExercisePickerTarget(
-            dayId: detail.day.id,
+        return ExercisePickerTarget(destination: .day(
+            id: detail.day.id,
             shortTitle: ProgramFormatting.dayShortTitle(detail.day),
             fullTitle: ProgramFormatting.dayFullTitle(detail.day)
-        )
+        ))
     }
 
     func goalsTarget(plannedExerciseId: UUID) -> PlannedExerciseGoalsTarget? {

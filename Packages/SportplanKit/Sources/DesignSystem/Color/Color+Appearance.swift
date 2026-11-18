@@ -12,14 +12,14 @@ extension Color {
     nonisolated private static let channelMask = 0xFF
     nonisolated private static let channelMaximum = 255.0
 
-    init(light: Int, dark: Int) {
+    nonisolated init(light: Int, dark: Int) {
         #if canImport(UIKit)
-        let dynamic = UIColor { traits in
+        let dynamic = UIColor { @Sendable traits in
             return traits.userInterfaceStyle == .dark ? Self.platformColor(hex: dark) : Self.platformColor(hex: light)
         }
         self.init(uiColor: dynamic)
         #else
-        let dynamic = NSColor(name: nil) { appearance in
+        let dynamic = NSColor(name: nil) { @Sendable appearance in
             let isDark = appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
             return isDark ? Self.platformColor(hex: dark) : Self.platformColor(hex: light)
         }
@@ -27,7 +27,7 @@ extension Color {
         #endif
     }
 
-    init(hex: Int) {
+    nonisolated init(hex: Int) {
         self.init(light: hex, dark: hex)
     }
 

@@ -14,7 +14,7 @@ struct ExercisePickerScreen: View {
             if data.isLibraryEmpty {
                 EmptyStateView(
                     title: String(localized: "picker.empty.title"),
-                    message: String(localized: "picker.empty.message"),
+                    message: data.emptyMessage,
                     actionTitle: String(localized: "picker.new"),
                     action: onCreate
                 )
@@ -45,14 +45,14 @@ struct ExercisePickerScreen: View {
         return List {
             Section {
             } footer: {
-                Text(String(localized: "picker.hint"))
+                Text(data.hint)
                     .appStyle(Typography.footnote)
                     .foregroundStyle(Palette.textSecondary)
             }
             ForEach(data.sections) { section in
                 return Section {
                     ForEach(section.exercises) { item in
-                        return PickerExerciseRow(item: item) {
+                        return PickerExerciseRow(item: item, addedLabel: data.addedLabel) {
                             onAdd(item.id)
                         }
                     }
@@ -76,12 +76,15 @@ struct ExercisePickerScreen: View {
     let data = ExercisePickerUiData(
         sections: [
             PickerSectionItem(category: .freeWeight, title: "Свободный вес", exercises: [
-                PickerExerciseItem(id: UUID(), name: "Жим лёжа", detail: "Олимпийский гриф", isInDay: true),
-                PickerExerciseItem(id: UUID(), name: "Присед", detail: "Олимпийский гриф", isInDay: false),
+                PickerExerciseItem(id: UUID(), name: "Жим лёжа", detail: "Олимпийский гриф", isAdded: true, accessibilityLabel: "«Жим лёжа» уже в дне"),
+                PickerExerciseItem(id: UUID(), name: "Присед", detail: "Олимпийский гриф", isAdded: false, accessibilityLabel: "Добавить «Присед» в день"),
             ]),
         ],
         isLibraryEmpty: false,
         searchQuery: "",
+        hint: "Тап — упражнение сразу встанет в день с целью 3 × 8–12 и своим отдыхом. Уже добавленные отмечены.",
+        emptyMessage: "Создай первое упражнение — оно сразу встанет в день.",
+        addedLabel: "в дне",
         isShowingError: false
     )
     return NavigationStack {
