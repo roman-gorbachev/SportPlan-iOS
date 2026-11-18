@@ -81,6 +81,19 @@ struct TokenCatalogView: View {
                 return Text(verbatim: "Добавить оборудование")
             }
             .buttonStyle(InkButtonStyle())
+            Button(action: {}) {
+                return Text(verbatim: "Жим лёжа")
+            }
+            .buttonStyle(ChipButtonStyle())
+            ValueStepper(
+                title: "отдых",
+                value: "1:30",
+                accessibilityValue: "1 минута 30 секунд",
+                canDecrement: true,
+                canIncrement: true,
+                onDecrement: {},
+                onIncrement: {}
+            )
             EmptyStateView(
                 title: "Оборудования пока нет",
                 message: "Добавь грифы и тренажёры своего зала.",

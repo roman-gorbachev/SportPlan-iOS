@@ -5,10 +5,9 @@ enum WeightFormatting {
     private static let maximumFractionDigits = 2
     private static let decimalComma = ","
     private static let decimalPoint = "."
-    private static let appLocale = Locale(identifier: Bundle.main.preferredLocalizations.first ?? Locale.current.identifier)
 
     static func kilograms(_ weight: Weight) -> String {
-        return weight.kilograms.formatted(.number.grouping(.never).precision(.fractionLength(0...maximumFractionDigits)).locale(appLocale))
+        return weight.kilograms.formatted(.number.grouping(.never).precision(.fractionLength(0...maximumFractionDigits)).locale(AppLocale.current))
     }
 
     static func parseKilograms(_ text: String) -> Weight? {

@@ -15,7 +15,7 @@ struct RootView: View {
                 return WorkoutTabView(container: container, router: workoutRouter)
             }
             Tab(AppTab.programs.title, systemImage: AppTab.programs.systemImage, value: AppTab.programs) {
-                return ProgramsTabView(router: programsRouter)
+                return ProgramsTabView(container: container, router: programsRouter)
             }
             Tab(AppTab.history.title, systemImage: AppTab.history.systemImage, value: AppTab.history) {
                 return HistoryTabView(router: historyRouter)

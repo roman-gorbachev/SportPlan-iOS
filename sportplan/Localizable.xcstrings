@@ -1,6 +1,303 @@
 {
   "sourceLanguage" : "ru",
   "strings" : {
+    "addExercise.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить"
+          }
+        }
+      }
+    },
+    "addExercise.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Описание"
+          }
+        }
+      }
+    },
+    "addExercise.description.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Техника, настройки тренажёра"
+          }
+        }
+      }
+    },
+    "addExercise.equipment.header" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оборудование · мой зал"
+          }
+        }
+      }
+    },
+    "addExercise.equipment.new.barbell" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новый гриф"
+          }
+        }
+      }
+    },
+    "addExercise.equipment.new.dumbbell" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новые гантели"
+          }
+        }
+      }
+    },
+    "addExercise.equipment.new.machine" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новый тренажёр"
+          }
+        }
+      }
+    },
+    "addExercise.group.bodyweight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Без оборудования"
+          }
+        }
+      }
+    },
+    "addExercise.group.freeWeight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Свободный вес"
+          }
+        }
+      }
+    },
+    "addExercise.group.machine" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тренажёр"
+          }
+        }
+      }
+    },
+    "addExercise.kind.barbell" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Штанга"
+          }
+        }
+      }
+    },
+    "addExercise.kind.barbell.examples" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "олимпийский гриф, EZ, Смит"
+          }
+        }
+      }
+    },
+    "addExercise.kind.bodyweight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Собственный вес"
+          }
+        }
+      }
+    },
+    "addExercise.kind.bodyweight.examples" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "подтягивания, брусья, планка"
+          }
+        }
+      }
+    },
+    "addExercise.kind.dumbbell" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гантели"
+          }
+        }
+      }
+    },
+    "addExercise.kind.dumbbell.examples" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "вес одной гантели"
+          }
+        }
+      }
+    },
+    "addExercise.kind.plateLoadedMachine" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "С блинами"
+          }
+        }
+      }
+    },
+    "addExercise.kind.plateLoadedMachine.examples" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "жим ногами, гакк-машина"
+          }
+        }
+      }
+    },
+    "addExercise.kind.selectorizedMachine" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Блочный"
+          }
+        }
+      }
+    },
+    "addExercise.kind.selectorizedMachine.examples" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "кроссовер, тяги блока, стек"
+          }
+        }
+      }
+    },
+    "addExercise.metric" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Метрика"
+          }
+        }
+      }
+    },
+    "addExercise.name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Название"
+          }
+        }
+      }
+    },
+    "addExercise.rest" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "отдых"
+          }
+        }
+      }
+    },
+    "addExercise.saveError" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить упражнение"
+          }
+        }
+      }
+    },
+    "addExercise.step.first" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 из 2"
+          }
+        }
+      }
+    },
+    "addExercise.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новое упражнение"
+          }
+        }
+      }
+    },
+    "addExercise.type.question" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чем делаешь?"
+          }
+        }
+      }
+    },
     "common.cancel" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -289,6 +586,50 @@
         }
       }
     },
+    "exercise.metric.duration" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Время"
+          }
+        }
+      }
+    },
+    "exercise.metric.duration.list" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "время"
+          }
+        }
+      }
+    },
+    "exercise.metric.reps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повторы"
+          }
+        }
+      }
+    },
+    "exercise.metric.reps.list" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "повторы"
+          }
+        }
+      }
+    },
     "gym.add" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -395,6 +736,318 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Мой зал"
+          }
+        }
+      }
+    },
+    "library.archive" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Архивировать"
+          }
+        }
+      }
+    },
+    "library.archive.error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось архивировать"
+          }
+        }
+      }
+    },
+    "library.archive.message.days %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Упражнение будет убрано из %lld дня программ. История сохранится."
+                }
+              },
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Упражнение будет убрано из %lld дней программ. История сохранится."
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Упражнение будет убрано из %lld дней программ. История сохранится."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Упражнение будет убрано из %lld дня программ. История сохранится."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "library.archive.message.unused" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Упражнение пропадёт из справочника. История сохранится."
+          }
+        }
+      }
+    },
+    "library.archive.title %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Архивировать «%@»?"
+          }
+        }
+      }
+    },
+    "library.empty.custom" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Своё упражнение"
+          }
+        }
+      }
+    },
+    "library.empty.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавь упражнения, которые делаешь. Начни с частых — тип и оборудование подставятся сами."
+          }
+        }
+      }
+    },
+    "library.empty.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Справочник пуст"
+          }
+        }
+      }
+    },
+    "library.row.detail %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "library.search" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поиск"
+          }
+        }
+      }
+    },
+    "library.section.bodyweight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Собственный вес"
+          }
+        }
+      }
+    },
+    "library.section.freeWeight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Свободный вес"
+          }
+        }
+      }
+    },
+    "library.section.machine" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тренажёры"
+          }
+        }
+      }
+    },
+    "library.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Упражнения"
+          }
+        }
+      }
+    },
+    "programs.library.count %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld упражнение"
+                }
+              },
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld упражнения"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld упражнений"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld упражнения"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "programs.library.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пока пусто"
+          }
+        }
+      }
+    },
+    "programs.library.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Справочник упражнений"
+          }
+        }
+      }
+    },
+    "quickExercise.benchPress" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жим лёжа"
+          }
+        }
+      }
+    },
+    "quickExercise.deadlift" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Становая тяга"
+          }
+        }
+      }
+    },
+    "quickExercise.dip" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Брусья"
+          }
+        }
+      }
+    },
+    "quickExercise.legPress" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жим ногами"
+          }
+        }
+      }
+    },
+    "quickExercise.plank" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Планка"
+          }
+        }
+      }
+    },
+    "quickExercise.pullUp" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подтягивания"
+          }
+        }
+      }
+    },
+    "quickExercise.squat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Присед"
           }
         }
       }
@@ -517,7 +1170,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Здесь появятся программы и справочник упражнений."
+            "value" : "Здесь появятся программы."
           }
         }
       }

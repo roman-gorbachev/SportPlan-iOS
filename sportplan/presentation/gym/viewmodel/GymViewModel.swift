@@ -26,25 +26,12 @@ final class GymViewModel {
     }
 
     private static func makeItem(_ equipment: Equipment) -> GymEquipmentItem {
-        let step = WeightFormatting.kilograms(equipment.weightStep)
-        let weightsText: String
-        let weightsAccessibilityText: String
-        if equipment.kind.hasBaseWeight {
-            let base = WeightFormatting.kilograms(equipment.baseWeight)
-            weightsText = String(localized: "gym.row.weightsPair \(base) \(step)")
-            weightsAccessibilityText = equipment.kind == .plateLoadedMachine
-                ? String(localized: "gym.row.platformWeights \(base) \(step)")
-                : String(localized: "gym.row.barWeights \(base) \(step)")
-        } else {
-            weightsText = String(localized: "gym.row.stepShort \(step)")
-            weightsAccessibilityText = String(localized: "gym.row.step \(step)")
-        }
         return GymEquipmentItem(
             id: equipment.id,
             name: equipment.name,
             kindTitle: equipment.kind.listTitle,
-            weightsText: weightsText,
-            weightsAccessibilityText: weightsAccessibilityText
+            weightsText: EquipmentFormatting.weightsText(equipment),
+            weightsAccessibilityText: EquipmentFormatting.weightsAccessibilityText(equipment)
         )
     }
 }
