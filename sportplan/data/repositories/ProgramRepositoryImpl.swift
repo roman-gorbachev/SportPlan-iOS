@@ -15,14 +15,20 @@ nonisolated final class ProgramRepositoryImpl: ProgramRepository {
         let observation = ValueObservation.tracking { db in
             return try Self.fetchSummaries(db)
         }
-        return Self.stream(of: observation, in: database.reader)
+        return database.stream(of: observation)
     }
 
     func observeDay(id: UUID) -> AsyncThrowingStream<ProgramDayDetail?, any Error> {
         let observation = ValueObservation.tracking { db in
             return try Self.fetchDayDetail(db, id: id)
         }
-        return Self.stream(of: observation, in: database.reader)
+        return database.stream(of: observation)
+    }
+
+    func day(id: UUID) async throws -> ProgramDayDetail? {
+        return try await database.reader.read { db in
+            return try Self.fetchDayDetail(db, id: id)
+        }
     }
 
     func createProgram(_ program: Program, firstDay: ProgramDay) async throws -> Program {
@@ -166,15 +172,8 @@ nonisolated final class ProgramRepositoryImpl: ProgramRepository {
     private static func fetchSummaries(_ db: Database) throws -> [ProgramSummary] {
         let programs = try ProgramRecord.order(Column("position"), Column("created_at")).fetchAll(db)
         let days = try ProgramDayRecord.order(Column("position")).fetchAll(db)
-        let countRows = try Row.fetchAll(
-            db,
-            sql: "SELECT program_day_id, COUNT(*) AS exercise_count FROM planned_exercise GROUP BY program_day_id"
-        )
-        let countsByDayId = Dictionary(uniqueKeysWithValues: countRows.map { row in
-            let dayId: String = row["program_day_id"]
-            let count: Int = row["exercise_count"]
-            return (dayId, count)
-        })
+        let namesByDayId = try Self.fetchExerciseNamesByDayId(db)
+        let lastWorkoutDates = try Self.fetchLastWorkoutDatesByDayId(db)
         let daysByProgramId = Dictionary(grouping: days) { day in
             return day.programId
         }
@@ -182,11 +181,42 @@ nonisolated final class ProgramRepositoryImpl: ProgramRepository {
             let summaries = daysByProgramId[program.id, default: []].map { day in
                 return ProgramDaySummary(
                     day: day.toDomainModel(),
-                    exerciseCount: countsByDayId[day.id.databaseText, default: 0]
+                    exerciseNames: namesByDayId[day.id, default: []],
+                    lastWorkoutAt: lastWorkoutDates[day.id]
                 )
             }
             return ProgramSummary(program: program.toDomainModel(), days: summaries)
         }
+    }
+
+    private static func fetchExerciseNamesByDayId(_ db: Database) throws -> [UUID: [String]] {
+        let rows = try Row.fetchAll(db, sql: """
+            SELECT planned_exercise.program_day_id, exercise.name
+            FROM planned_exercise
+            JOIN exercise ON exercise.id = planned_exercise.exercise_id
+            ORDER BY planned_exercise.position
+            """)
+        var namesByDayId: [UUID: [String]] = [:]
+        for row in rows {
+            let dayId: UUID = row["program_day_id"]
+            let name: String = row["name"]
+            namesByDayId[dayId, default: []].append(name)
+        }
+        return namesByDayId
+    }
+
+    private static func fetchLastWorkoutDatesByDayId(_ db: Database) throws -> [UUID: Date] {
+        let rows = try Row.fetchAll(db, sql: """
+            SELECT program_day_id, MAX(started_at) AS last_started_at
+            FROM workout
+            WHERE finished_at IS NOT NULL AND program_day_id IS NOT NULL
+            GROUP BY program_day_id
+            """)
+        return Dictionary(uniqueKeysWithValues: rows.map { row in
+            let dayId: UUID = row["program_day_id"]
+            let date: Date = row["last_started_at"]
+            return (dayId, date)
+        })
     }
 
     private static func fetchDayDetail(_ db: Database, id: UUID) throws -> ProgramDayDetail? {
@@ -225,26 +255,5 @@ nonisolated final class ProgramRepositoryImpl: ProgramRepository {
             return PlannedExerciseItem(plannedExercise: try record.toDomainModel(), exercise: exercise)
         }
         return ProgramDayDetail(day: day.toDomainModel(), programName: program.name, exercises: items)
-    }
-
-    private static func stream<Value: Sendable>(
-        of observation: ValueObservation<ValueReducers.Fetch<Value>>,
-        in reader: any DatabaseReader
-    ) -> AsyncThrowingStream<Value, any Error> {
-        return AsyncThrowingStream { continuation in
-            let task = Task {
-                do {
-                    for try await value in observation.values(in: reader) {
-                        continuation.yield(value)
-                    }
-                    continuation.finish()
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            }
-            continuation.onTermination = { _ in
-                task.cancel()
-            }
-        }
     }
 }

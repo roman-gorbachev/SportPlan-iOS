@@ -47,6 +47,8 @@ struct ProgramRepositoryImplTests {
         #expect(programs.map(\.program.name) == ["Сила 3×", "Разгрузка"])
         #expect(programs[0].days.map(\.day.name) == ["Грудь и трицепс", "Спина и бицепс"])
         #expect(programs[0].days.map(\.exerciseCount) == [1, 0])
+        #expect(programs[0].days.map(\.exerciseNames) == [["Жим лёжа"], []])
+        #expect(programs[0].days.map(\.lastWorkoutAt) == [nil, nil])
         #expect(programs[1].days.map(\.day.label) == [nil])
     }
 
@@ -73,6 +75,7 @@ struct ProgramRepositoryImplTests {
         #expect(detail.exercises.map(\.id) == [dipsPlanned.id, benchPlanned.id])
         #expect(detail.exercises.map(\.exercise.equipment) == [nil, bar])
         #expect(detail.exerciseIds == [bench.id, dips.id])
+        #expect(try await repository.day(id: day.id) == detail)
     }
 
     @Test func missingDayIsObservedAsNil() async throws {
