@@ -1,10 +1,6 @@
 import Foundation
 
 public struct ExerciseDraft: Hashable, Sendable {
-    private static let minimumRestSeconds = 0
-    private static let maximumRestSeconds = 600
-    private static let restStepSeconds = 15
-
     public var name: String
     public var loadKind: ExerciseLoadKind {
         didSet {
@@ -61,19 +57,19 @@ public struct ExerciseDraft: Hashable, Sendable {
     }
 
     public var canIncrementRest: Bool {
-        return restSeconds + Self.restStepSeconds <= Self.maximumRestSeconds
+        return restSeconds + Exercise.restStepSeconds <= Exercise.maximumRestSeconds
     }
 
     public var canDecrementRest: Bool {
-        return restSeconds - Self.restStepSeconds >= Self.minimumRestSeconds
+        return restSeconds - Exercise.restStepSeconds >= Exercise.minimumRestSeconds
     }
 
     public mutating func incrementRest() {
-        restSeconds = min(restSeconds + Self.restStepSeconds, Self.maximumRestSeconds)
+        restSeconds = min(restSeconds + Exercise.restStepSeconds, Exercise.maximumRestSeconds)
     }
 
     public mutating func decrementRest() {
-        restSeconds = max(restSeconds - Self.restStepSeconds, Self.minimumRestSeconds)
+        restSeconds = max(restSeconds - Exercise.restStepSeconds, Exercise.minimumRestSeconds)
     }
 
     public var validationIssues: Set<ExerciseValidationIssue> {
@@ -87,7 +83,7 @@ public struct ExerciseDraft: Hashable, Sendable {
         if metric == .duration, !loadKind.allowsDuration {
             issues.insert(.durationNotAllowed)
         }
-        if restSeconds < Self.minimumRestSeconds || restSeconds > Self.maximumRestSeconds {
+        if restSeconds < Exercise.minimumRestSeconds || restSeconds > Exercise.maximumRestSeconds {
             issues.insert(.restOutOfRange)
         }
         return issues

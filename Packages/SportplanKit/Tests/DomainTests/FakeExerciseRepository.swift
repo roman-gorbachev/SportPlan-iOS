@@ -41,6 +41,17 @@ final class FakeExerciseRepository: ExerciseRepository {
         }
     }
 
+    func exercise(id: UUID) async throws -> Exercise? {
+        return state.withLock { state in
+            let stored = state.library.map { item in
+                return item.exercise
+            } + state.created
+            return stored.first { exercise in
+                return exercise.id == id
+            }
+        }
+    }
+
     func create(_ exercise: Exercise) async throws {
         state.withLock { state in
             state.created.append(exercise)

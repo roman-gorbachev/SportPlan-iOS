@@ -26,4 +26,8 @@ public struct PlannedExercise: Identifiable, Hashable, Sendable {
         self.targetReps = targetReps
         self.restSeconds = restSeconds
     }
+
+    public var targets: PlannedExerciseTargets {
+        return PlannedExerciseTargets(sets: targetSets, reps: targetReps, restSeconds: restSeconds)
+    }
 }

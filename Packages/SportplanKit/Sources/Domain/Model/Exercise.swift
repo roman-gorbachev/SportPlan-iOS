@@ -2,6 +2,9 @@ import Foundation
 
 public struct Exercise: Identifiable, Hashable, Sendable {
     public static let defaultRestSeconds = 90
+    public static let minimumRestSeconds = 0
+    public static let maximumRestSeconds = 600
+    public static let restStepSeconds = 15
 
     public let id: UUID
     public var name: String
