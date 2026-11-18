@@ -25,13 +25,14 @@
 | `system/PlatesKit` | Настройки «Мой зал»: оборудование и блины |
 | `screens/WorkoutScreen` | Экран «Тренировка»: один компонент, параметры `dark` и `state` (active / start / empty / ax) |
 | `screens/*Light`, `*Dark` | Состояния экрана «Тренировка», собранные из `WorkoutScreen` |
-| `screens/ProgramsScreen` | Вкладка «Программы»: `state` list / empty / day / ax |
-| `screens/ExerciseFlow` | Справочник упражнений и добавление: `state` library / libraryEmpty / archive / type / details |
+| `screens/ProgramsScreen` | Вкладка «Программы»: `state` list / listNoDays / menu / progDelete / empty / day / dayEmpty / dayEdit / dayDelete, `large` — крупный текст |
+| `screens/ProgramsFlow` | Листы программ: `state` create / dayNew / dayForm / goals / goalsTimed / picker, `large` |
+| `screens/ExerciseFlow` | Справочник и добавление: `state` library / libraryEmpty / libraryArchive / archive / archiveFree / type / details / detailsBody / edit |
 | `screens/HistoryScreen` | Вкладка «История»: `state` list / empty / workout / ax |
 | `screens/ExerciseCard` | Карточка упражнения: `state` weighted / bodyweight / timed / empty / ax |
-| `screens/SettingsScreen` | Настройки и «Мой зал»: `state` main / import / gym / gymEmpty / ax |
+| `screens/SettingsScreen` | Настройки и «Мой зал»: `state` main / import / gym / gymEmpty / gymArchive / ax |
 | `screens/LiveActivity` | Live Activity на экране блокировки и Dynamic Island (компактный, минимальный, развёрнутый) в трёх состояниях |
 | `screens/AppIcon` | Три варианта иконки: обычная, тёмная, тонированная, мелкие размеры |
-| `screens/Prog*`, `Lib*`, `Add*`, `Archive*`, `Hist*`, `Card*`, `Set*` | Состояния этих экранов в светлой и тёмной теме |
+| `screens/Prog*`, `Lib*`, `Add*`, `Archive*`, `Hist*`, `Card*`, `Set*`, `Flow*`, `Ex*` | Состояния этих экранов в светлой и тёмной теме |
 
 Для кода главное — `system/Color` и `system/Type`: в них все токены (имена вроде `textPrimary`, `surfaceSunken`, `numeralL` совпадают с тем, что стоит завести в модуле дизайн-токенов).

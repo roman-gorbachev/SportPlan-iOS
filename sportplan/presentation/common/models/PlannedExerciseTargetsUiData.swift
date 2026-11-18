@@ -1,0 +1,17 @@
+struct PlannedExerciseTargetsUiData {
+    let setsText: String
+    let setsAccessibilityText: String
+    let canIncrementSets: Bool
+    let canDecrementSets: Bool
+    let showsReps: Bool
+    let minimumRepsText: String
+    let maximumRepsText: String
+    let canIncrementMinimumReps: Bool
+    let canDecrementMinimumReps: Bool
+    let canIncrementMaximumReps: Bool
+    let canDecrementMaximumReps: Bool
+    let restText: String
+    let restAccessibilityText: String
+    let canIncrementRest: Bool
+    let canDecrementRest: Bool
+}

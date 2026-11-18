@@ -8,6 +8,7 @@ final class AppDIContainer {
 
     private lazy var equipmentRepository: any EquipmentRepository = EquipmentRepositoryImpl(database: appDatabase)
     private lazy var exerciseRepository: any ExerciseRepository = ExerciseRepositoryImpl(database: appDatabase)
+    private lazy var programRepository: any ProgramRepository = ProgramRepositoryImpl(database: appDatabase)
 
     private lazy var observeGymEquipmentUseCase = ObserveGymEquipmentUseCase(repository: equipmentRepository)
     private lazy var loadEquipmentEditorUseCase = LoadEquipmentEditorUseCase(repository: equipmentRepository)
@@ -23,6 +24,25 @@ final class AppDIContainer {
     )
     private lazy var countProgramDaysUsingExerciseUseCase = CountProgramDaysUsingExerciseUseCase(repository: exerciseRepository)
     private lazy var archiveExerciseUseCase = ArchiveExerciseUseCase(repository: exerciseRepository)
+
+    private lazy var observeProgramsUseCase = ObserveProgramsUseCase(repository: programRepository)
+    private lazy var observeProgramDayUseCase = ObserveProgramDayUseCase(repository: programRepository)
+    private lazy var createProgramUseCase = CreateProgramUseCase(repository: programRepository, now: { return Date() })
+    private lazy var renameProgramUseCase = RenameProgramUseCase(repository: programRepository)
+    private lazy var deleteProgramUseCase = DeleteProgramUseCase(repository: programRepository)
+    private lazy var addProgramDayUseCase = AddProgramDayUseCase(repository: programRepository)
+    private lazy var updateProgramDayUseCase = UpdateProgramDayUseCase(repository: programRepository)
+    private lazy var deleteProgramDayUseCase = DeleteProgramDayUseCase(repository: programRepository)
+    private lazy var addExerciseToDayUseCase = AddExerciseToDayUseCase(
+        programRepository: programRepository,
+        exerciseRepository: exerciseRepository
+    )
+    private lazy var updatePlannedExerciseTargetsUseCase = UpdatePlannedExerciseTargetsUseCase(
+        programRepository: programRepository,
+        exerciseRepository: exerciseRepository
+    )
+    private lazy var removePlannedExerciseUseCase = RemovePlannedExerciseUseCase(repository: programRepository)
+    private lazy var reorderPlannedExercisesUseCase = ReorderPlannedExercisesUseCase(repository: programRepository)
 
     init() {
         do {
@@ -56,7 +76,50 @@ extension AppDIContainer {
     }
 
     func buildProgramsViewModel() -> ProgramsViewModel {
-        return ProgramsViewModel(observeExerciseLibrary: observeExerciseLibraryUseCase)
+        return ProgramsViewModel(
+            observeExerciseLibrary: observeExerciseLibraryUseCase,
+            observePrograms: observeProgramsUseCase,
+            deleteProgram: deleteProgramUseCase
+        )
+    }
+
+    func buildProgramFormViewModel(target: ProgramFormTarget) -> ProgramFormViewModel {
+        return ProgramFormViewModel(target: target, createProgram: createProgramUseCase, renameProgram: renameProgramUseCase)
+    }
+
+    func buildProgramDayFormViewModel(target: ProgramDayFormTarget) -> ProgramDayFormViewModel {
+        return ProgramDayFormViewModel(
+            target: target,
+            addProgramDay: addProgramDayUseCase,
+            updateProgramDay: updateProgramDayUseCase,
+            deleteProgramDay: deleteProgramDayUseCase
+        )
+    }
+
+    func buildProgramDayViewModel(dayId: UUID) -> ProgramDayViewModel {
+        return ProgramDayViewModel(
+            dayId: dayId,
+            observeProgramDay: observeProgramDayUseCase,
+            removePlannedExercise: removePlannedExerciseUseCase,
+            reorderPlannedExercises: reorderPlannedExercisesUseCase
+        )
+    }
+
+    func buildPlannedExerciseGoalsViewModel(target: PlannedExerciseGoalsTarget) -> PlannedExerciseGoalsViewModel {
+        return PlannedExerciseGoalsViewModel(
+            target: target,
+            updateTargets: updatePlannedExerciseTargetsUseCase,
+            removePlannedExercise: removePlannedExerciseUseCase
+        )
+    }
+
+    func buildExercisePickerViewModel(target: ExercisePickerTarget) -> ExercisePickerViewModel {
+        return ExercisePickerViewModel(
+            target: target,
+            observeExerciseLibrary: observeExerciseLibraryUseCase,
+            observeProgramDay: observeProgramDayUseCase,
+            addExerciseToDay: addExerciseToDayUseCase
+        )
     }
 
     func buildLibraryViewModel() -> LibraryViewModel {
@@ -67,11 +130,13 @@ extension AppDIContainer {
         )
     }
 
-    func buildAddExerciseViewModel(target: AddExerciseTarget) -> AddExerciseViewModel {
+    func buildAddExerciseViewModel(target: AddExerciseTarget, dayContext: AddExerciseDayContext?) -> AddExerciseViewModel {
         return AddExerciseViewModel(
             target: target,
+            dayContext: dayContext,
             observeEquipmentChoices: observeEquipmentChoicesUseCase,
-            createExercise: createExerciseUseCase
+            createExercise: createExerciseUseCase,
+            addExerciseToDay: addExerciseToDayUseCase
         )
     }
 }

@@ -46,6 +46,7 @@ body{margin:0}
 </sc-for>
 <button style="width: 100%; min-height: 52px; border: 0; padding: 0 16px; background: transparent; display: flex; align-items: center; gap: 10px; font-family: 'Onest', sans-serif; font-size: 17px; color: {{t.accent}}; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{t.accent}}" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Добавить оборудование</button>
 </div>
+<a href="#" style="display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 14px 0 16px; background: {{t.surf}}; border-radius: 20px; text-decoration: none; color: {{t.tp}}"><span style="flex: 1; font-size: 17px">Архив оборудования</span><span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 17px; font-weight: 500; color: {{t.ts}}">1</span><svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="{{t.ts}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l6 6-6 6"></path></svg></a>
 <span style="padding: 8px 8px 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}">Блины</span>
 <div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden">
 <sc-for list="{{plates}}" as="p" hint-placeholder-count="7">
@@ -56,6 +57,18 @@ body{margin:0}
 </a>
 </sc-for>
 </div>
+</sc-if>
+
+<sc-if value="{{isGymArchive}}" hint-placeholder-val="{{false}}">
+<h1 style="margin: 0; padding: 0 8px; font-size: 34px; font-weight: 600; line-height: 1.2">Архив оборудования</h1>
+<span style="padding: 0 8px; font-size: 15px; line-height: 1.45; color: {{t.ts}}">Скрыто из «Моего зала» и выбора в упражнениях. Упражнения и история с этим оборудованием сохраняются.</span>
+<div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden; margin-top: 8px">
+<div style="display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 8px 8px 8px 16px; box-sizing: border-box">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 17px; font-weight: 500">Тренажёр для икр</span><span style="font-size: 13px; color: {{t.ts}}">блочный тренажёр · шаг 5</span></div>
+<button aria-label="Вернуть «Тренажёр для икр» в «Мой зал»" style="min-height: 44px; border: 0; border-radius: 22px; padding: 0 14px; background: {{t.sunk}}; color: {{t.accent}}; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer">Вернуть</button>
+</div>
+</div>
+<span style="padding: 0 8px; font-size: 13px; line-height: 1.45; color: {{t.ts}}">Пустой архив не показывается — строка «Архив оборудования» в «Моём зале» появляется, только когда в нём что-то есть.</span>
 </sc-if>
 
 <sc-if value="{{isGymEmpty}}" hint-placeholder-val="{{false}}">
@@ -93,14 +106,14 @@ body{margin:0}
 </nav>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"state":{"editor":"enum","options":["main","import","gym","gymEmpty","ax"],"default":"main"},"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"state":{"editor":"enum","options":["main","import","gym","gymEmpty","gymArchive","ax"],"default":"main"},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
 renderVals() {
 const light = { bg: '#F3F2EF', surf: '#FFFFFF', sunk: '#EAE9E5', sep: '#E4E3DF', plateLine: '#CFCEC8', tp: '#151515', ts: '#5E5E5A', ink: '#151515', onInk: '#FFFFFF', accent: '#1F5FBF', destr: '#C42019', glass: 'rgba(255,255,255,0.72)', glassShadow: 'inset 0 0 0 1px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.08)', tabSel: 'rgba(0,0,0,0.06)' };
 const dark = { bg: '#111214', surf: '#1C1D20', sunk: '#26272B', sep: '#2E2F33', plateLine: '#45464B', tp: '#F2F1EE', ts: '#A3A29C', ink: '#F2F1EE', onInk: '#111214', accent: '#6A9BEA', destr: '#FF6B5E', glass: 'rgba(44,45,50,0.72)', glassShadow: 'inset 0 0 0 1px rgba(255,255,255,0.10), 0 6px 20px rgba(0,0,0,0.4)', tabSel: 'rgba(255,255,255,0.10)' };
 const state = this.props.state ?? 'main';
 const ax = state === 'ax';
-const gym = state === 'gym' || state === 'gymEmpty';
+const gym = state === 'gym' || state === 'gymEmpty' || state === 'gymArchive';
 const plates = [
 { kg: '25 кг', note: 'красный · IWF', color: '#D7261E', w: 9, h: 32 },
 { kg: '20 кг', note: 'свой цвет', color: '#2A2A2A', w: 8, h: 32 },
@@ -116,6 +129,7 @@ showMain: state === 'main' || state === 'import' || ax,
 isImport: state === 'import',
 isGym: state === 'gym',
 isGymEmpty: state === 'gymEmpty',
+isGymArchive: state === 'gymArchive',
 backLabel: gym ? 'Назад к настройкам' : 'Назад к тренировке',
 f: ax ? { btn: 52, large: 40, cap: 20, body: 28, foot: 22, row: 80 } : { btn: 44, large: 34, cap: 12, body: 17, foot: 13, row: 56 },
 gear: [

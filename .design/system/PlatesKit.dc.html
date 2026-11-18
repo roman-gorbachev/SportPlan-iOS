@@ -27,7 +27,7 @@ a{color:#1F5FBF}a:hover{color:#151515}
 <span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: 17px; font-weight: 500; color: #55554F">11</span>
 <h2 style="margin: 0; font-size: 24px; font-weight: 600">Мой зал</h2>
 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Системный сгруппированный список из двух секций: оборудование и блины.</p>
-<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Строка оборудования: название, вид, вес грифа или платформы и шаг. Тап — редактирование. Оборудование не удаляется, а архивируется.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Строка оборудования: название, вид, вес грифа или платформы и шаг. Тап — редактирование. Оборудование не удаляется, а архивируется; заархивированное — в разделе «Архив оборудования» (виден, только если не пуст), оттуда его можно вернуть.</p>
 <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Строка блина: блин в своём цвете с обводкой separatorStrong (чёрный не теряется на тёмном фоне, белый — на светлом), вес и подпись. «Сбросить к IWF» — с подтверждением.</p>
 <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Цвет блина — только графика. Рекорд, успех и удаление остаются своими токенами.</p>
 </div>
@@ -75,6 +75,7 @@ a{color:#1F5FBF}a:hover{color:#151515}
 <h2 style="margin: 0; font-size: 24px; font-weight: 600">Оборудование</h2>
 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #2E2E2C">Sheet создания и редактирования. Открывается из «Моего зала» и прямо из сценария добавления упражнения.</p>
 <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Вид — системный Picker: гриф, гантели, тренажёр с блинами, блочный тренажёр. Поле «вес грифа / платформы» есть только у грифа и тренажёра с блинами; подпись меняется по виду.</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Если оборудование используется хотя бы в одном упражнении, Picker неактивен, рядом — «Используется в N упражнениях». Иначе старые подходы прочитаются по-другому.</p>
 <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #3D3D3A">Внизу — «Архивировать». Подтверждение: «Оборудование будет скрыто из „Моего зала“. Упражнения и история сохранятся».</p>
 </div>
 <div style="display: flex; gap: 40px">
@@ -93,12 +94,13 @@ a{color:#1F5FBF}a:hover{color:#151515}
 </div>
 <div style="display: flex; flex-direction: column; gap: 8px">
 <span style="font-size: 13px; color: {{t.ts}}; padding-left: 4px">Вид</span>
-<div role="radiogroup" aria-label="Вид оборудования" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 18px; background: {{t.sunk}}">
+<div role="radiogroup" aria-label="Вид оборудования" aria-disabled="true" style="opacity: 0.5; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 18px; background: {{t.sunk}}">
 <button role="radio" aria-checked="true" style="height: 44px; border-radius: 14px; border: 0; background: {{t.surf}}; color: {{t.tp}}; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer">Гриф</button>
 <button role="radio" aria-checked="false" style="height: 44px; border-radius: 14px; border: 0; background: transparent; color: {{t.ts}}; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer">Гантели</button>
 <button role="radio" aria-checked="false" style="height: 44px; border-radius: 14px; border: 0; background: transparent; color: {{t.ts}}; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer">С блинами</button>
 <button role="radio" aria-checked="false" style="height: 44px; border-radius: 14px; border: 0; background: transparent; color: {{t.ts}}; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer">Блочный</button>
 </div>
+<span style="display: flex; align-items: center; gap: 6px; padding: 0 4px; font-size: 13px; line-height: 1.4; color: {{t.ts}}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="{{t.ts}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>Используется в 4 упражнениях — вид не меняется</span>
 </div>
 <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
 <div style="display: flex; flex-direction: column; gap: 8px">
@@ -110,7 +112,7 @@ a{color:#1F5FBF}a:hover{color:#151515}
 <input id="gear-step-{{t.key}}" type="text" inputmode="decimal" value="2,5" style="box-sizing: border-box; width: 100%; height: 56px; border: 0; border-radius: 14px; padding: 0 16px; background: {{t.sunk}}; color: {{t.tp}}; font-family: 'Sofia Sans Condensed', sans-serif; font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums">
 </div>
 </div>
-<span style="font-size: 13px; line-height: 1.45; color: {{t.ts}}; padding: 0 4px">Используется в 4 упражнениях</span>
+
 <button style="min-height: 48px; border: 0; border-radius: 24px; background: {{t.surf}}; font-family: 'Onest', sans-serif; font-size: 15px; font-weight: 500; color: {{t.destr}}; cursor: pointer">Архивировать</button>
 </div>
 </div>

@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Программы — листы</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&amp;family=Sofia+Sans+Condensed:wght@500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: {{t.backdrop}}; color: {{t.tp}}; font-family: 'Onest', sans-serif">
+<div style="position: absolute; left: 0; right: 0; top: 54px; bottom: 0; box-sizing: border-box; padding: 8px 12px 0; border-radius: 28px 28px 0 0; background: {{t.bg}}; display: flex; flex-direction: column; gap: 12px">
+<span aria-hidden="true" style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {{t.grabber}}"></span>
+<sc-if value="{{isCreate}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<button style="min-height: 44px; border: 0; padding: 0 8px; background: transparent; font-family: 'Onest', sans-serif; font-size: {{f.nav}}px; color: {{t.accent}}; cursor: pointer">Отмена</button>
+<span style="font-size: {{f.nav}}px; font-weight: 600; text-align: center">Новая программа</span>
+<button style="min-height: 44px; border: 0; padding: 0 8px; background: transparent; font-family: 'Onest', sans-serif; font-size: {{f.nav}}px; font-weight: 600; color: {{t.accent}}; cursor: pointer">Создать</button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<label for="prog-name-{{key}}" style="font-size: {{f.foot}}px; color: {{t.ts}}; padding-left: 4px">Название программы</label>
+<input id="prog-name-{{key}}" type="text" value="Сила 3×" style="box-sizing: border-box; width: 100%; height: {{f.field}}px; border: 0; border-radius: 14px; padding: 0 16px; background: {{t.surf}}; color: {{t.tp}}; font-family: 'Onest', sans-serif; font-weight: 500; font-size: {{f.body}}px">
+</div>
+<span style="padding: 6px 4px 0; font-size: {{f.cap}}px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}">Первый день</span>
+<div style="display: grid; grid-template-columns: {{f.labelCols}}; gap: 8px; align-items: end">
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<label for="day-label-{{key}}" style="font-size: {{f.foot}}px; color: {{t.ts}}; padding-left: 4px">Метка</label>
+<input id="day-label-{{key}}" type="text" value="A" style="box-sizing: border-box; width: 100%; height: {{f.field}}px; border: 0; border-radius: 14px; padding: 0 16px; background: {{t.surf}}; color: {{t.tp}}; font-family: 'Sofia Sans Condensed', sans-serif; font-weight: 600; font-size: {{f.stepNum}}px">
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<label for="day-name-{{key}}" style="font-size: {{f.foot}}px; color: {{t.ts}}; padding-left: 4px">Название дня</label>
+<input id="day-name-{{key}}" type="text" value="Грудь и трицепс" style="box-sizing: border-box; width: 100%; height: {{f.field}}px; border: 0; border-radius: 14px; padding: 0 16px; background: {{t.surf}}; color: {{t.tp}}; font-family: 'Onest', sans-serif; font-weight: 500; font-size: {{f.body}}px">
+</div>
+</div>
+<span style="padding: 0 4px; font-size: {{f.foot}}px; line-height: 1.4; color: {{t.ts}}">Метка — до 3 символов, например «A». Без метки день везде показывается по названию.</span>
+<span style="padding: 0 4px; font-size: {{f.foot}}px; line-height: 1.4; color: {{t.ts}}">Остальные дни добавишь кнопкой «+ День» под программой.</span>
+</sc-if>
+<sc-if value="{{isDayNew}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<button style="min-height: 44px; border: 0; padding: 0 8px; background: transparent; font-family: 'Onest', sans-serif; font-size: {{f.nav}}px; color: {{t.accent}}; cursor: pointer">Отмена</button>
+<span style="font-size: {{f.nav}}px; font-weight: 600; text-align: center">Новый день</span>
+<button style="min-height: 44px; border: 0; padding: 0 8px; background: transparent; font-family: 'Onest', sans-serif; font-size: {{f.nav}}px; font-weight: 600; color: {{t.accent}}; cursor: pointer">Добавить</button>
+</div>
+<span style="padding: 6px 4px 0; font-size: {{f.cap}}px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}">Сила 3×</span>
+<div style="display: grid; grid-template-columns: {{f.labelCols}}; gap: 8px; align-items: end">
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<label for="day-label-{{key}}" style="font-size: {{f.foot}}px; color: {{t.ts}}; padding-left: 4px">Метка</label>
+<input id="day-label-{{key}}" type="text" value="B" style="box-sizing: border-box; width: 100%; height: {{f.field}}px; border: 0; border-radius: 14px; padding: 0 16px; background: {{t.surf}}; color: {{t.tp}}; font-family: 'Sofia Sans Condensed', sans-serif; font-weight: 600; font-size: {{f.stepNum}}px">
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<label for="day-name-{{key}}" style="font-size: {{f.foot}}px; color: {{t.ts}}; padding-left: 4px">Название дня</label>
+<input id="day-name-{{key}}" type="text" value="Спина и бицепс" style="box-sizing: border-box; width: 100%; height: {{f.field}}px; border: 0; border-radius: 14px; padding: 0 16px; background: {{t.surf}}; color: {{t.tp}}; font-family: 'Onest', sans-serif; font-weight: 500; font-size: {{f.body}}px">
+</div>
+</div>
+<span style="padding: 0 4px; font-size: {{f.foot}}px; line-height: 1.4; color: {{t.ts}}">Название обязательно. Метка — до 3 символов, можно оставить пустой.</span>
+</sc-if>
+<sc-if value="{{isDayForm}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<button style="min-height: 44px; border: 0; padding: 0 8px; background: transparent; font-family: 'Onest', sans-serif; font-size: {{f.nav}}px; color: {{t.accent}}; cursor: pointer">Отмена</button>
+<span style="font-size: {{f.nav}}px; font-weight: 600; text-align: center">День</span>
+<button style="min-height: 44px; border: 0; padding: 0 8px; background: transparent; font-family: 'Onest', sans-serif; font-size: {{f.nav}}px; font-weight: 600; color: {{t.accent}}; cursor: pointer">Готово</button>
+</div>
+<span style="padding: 6px 4px 0; font-size: {{f.cap}}px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}">Сила 3×</span>
+<div style="display: grid; grid-template-columns: {{f.labelCols}}; gap: 8px; align-items: end">
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<label for="day-label-{{key}}" style="font-size: {{f.foot}}px; color: {{t.ts}}; padding-left: 4px">Метка</label>
+<input id="day-label-{{key}}" type="text" value="A" style="box-sizing: border-box; width: 100%; height: {{f.field}}px; border: 0; border-radius: 14px; padding: 0 16px; background: {{t.surf}}; color: {{t.tp}}; font-family: 'Sofia Sans Condensed', sans-serif; font-weight: 600; font-size: {{f.stepNum}}px">
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<label for="day-name-{{key}}" style="font-size: {{f.foot}}px; color: {{t.ts}}; padding-left: 4px">Название дня</label>
+<input id="day-name-{{key}}" type="text" value="Грудь и трицепс" style="box-sizing: border-box; width: 100%; height: {{f.field}}px; border: 0; border-radius: 14px; padding: 0 16px; background: {{t.surf}}; color: {{t.tp}}; font-family: 'Onest', sans-serif; font-weight: 500; font-size: {{f.body}}px">
+</div>
+</div>
+<span style="padding: 0 4px; font-size: {{f.foot}}px; line-height: 1.4; color: {{t.ts}}">Без метки день показывается по названию.</span>
+<button style="margin-top: 4px; min-height: 48px; border: 0; border-radius: 24px; background: {{t.surf}}; font-family: 'Onest', sans-serif; font-size: {{f.text}}px; font-weight: 500; color: {{t.destr}}; cursor: pointer">Удалить день</button>
+</sc-if>
+<sc-if value="{{isGoals}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<button style="min-height: 44px; border: 0; padding: 0 8px; background: transparent; font-family: 'Onest', sans-serif; font-size: {{f.nav}}px; color: {{t.accent}}; cursor: pointer">Отмена</button>
+<span style="font-size: {{f.nav}}px; font-weight: 600; text-align: center">Жим лёжа</span>
+<button style="min-height: 44px; border: 0; padding: 0 8px; background: transparent; font-family: 'Onest', sans-serif; font-size: {{f.nav}}px; font-weight: 600; color: {{t.accent}}; cursor: pointer">Готово</button>
+</div>
+<span style="padding: 6px 4px 0; font-size: {{f.cap}}px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}">Цели в дне A · Грудь и трицепс</span>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<span style="font-size: {{f.foot}}px; color: {{t.ts}}; padding-left: 4px">Подходы</span>
+<div style="display: flex; align-items: center; justify-content: space-between; height: {{f.stepH}}px; padding: 6px; box-sizing: border-box; background: {{t.surf}}; border-radius: 42px">
+<button aria-label="Уменьшить: подходы" style="width: {{f.stepB}}px; height: {{f.stepB}}px; border-radius: 32px; border: 0; padding: 0; background: {{t.sunk}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+<span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: {{f.stepNum}}px; font-weight: 600; font-variant-numeric: tabular-nums">4</span>
+<button aria-label="Увеличить: подходы" style="width: {{f.stepB}}px; height: {{f.stepB}}px; border-radius: 32px; border: 0; padding: 0; background: {{t.sunk}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: {{f.foot}}px; color: {{t.ts}}; padding-left: 4px">Повторы</span>
+<div style="display: grid; grid-template-columns: {{f.repsCols}}; gap: 8px">
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<span style="font-size: {{f.foot}}px; color: {{t.ts}}; padding-left: 4px">от</span>
+<div style="display: flex; align-items: center; justify-content: space-between; height: {{f.stepH}}px; padding: 6px; box-sizing: border-box; background: {{t.surf}}; border-radius: 42px">
+<button aria-label="Уменьшить: повторы от" style="width: {{f.stepB}}px; height: {{f.stepB}}px; border-radius: 32px; border: 0; padding: 0; background: {{t.sunk}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+<span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: {{f.stepNum}}px; font-weight: 600; font-variant-numeric: tabular-nums">8</span>
+<button aria-label="Увеличить: повторы от" style="width: {{f.stepB}}px; height: {{f.stepB}}px; border-radius: 32px; border: 0; padding: 0; background: {{t.sunk}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<span style="font-size: {{f.foot}}px; color: {{t.ts}}; padding-left: 4px">до</span>
+<div style="display: flex; align-items: center; justify-content: space-between; height: {{f.stepH}}px; padding: 6px; box-sizing: border-box; background: {{t.surf}}; border-radius: 42px">
+<button aria-label="Уменьшить: повторы до" style="width: {{f.stepB}}px; height: {{f.stepB}}px; border-radius: 32px; border: 0; padding: 0; background: {{t.sunk}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+<span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: {{f.stepNum}}px; font-weight: 600; font-variant-numeric: tabular-nums">12</span>
+<button aria-label="Увеличить: повторы до" style="width: {{f.stepB}}px; height: {{f.stepB}}px; border-radius: 32px; border: 0; padding: 0; background: {{t.sunk}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+</div>
+</div>
+</div>
+<span style="padding: 0 4px; font-size: {{f.foot}}px; line-height: 1.4; color: {{t.ts}}">Одно число — поставь «от» и «до» одинаковыми.</span>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<span style="font-size: {{f.foot}}px; color: {{t.ts}}; padding-left: 4px">Отдых</span>
+<div style="display: flex; align-items: center; justify-content: space-between; height: {{f.stepH}}px; padding: 6px; box-sizing: border-box; background: {{t.surf}}; border-radius: 42px">
+<button aria-label="Уменьшить: отдых на 15 секунд" style="width: {{f.stepB}}px; height: {{f.stepB}}px; border-radius: 32px; border: 0; padding: 0; background: {{t.sunk}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+<span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: {{f.stepNum}}px; font-weight: 600; font-variant-numeric: tabular-nums">2:00</span>
+<button aria-label="Увеличить: отдых на 15 секунд" style="width: {{f.stepB}}px; height: {{f.stepB}}px; border-radius: 32px; border: 0; padding: 0; background: {{t.sunk}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+</div>
+<span style="padding: 0 4px; font-size: {{f.foot}}px; line-height: 1.4; color: {{t.ts}}">Шаг 15 с. У упражнения по умолчанию 1:30 — здесь только для этого дня.</span>
+<button style="margin-top: 4px; min-height: 48px; border: 0; border-radius: 24px; background: {{t.surf}}; font-family: 'Onest', sans-serif; font-size: {{f.text}}px; font-weight: 500; color: {{t.destr}}; cursor: pointer">Убрать из дня</button>
+</sc-if>
+<sc-if value="{{isGoalsTimed}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<button style="min-height: 44px; border: 0; padding: 0 8px; background: transparent; font-family: 'Onest', sans-serif; font-size: {{f.nav}}px; color: {{t.accent}}; cursor: pointer">Отмена</button>
+<span style="font-size: {{f.nav}}px; font-weight: 600; text-align: center">Планка</span>
+<button style="min-height: 44px; border: 0; padding: 0 8px; background: transparent; font-family: 'Onest', sans-serif; font-size: {{f.nav}}px; font-weight: 600; color: {{t.accent}}; cursor: pointer">Готово</button>
+</div>
+<span style="padding: 6px 4px 0; font-size: {{f.cap}}px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}">Цели в дне A · Грудь и трицепс</span>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<span style="font-size: {{f.foot}}px; color: {{t.ts}}; padding-left: 4px">Подходы</span>
+<div style="display: flex; align-items: center; justify-content: space-between; height: {{f.stepH}}px; padding: 6px; box-sizing: border-box; background: {{t.surf}}; border-radius: 42px">
+<button aria-label="Уменьшить: подходы" style="width: {{f.stepB}}px; height: {{f.stepB}}px; border-radius: 32px; border: 0; padding: 0; background: {{t.sunk}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+<span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: {{f.stepNum}}px; font-weight: 600; font-variant-numeric: tabular-nums">3</span>
+<button aria-label="Увеличить: подходы" style="width: {{f.stepB}}px; height: {{f.stepB}}px; border-radius: 32px; border: 0; padding: 0; background: {{t.sunk}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<span style="font-size: {{f.foot}}px; color: {{t.ts}}; padding-left: 4px">Отдых</span>
+<div style="display: flex; align-items: center; justify-content: space-between; height: {{f.stepH}}px; padding: 6px; box-sizing: border-box; background: {{t.surf}}; border-radius: 42px">
+<button aria-label="Уменьшить: отдых на 15 секунд" style="width: {{f.stepB}}px; height: {{f.stepB}}px; border-radius: 32px; border: 0; padding: 0; background: {{t.sunk}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+<span style="font-family: 'Sofia Sans Condensed', sans-serif; font-size: {{f.stepNum}}px; font-weight: 600; font-variant-numeric: tabular-nums">1:00</span>
+<button aria-label="Увеличить: отдых на 15 секунд" style="width: {{f.stepB}}px; height: {{f.stepB}}px; border-radius: 32px; border: 0; padding: 0; background: {{t.sunk}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.tp}}" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+</div>
+<span style="padding: 0 4px; font-size: {{f.foot}}px; line-height: 1.4; color: {{t.ts}}">Упражнение на время: повторов нет, длительность записывает секундомер на тренировке.</span>
+<button style="margin-top: 4px; min-height: 48px; border: 0; border-radius: 24px; background: {{t.surf}}; font-family: 'Onest', sans-serif; font-size: {{f.text}}px; font-weight: 500; color: {{t.destr}}; cursor: pointer">Убрать из дня</button>
+</sc-if>
+<sc-if value="{{isPicker}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<button style="min-height: 44px; border: 0; padding: 0 8px; background: transparent; font-family: 'Onest', sans-serif; font-size: {{f.nav}}px; color: {{t.accent}}; cursor: pointer">Отмена</button>
+<span style="font-size: {{f.nav}}px; font-weight: 600; text-align: center">В день A</span>
+<button style="min-height: 44px; border: 0; padding: 0 8px; background: transparent; font-family: 'Onest', sans-serif; font-size: {{f.nav}}px; font-weight: 600; color: {{t.accent}}; cursor: pointer">Новое</button>
+</div>
+<label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px; border-radius: 22px; background: {{t.sunk}}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{t.ts}}" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg><input type="search" placeholder="Поиск" aria-label="Поиск упражнений" style="flex: 1; min-width: 0; border: 0; background: transparent; color: {{t.tp}}; font-family: 'Onest', sans-serif; font-size: {{f.body}}px; outline: none"></label>
+<span style="padding: 0 4px; font-size: {{f.foot}}px; line-height: 1.4; color: {{t.ts}}">Тап — упражнение сразу встанет в день с целью 3 × 8–12 и своим отдыхом. Уже добавленные отмечены.</span>
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="3">
+<span style="padding: 6px 4px 0; font-size: {{f.cap}}px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: {{t.ts}}">{{g.title}}</span>
+<div style="background: {{t.surf}}; border-radius: 20px; overflow: hidden">
+<sc-for list="{{g.items}}" as="e" hint-placeholder-count="3">
+<button aria-label="{{e.aria}}" aria-disabled="{{e.added}}" style="width: 100%; display: flex; align-items: center; gap: 12px; min-height: {{f.row}}px; padding: 8px 12px 8px 16px; box-sizing: border-box; border: 0; border-bottom: 1px solid {{t.sep}}; background: transparent; text-align: left; font-family: 'Onest', sans-serif; color: {{e.color}}; cursor: pointer">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: {{f.body}}px; font-weight: 500">{{e.name}}</span><span style="font-size: {{f.foot}}px; color: {{t.ts}}">{{e.meta}}</span></div>
+<sc-if value="{{e.isAdded}}" hint-placeholder-val="{{false}}"><span style="display: flex; align-items: center; gap: 6px; font-size: {{f.foot}}px; color: {{t.ts}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{t.ts}}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>в дне</span></sc-if>
+<sc-if value="{{e.canAdd}}" hint-placeholder-val="{{true}}"><span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 18px; background: {{t.sunk}}; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{t.accent}}" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span></sc-if>
+</button>
+</sc-for>
+</div>
+</sc-for>
+</sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"large":{"editor":"boolean","default":false},"state":{"editor":"enum","options":["create","dayNew","dayForm","goals","goalsTimed","picker"],"default":"create"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+const light = { bg: '#F3F2EF', surf: '#FFFFFF', sunk: '#EAE9E5', sep: '#E4E3DF', tp: '#151515', ts: '#5E5E5A', accent: '#1F5FBF', destr: '#C42019', backdrop: '#8D8C89', grabber: '#CFCEC8' };
+const dark = { bg: '#111214', surf: '#1C1D20', sunk: '#26272B', sep: '#2E2F33', tp: '#F2F1EE', ts: '#A3A29C', accent: '#6A9BEA', destr: '#FF6B5E', backdrop: '#000000', grabber: '#45464B' };
+const isDark = this.props.dark ?? false;
+const t = isDark ? dark : light;
+const large = this.props.large ?? false;
+const state = this.props.state ?? 'create';
+const f = large
+? { nav: 22, body: 28, text: 22, foot: 22, cap: 20, field: 72, stepH: 84, stepB: 64, stepNum: 40, row: 88, labelCols: 'minmax(0, 1fr)', repsCols: 'minmax(0, 1fr)' }
+: { nav: 17, body: 17, text: 15, foot: 13, cap: 12, field: 52, stepH: 68, stepB: 56, stepNum: 30, row: 56, labelCols: '96px minmax(0, 1fr)', repsCols: 'repeat(2, minmax(0, 1fr))' };
+const item = (name, meta, added) => ({ name: name, meta: meta, isAdded: added, canAdd: !added, added: added ? 'true' : 'false', color: added ? t.ts : t.tp, aria: added ? '«' + name + '» уже в дне' : 'Добавить «' + name + '» в день' });
+return {
+t: t, f: f, key: isDark ? 'dark' : 'light',
+isCreate: state === 'create', isDayNew: state === 'dayNew', isDayForm: state === 'dayForm',
+isGoals: state === 'goals', isGoalsTimed: state === 'goalsTimed', isPicker: state === 'picker',
+groups: [
+{ title: 'Свободный вес', items: [item('Жим лёжа', 'олимпийский гриф', true), item('Присед', 'олимпийский гриф', false), item('Жим гантелей на наклонной', 'гантели', true), item('Жим стоя', 'олимпийский гриф', false)] },
+{ title: 'Тренажёры', items: [item('Жим ногами', 'жим ногами', false), item('Разгибания на блоке', 'кроссовер', true)] },
+{ title: 'Собственный вес', items: [item('Брусья', 'повторы', true), item('Подтягивания', 'повторы', false), item('Планка', 'время', true)] }
+]
+};
+}
+}
+</script>
+</body>
+</html>

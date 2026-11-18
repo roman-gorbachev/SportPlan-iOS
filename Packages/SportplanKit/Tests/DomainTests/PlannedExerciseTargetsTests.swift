@@ -40,4 +40,48 @@ struct PlannedExerciseTargetsTests {
         #expect(PlannedExerciseTargets(sets: 3, reps: nil, restSeconds: tooLong).validationIssues(for: .duration) == [.restOutOfRange])
         #expect(PlannedExerciseTargets(sets: 3, reps: nil, restSeconds: -1).validationIssues(for: .duration) == [.restOutOfRange])
     }
+
+    @Test func setsStepperStopsAtBounds() {
+        var targets = PlannedExerciseTargets(sets: 1, reps: nil, restSeconds: 90)
+        #expect(targets.canDecrementSets == false)
+        targets.decrementSets()
+        #expect(targets.sets == 1)
+        targets = PlannedExerciseTargets(sets: 10, reps: nil, restSeconds: 90)
+        #expect(targets.canIncrementSets == false)
+        targets.incrementSets()
+        #expect(targets.sets == 10)
+    }
+
+    @Test func repBoundsPullEachOther() {
+        var targets = PlannedExerciseTargets(sets: 3, reps: RepRange(min: 8, max: 8), restSeconds: 90)
+        targets.incrementMinimumReps()
+        #expect(targets.reps == RepRange(min: 9, max: 9))
+        targets.decrementMaximumReps()
+        #expect(targets.reps == RepRange(min: 8, max: 8))
+        targets.incrementMaximumReps()
+        #expect(targets.reps == RepRange(min: 8, max: 9))
+    }
+
+    @Test func repsStepperStopsAtBounds() {
+        var targets = PlannedExerciseTargets(sets: 3, reps: RepRange(min: 1, max: 100), restSeconds: 90)
+        #expect(targets.canDecrementMinimumReps == false)
+        #expect(targets.canIncrementMaximumReps == false)
+        targets.decrementMinimumReps()
+        targets.incrementMaximumReps()
+        #expect(targets.reps == RepRange(min: 1, max: 100))
+    }
+
+    @Test func durationTargetsHaveNoRepSteps() {
+        var targets = PlannedExerciseTargets(sets: 3, reps: nil, restSeconds: 90)
+        #expect(targets.canIncrementMinimumReps == false)
+        targets.incrementMinimumReps()
+        #expect(targets.reps == nil)
+    }
+
+    @Test func restStepsByFifteenSeconds() {
+        var targets = PlannedExerciseTargets(sets: 3, reps: nil, restSeconds: Exercise.maximumRestSeconds)
+        #expect(targets.canIncrementRest == false)
+        targets.decrementRest()
+        #expect(targets.restSeconds == Exercise.maximumRestSeconds - Exercise.restStepSeconds)
+    }
 }

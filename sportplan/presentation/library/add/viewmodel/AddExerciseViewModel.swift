@@ -8,6 +8,9 @@ final class AddExerciseViewModel {
 
     @ObservationIgnored private let observeEquipmentChoices: ObserveEquipmentChoicesUseCase
     @ObservationIgnored private let createExercise: CreateExerciseUseCase
+    @ObservationIgnored private let addExerciseToDay: AddExerciseToDayUseCase
+    @ObservationIgnored private let dayContext: AddExerciseDayContext?
+    @ObservationIgnored private var dayTargets: PlannedExerciseTargets
     @ObservationIgnored private var draft: ExerciseDraft
     @ObservationIgnored private var equipmentChoices: [Equipment] = []
     @ObservationIgnored private var isSaving = false
@@ -19,11 +22,16 @@ final class AddExerciseViewModel {
 
     init(
         target: AddExerciseTarget,
+        dayContext: AddExerciseDayContext?,
         observeEquipmentChoices: ObserveEquipmentChoicesUseCase,
-        createExercise: CreateExerciseUseCase
+        createExercise: CreateExerciseUseCase,
+        addExerciseToDay: AddExerciseToDayUseCase
     ) {
+        self.dayContext = dayContext
         self.observeEquipmentChoices = observeEquipmentChoices
         self.createExercise = createExercise
+        self.addExerciseToDay = addExerciseToDay
+        dayTargets = PlannedExerciseTargets(defaultsFor: .weightReps, restSeconds: Exercise.defaultRestSeconds)
         switch target {
         case .blank:
             draft = ExerciseDraft(loadKind: Self.placeholderLoadKind)
@@ -112,6 +120,11 @@ final class AddExerciseViewModel {
         publish()
     }
 
+    func stepDayTargets(_ step: PlannedExerciseTargetsStep) {
+        dayTargets.apply(step)
+        publish()
+    }
+
     func dismissSaveError() {
         isShowingSaveError = false
         publish()
@@ -124,7 +137,10 @@ final class AddExerciseViewModel {
         isSaving = true
         publish()
         do {
-            _ = try await createExercise.execute(draft: draft)
+            let exercise = try await createExercise.execute(draft: draft)
+            if let dayContext {
+                _ = try await addExerciseToDay.execute(exerciseId: exercise.id, dayId: dayContext.dayId, targets: resolvedDayTargets)
+            }
             return true
         } catch {
             isSaving = false
@@ -132,6 +148,15 @@ final class AddExerciseViewModel {
             publish()
             return false
         }
+    }
+
+    private var resolvedDayTargets: PlannedExerciseTargets {
+        var targets = dayTargets
+        targets.restSeconds = draft.restSeconds
+        if draft.metric == .duration {
+            targets.reps = nil
+        }
+        return targets
     }
 
     private func publish() {
@@ -154,6 +179,12 @@ final class AddExerciseViewModel {
             canIncrementRest: draft.canIncrementRest,
             canDecrementRest: draft.canDecrementRest,
             description: draft.description,
+            dayContextTitle: dayContext.map { context in
+                return String(localized: "addExercise.dayContext \(context.title)")
+            },
+            dayTargets: dayContext.map { _ in
+                return resolvedDayTargets.uiData
+            },
             canSave: !isSaving && draft.isValid,
             isShowingSaveError: isShowingSaveError
         ))

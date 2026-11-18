@@ -13,6 +13,7 @@ struct AddExerciseDetailsScreen: View {
     let onIncrementRest: () -> Void
     let onDecrementRest: () -> Void
     let onDescriptionChange: @MainActor (String) -> Void
+    let onDayTargetsStep: (PlannedExerciseTargetsStep) -> Void
     let onDismissSaveError: () -> Void
 
     var body: some View {
@@ -67,6 +68,15 @@ struct AddExerciseDetailsScreen: View {
             }
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets())
+            if let dayContextTitle = data.dayContextTitle, let dayTargets = data.dayTargets {
+                Section {
+                    PlannedExerciseTargetsSteppers(data: dayTargets, onStep: onDayTargetsStep)
+                } header: {
+                    ListSectionHeader(title: dayContextTitle)
+                }
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
+            }
             Section {
                 TextField(
                     String(localized: "addExercise.description.placeholder"),
@@ -111,6 +121,8 @@ struct AddExerciseDetailsScreen: View {
         canIncrementRest: true,
         canDecrementRest: true,
         description: "",
+        dayContextTitle: nil,
+        dayTargets: nil,
         canSave: true,
         isShowingSaveError: false
     )
@@ -124,6 +136,7 @@ struct AddExerciseDetailsScreen: View {
             onIncrementRest: {},
             onDecrementRest: {},
             onDescriptionChange: { _ in },
+            onDayTargetsStep: { _ in },
             onDismissSaveError: {}
         )
         .navigationTitle("Штанга")

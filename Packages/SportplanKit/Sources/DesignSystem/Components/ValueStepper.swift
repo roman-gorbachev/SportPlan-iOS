@@ -6,6 +6,7 @@ public struct ValueStepper: View {
     private static let incrementIconName = "plus"
 
     private let title: String
+    private let accessibilityTitle: String
     private let value: String
     private let accessibilityValueText: String
     private let canDecrement: Bool
@@ -15,6 +16,7 @@ public struct ValueStepper: View {
 
     public init(
         title: String,
+        accessibilityTitle: String? = nil,
         value: String,
         accessibilityValue: String,
         canDecrement: Bool,
@@ -23,6 +25,7 @@ public struct ValueStepper: View {
         onIncrement: @escaping () -> Void
     ) {
         self.title = title
+        self.accessibilityTitle = accessibilityTitle ?? title
         self.value = value
         self.accessibilityValueText = accessibilityValue
         self.canDecrement = canDecrement
@@ -47,7 +50,7 @@ public struct ValueStepper: View {
         .frame(minHeight: Self.buttonSize)
         .background(Palette.surface, in: Capsule())
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(title)
+        .accessibilityLabel(accessibilityTitle)
         .accessibilityValue(accessibilityValueText)
         .accessibilityAdjustableAction { direction in
             switch direction {

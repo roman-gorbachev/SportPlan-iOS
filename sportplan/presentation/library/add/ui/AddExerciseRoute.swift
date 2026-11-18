@@ -64,6 +64,7 @@ struct AddExerciseRoute: View {
                     onIncrementRest: viewModel.incrementRest,
                     onDecrementRest: viewModel.decrementRest,
                     onDescriptionChange: viewModel.updateDescription,
+                    onDayTargetsStep: viewModel.stepDayTargets,
                     onDismissSaveError: viewModel.dismissSaveError
                 )
                 .navigationTitle(data.loadKind.title)
