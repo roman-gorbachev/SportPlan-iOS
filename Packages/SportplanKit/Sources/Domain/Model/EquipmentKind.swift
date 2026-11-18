@@ -3,4 +3,13 @@ public enum EquipmentKind: String, CaseIterable, Sendable {
     case dumbbell
     case plateLoadedMachine = "plate_loaded_machine"
     case selectorizedMachine = "selectorized_machine"
+
+    public var hasBaseWeight: Bool {
+        switch self {
+        case .barbell, .plateLoadedMachine:
+            return true
+        case .dumbbell, .selectorizedMachine:
+            return false
+        }
+    }
 }
