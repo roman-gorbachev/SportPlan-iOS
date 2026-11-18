@@ -3,6 +3,7 @@ import Foundation
 public protocol ProgramRepository: Sendable {
     func observePrograms() -> AsyncThrowingStream<[ProgramSummary], any Error>
     func observeDay(id: UUID) -> AsyncThrowingStream<ProgramDayDetail?, any Error>
+    func day(id: UUID) async throws -> ProgramDayDetail?
     func createProgram(_ program: Program, firstDay: ProgramDay) async throws -> Program
     func renameProgram(id: UUID, name: String) async throws
     func deleteProgram(id: UUID) async throws

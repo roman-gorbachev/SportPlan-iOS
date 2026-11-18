@@ -7,14 +7,18 @@ final class FakeProgramRepository: ProgramRepository {
         var programs: [Program] = []
         var days: [ProgramDay] = []
         var plannedExercises: [PlannedExercise] = []
+        var dayDetails: [UUID: ProgramDayDetail] = [:]
     }
 
     private let state = Mutex(State())
 
-    init(days: [ProgramDay] = [], plannedExercises: [PlannedExercise] = []) {
+    init(days: [ProgramDay] = [], plannedExercises: [PlannedExercise] = [], dayDetails: [ProgramDayDetail] = []) {
         state.withLock { state in
             state.days = days
             state.plannedExercises = plannedExercises
+            for detail in dayDetails {
+                state.dayDetails[detail.day.id] = detail
+            }
         }
     }
 
@@ -42,10 +46,12 @@ final class FakeProgramRepository: ProgramRepository {
                 let days = state.days.filter { day in
                     return day.programId == program.id
                 }.map { day in
-                    let count = state.plannedExercises.filter { planned in
+                    let names = state.plannedExercises.filter { planned in
                         return planned.programDayId == day.id
-                    }.count
-                    return ProgramDaySummary(day: day, exerciseCount: count)
+                    }.map { planned in
+                        return planned.exerciseId.uuidString
+                    }
+                    return ProgramDaySummary(day: day, exerciseNames: names, lastWorkoutAt: nil)
                 }
                 return ProgramSummary(program: program, days: days)
             }
@@ -60,6 +66,12 @@ final class FakeProgramRepository: ProgramRepository {
         return AsyncThrowingStream { continuation in
             continuation.yield(nil)
             continuation.finish()
+        }
+    }
+
+    func day(id: UUID) async throws -> ProgramDayDetail? {
+        return state.withLock { state in
+            return state.dayDetails[id]
         }
     }
 

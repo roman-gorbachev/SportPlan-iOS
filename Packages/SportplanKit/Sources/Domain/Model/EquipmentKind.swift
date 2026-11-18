@@ -12,4 +12,13 @@ public enum EquipmentKind: String, CaseIterable, Sendable {
             return false
         }
     }
+
+    public var usesPlates: Bool {
+        switch self {
+        case .barbell, .plateLoadedMachine:
+            return true
+        case .dumbbell, .selectorizedMachine:
+            return false
+        }
+    }
 }

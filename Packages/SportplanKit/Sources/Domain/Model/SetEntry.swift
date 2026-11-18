@@ -33,3 +33,19 @@ public struct SetEntry: Identifiable, Hashable, Sendable {
         self.completedAt = completedAt
     }
 }
+
+extension SetEntry {
+    public var state: SetEntryState {
+        if completedAt != nil {
+            return .completed
+        }
+        if startedAt != nil {
+            return .running
+        }
+        return .planned
+    }
+
+    public var isCompleted: Bool {
+        return completedAt != nil
+    }
+}
