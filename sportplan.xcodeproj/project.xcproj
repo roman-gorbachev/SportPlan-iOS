@@ -8,11 +8,19 @@
     "development": "ru",
     "supported": [
       "Base",
-      "ru",
     ],
   },
   "packages": [
-    { "kind": "local", "path": "Packages/SportplanKit" },
+    {
+      "kind": "local",
+      "path": "Packages/SportplanKit",
+    }, {
+      "kind": "remote",
+      "repository": "https://github.com/groue/GRDB.swift",
+      "version": {
+        "up-to-next-major-version": "7.12.0",
+      },
+    },
   ],
   "files": [
     { "kind": "folder", "path": "sportplan", "target-membership": [ "sportplan" ] },
@@ -35,6 +43,7 @@
       "dependencies": [
         { "kind": "package", "package": "SportplanKit", "product-name": "DesignSystem" },
         { "kind": "package", "package": "SportplanKit", "product-name": "Domain" },
+        { "kind": "package", "package": "GRDB", "product-name": "GRDB" },
       ],
       "build-phases": [
         "compile-sources",
@@ -42,8 +51,19 @@
         "resources",
       ],
       "package-product-members": [
-        { "package": "SportplanKit", "product-name": "DesignSystem", "build-phase": { "build-phase": "frameworks" } },
-        { "package": "SportplanKit", "product-name": "Domain", "build-phase": { "build-phase": "frameworks" } },
+        {
+          "package": "GRDB",
+          "product-name": "GRDB",
+          "build-phase": { "build-phase": "frameworks" },
+        }, {
+          "package": "SportplanKit",
+          "product-name": "DesignSystem",
+          "build-phase": { "build-phase": "frameworks" },
+        }, {
+          "package": "SportplanKit",
+          "product-name": "Domain",
+          "build-phase": { "build-phase": "frameworks" },
+        },
       ],
       "build-settings": {
         "CODE_SIGN_STYLE": "Automatic",
@@ -73,8 +93,7 @@
         "SWIFT_VERSION": "6.0",
         "TARGETED_DEVICE_FAMILY": "1",
       },
-    },
-    {
+    }, {
       "name": "sportplanTests",
       "id": "000000000000000200000000",
       "product": "Products/sportplanTests.xctest",

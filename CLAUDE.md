@@ -4,10 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Sportplan — a minimalist offline strength-training tracker for iPhone (SwiftUI). No accounts, no server, no subscriptions. iOS 26+, iPhone only, portrait only, Swift 6. App target `sportplan`, bundle id `com.rgorbachev.sportplan`, project `sportplan.xcodeproj` (Xcode 27 text format `project.xcproj`; JSON-like, schema at github.com/apple/xcode-project-format; build settings, targets and package references can be edited there directly — a local package product is linked with `{ "kind": "package", "package": "SportplanKit", "product-name": "X" }` in `dependencies` plus a matching `package-product-members` entry with `"build-phase": { "build-phase": "frameworks" }`; unknown keys are silently ignored, so verify with `xcodebuild` after editing).
+Sportplan — a minimalist offline strength-training tracker for iPhone (SwiftUI). No accounts, no server, no subscriptions. iOS 26+, iPhone only, portrait only, Swift 6. App target `sportplan`, bundle id `com.rgorbachev.sportplan`, project `sportplan.xcodeproj` (Xcode 27 text format `project.xcproj`; JSON-like, schema at github.com/apple/xcode-project-format; build settings, targets and package references can be edited there directly — a local package product is linked with `{ "kind": "package", "package": "SportplanKit", "product-name": "X" }` in `dependencies` plus a matching `package-product-members` entry with `"build-phase": { "build-phase": "frameworks" }`; a remote package is `{ "kind": "remote", "repository": "…", "version": { "up-to-next-major-version": "…" } }` and is referenced by its manifest name, e.g. `"package": "GRDB"`; unknown keys are silently ignored, so verify with `xcodebuild` after editing).
 
 Layout:
-- `sportplan/` — app target (file-system-synchronized folder: a new `.swift` file under it is added automatically). `SportplanApp.swift`, `di/`, `presentation/`, `Localizable.xcstrings` (source language `ru`).
+- `sportplan/` — app target (file-system-synchronized folder: a new `.swift` file under it is added automatically). `SportplanApp.swift`, `di/`, `data/` (`database/`, `records/`), `presentation/`, `Localizable.xcstrings` (source language `ru`).
 - `Packages/SportplanKit/` — local package with `Domain` and `DesignSystem` libraries and their test targets.
 - `sportplanTests/` — app unit tests (Swift Testing).
 
@@ -85,11 +85,18 @@ The active workout is the `workout` row with `finished_at IS NULL` (at most one,
 ### Persistence
 GRDB (SQLite) is the only third-party dependency. Schema v1 is described in `docs/code-brief.md`. Conventions: UUID primary keys, weights in integer grams (`Weight` in the domain), ordering via `position`, dates in UTC, foreign keys on with explicit indexes. Schema changes go in the migrator as a **new** `registerMigration` block — never edit an existing one once real data exists. Exercises and equipment are archived, never deleted.
 
+- `AppDatabase` (`data/database/`) wraps a `DatabaseWriter` and runs the migrator in `init`. The app opens a `DatabasePool` (WAL) at `Application Support/Database/sportplan.sqlite`, eagerly in `AppDIContainer`; tests use `AppDatabase(DatabaseQueue())` in memory.
+- The app target defaults to MainActor isolation, so every data-layer type and extension is declared `nonisolated`.
+- Records (`data/records/`) conform to `AppRecord`: snake_case columns and UUIDs as lowercase text. In GRDB 7 the UUID strategy is the per-column `databaseUUIDEncodingStrategy(for:)` function; a static property with that name is silently ignored.
+- Migrations are raw SQL with frozen literals (bounds as `private static let`). The IWF plate seed comes from `StandardPlates` and is pinned by `MigrationTests`, so changing the constant breaks a test instead of silently changing the migration.
+- The single active workout is a unique index on the expression `(finished_at IS NULL)`: in SQLite, NULLs never collide in a plain unique index.
+
 ## Conventions
 
 - Theming: never hardcode colors, fonts, spacing or corner radii; use the `DesignSystem` tokens. Plate colors are user data used only for the plate stack graphic; state colors (record, success, warm-up, destructive) are separate tokens. Both light and dark appearance are supported; `preferredColorScheme` is not set.
 - Icons: SF Symbols only, unless the design provides a custom asset.
 - Accessibility: Dynamic Type, VoiceOver labels, tap targets of at least 44pt, Reduce Motion.
+- `MemberImportVisibility` is on: import `Foundation`, `SwiftUI` or `GRDB` explicitly in every file that uses their members.
 - Naming: no `XxxDefaults` constant holders (use `private static let`, or a file-private `enum XMetrics` when sibling types need it); no SCREAMING_SNAKE constants; no `get`-prefixed accessors.
 - Distribution uses a free Apple ID (personal team): do not add capabilities it does not support (iCloud/CloudKit, push notifications, App Groups).
 - Tests use Swift Testing (`@Test`). Domain logic is covered by unit tests in the package; repositories are tested against an in-memory GRDB database.
