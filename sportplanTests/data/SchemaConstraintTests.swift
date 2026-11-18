@@ -18,7 +18,7 @@ struct SchemaConstraintTests {
     @Test func rejectsDuplicatePlateWeight() throws {
         let database = try DatabaseFixtures.makeDatabase()
         let duplicate = Plate(id: UUID(), weight: Weight(kilograms: 20), color: PlateColor(rgb: 0))
-        try database.writer.write { db in
+        _ = try database.writer.write { db in
             #expect(throws: DatabaseError.self) { try PlateRecord(duplicate).insert(db) }
         }
     }
@@ -54,7 +54,7 @@ struct SchemaConstraintTests {
         let database = try DatabaseFixtures.makeDatabase()
         var record = EquipmentRecord(DatabaseFixtures.makeEquipment())
         record.kind = "kettlebell"
-        try database.writer.write { db in
+        _ = try database.writer.write { db in
             #expect(throws: DatabaseError.self) { try record.insert(db) }
         }
     }
@@ -76,7 +76,7 @@ struct SchemaConstraintTests {
         let database = try DatabaseFixtures.makeDatabase()
         var record = WorkoutRecord(DatabaseFixtures.makeWorkout(day: nil, finishedAt: nil))
         record.restEndsAt = nil
-        try database.writer.write { db in
+        _ = try database.writer.write { db in
             #expect(throws: DatabaseError.self) { try record.insert(db) }
         }
     }
