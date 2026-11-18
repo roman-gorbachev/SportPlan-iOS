@@ -82,7 +82,7 @@
 - `AppDIContainer`: `private lazy var equipmentRepository` и use cases.
 - Фабрики `buildSettingsViewModel()`, `buildGymViewModel()`, `buildEquipmentEditorViewModel(target:)` — в extension внутри `di/AppDIContainer.swift`: `private lazy var` видны только в своём файле.
 
-## 3.2 Справочник упражнений (кратко; детали — после ревью 3.1)
+## 3.2 Справочник упражнений (кратко; подробный план — `.claude/stage-3.2-plan.ru.md`)
 - Domain:
   - `ExerciseRepository`;
   - use cases: `ObserveExerciseLibrary` (группы «Свободный вес» / «Тренажёры» / «Собственный вес»), `CreateExercise` (название; оборудование обязательно для всех видов, кроме собственного веса; отдых), `ArchiveExercise` (в одной транзакции удаляет `planned_exercise`), `CountProgramDaysUsingExercise`;
