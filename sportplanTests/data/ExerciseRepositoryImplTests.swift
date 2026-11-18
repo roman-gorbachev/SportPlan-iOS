@@ -5,6 +5,15 @@ import Testing
 @testable import sportplan
 
 struct ExerciseRepositoryImplTests {
+    @Test func exerciseIsFetchedById() async throws {
+        let database = try DatabaseFixtures.makeDatabase()
+        let repository = ExerciseRepositoryImpl(database: database)
+        let exercise = DatabaseFixtures.makeExercise(load: .bodyweight)
+        try await repository.create(exercise)
+        #expect(try await repository.exercise(id: exercise.id) == exercise)
+        #expect(try await repository.exercise(id: UUID()) == nil)
+    }
+
     @Test func libraryFollowsCreateAndArchive() async throws {
         let database = try DatabaseFixtures.makeDatabase()
         let repository = ExerciseRepositoryImpl(database: database)

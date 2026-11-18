@@ -35,6 +35,15 @@ nonisolated final class ExerciseRepositoryImpl: ExerciseRepository {
         }
     }
 
+    func exercise(id: UUID) async throws -> Exercise? {
+        return try await database.reader.read { db in
+            return try ExerciseRecord
+                .filter(Column("id") == id.databaseText)
+                .fetchOne(db)?
+                .toDomainModel()
+        }
+    }
+
     func create(_ exercise: Exercise) async throws {
         try await database.writer.write { db in
             try ExerciseRecord(exercise).insert(db)
