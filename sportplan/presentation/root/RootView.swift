@@ -12,7 +12,7 @@ struct RootView: View {
     var body: some View {
         return TabView(selection: $selectedTab) {
             Tab(AppTab.workout.title, systemImage: AppTab.workout.systemImage, value: AppTab.workout) {
-                return WorkoutTabView(router: workoutRouter)
+                return WorkoutTabView(container: container, router: workoutRouter)
             }
             Tab(AppTab.programs.title, systemImage: AppTab.programs.systemImage, value: AppTab.programs) {
                 return ProgramsTabView(router: programsRouter)

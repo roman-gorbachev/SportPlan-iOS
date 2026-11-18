@@ -1,13 +1,23 @@
 import SwiftUI
 
 struct WorkoutTabView: View {
+    let container: AppDIContainer
     @Bindable var router: TabRouter
 
     var body: some View {
         return NavigationStack(path: $router.path) {
             return WorkoutScreen(onOpenSettings: { router.push(SettingsDestination()) })
                 .navigationDestination(for: SettingsDestination.self) { _ in
-                    return SettingsScreen()
+                    return SettingsRoute(
+                        viewModel: container.buildSettingsViewModel(),
+                        onOpenGym: { router.push(GymDestination()) }
+                    )
+                }
+                .navigationDestination(for: GymDestination.self) { _ in
+                    return GymRoute(
+                        viewModel: container.buildGymViewModel(),
+                        makeEditorViewModel: container.buildEquipmentEditorViewModel
+                    )
                 }
         }
     }

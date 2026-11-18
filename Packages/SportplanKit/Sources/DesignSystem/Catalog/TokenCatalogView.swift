@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TokenCatalogView: View {
     private static let swatchSize: CGFloat = 44
+    private static let emptyStatePreviewHeight: CGFloat = 320
 
     private let colors: [(String, Color)] = [
         ("background", Palette.background),
@@ -41,6 +42,7 @@ struct TokenCatalogView: View {
                 colorSection
                 heatmapSection
                 typeSection
+                componentSection
             }
             .padding(Spacing.m)
         }
@@ -70,6 +72,22 @@ struct TokenCatalogView: View {
                     .fill(Palette.heatmapLevels[index])
                     .frame(width: Self.swatchSize, height: Self.swatchSize)
             }
+        }
+    }
+
+    private var componentSection: some View {
+        return VStack(alignment: .leading, spacing: Spacing.m) {
+            Button(action: {}) {
+                return Text(verbatim: "Добавить оборудование")
+            }
+            .buttonStyle(InkButtonStyle())
+            EmptyStateView(
+                title: "Оборудования пока нет",
+                message: "Добавь грифы и тренажёры своего зала.",
+                actionTitle: "Добавить оборудование",
+                action: {}
+            )
+            .frame(height: Self.emptyStatePreviewHeight)
         }
     }
 
