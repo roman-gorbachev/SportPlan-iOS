@@ -26,11 +26,26 @@
     { "kind": "folder", "path": "sportplan", "target-membership": [ "sportplan" ] },
     { "kind": "folder", "path": "sportplanTests", "target-membership": [ "sportplanTests" ] },
     {
+      "kind": "folder",
+      "path": "sportplanLiveActivity",
+      "target-membership": [
+        "sportplanLiveActivity",
+      ],
+      "membership-exceptions": [
+        {
+          "target": "sportplanLiveActivity",
+          "exclusions": [
+            "Info.plist",
+          ],
+        },
+      ],
+    }, {
       "kind": "group",
       "name": "Products",
       "children": [
         { "path": "<PRODUCTS>/sportplan.app", "id": "000000000000000000000120", "type": "wrapper.application", "index": false },
         { "path": "<PRODUCTS>/sportplanTests.xctest", "id": "000000000000000000000130", "type": "wrapper.cfbundle", "index": false },
+        { "path": "<PRODUCTS>/sportplanLiveActivity.appex", "id": "000000000000000000000140", "type": "wrapper.app-extension", "index": false, "target-membership": [ { "build-phase": "sportplan/copy/Embed Foundation Extensions", "code-sign-on-copy": true, "header-preservation": "remove-on-copy" } ] },
       ],
     },
   ],
@@ -41,14 +56,21 @@
       "product": "Products/sportplan.app",
       "product-type": "application",
       "dependencies": [
+        "sportplanLiveActivity",
         { "kind": "package", "package": "SportplanKit", "product-name": "DesignSystem" },
         { "kind": "package", "package": "SportplanKit", "product-name": "Domain" },
+        { "kind": "package", "package": "SportplanKit", "product-name": "WorkoutActivity" },
         { "kind": "package", "package": "GRDB", "product-name": "GRDB" },
       ],
       "build-phases": [
         "compile-sources",
         "frameworks",
         "resources",
+        {
+          "kind": "copy",
+          "name": "Embed Foundation Extensions",
+          "bundle-base-path": "plugins-directory",
+        },
       ],
       "package-product-members": [
         {
@@ -63,6 +85,10 @@
           "package": "SportplanKit",
           "product-name": "Domain",
           "build-phase": { "build-phase": "frameworks" },
+        }, {
+          "package": "SportplanKit",
+          "product-name": "WorkoutActivity",
+          "build-phase": { "build-phase": "frameworks" },
         },
       ],
       "build-settings": {
@@ -71,6 +97,7 @@
         "DEVELOPMENT_TEAM": "T4BPBL797M",
         "ENABLE_PREVIEWS": "YES",
         "GENERATE_INFOPLIST_FILE": "YES",
+        "INFOPLIST_KEY_NSSupportsLiveActivities": "YES",
         "INFOPLIST_KEY_UIApplicationSceneManifest_Generation": "YES",
         "INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents": "YES",
         "INFOPLIST_KEY_UILaunchScreen_Generation": "YES",
@@ -124,6 +151,55 @@
         "SWIFT_VERSION": "6.0",
         "TARGETED_DEVICE_FAMILY": "1",
         "TEST_HOST": "$(BUILT_PRODUCTS_DIR)/sportplan.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/sportplan",
+      },
+    }, {
+      "name": "sportplanLiveActivity",
+      "id": "000000000000000300000000",
+      "product": "Products/sportplanLiveActivity.appex",
+      "product-type": "app-extension",
+      "dependencies": [
+        { "kind": "package", "package": "SportplanKit", "product-name": "DesignSystem" },
+        { "kind": "package", "package": "SportplanKit", "product-name": "WorkoutActivity" },
+      ],
+      "build-phases": [
+        "compile-sources",
+        "frameworks",
+        "resources",
+      ],
+      "package-product-members": [
+        {
+          "package": "SportplanKit",
+          "product-name": "DesignSystem",
+          "build-phase": { "build-phase": "frameworks" },
+        }, {
+          "package": "SportplanKit",
+          "product-name": "WorkoutActivity",
+          "build-phase": { "build-phase": "frameworks" },
+        },
+      ],
+      "build-settings": {
+        "CODE_SIGN_STYLE": "Automatic",
+        "CURRENT_PROJECT_VERSION": "1",
+        "DEVELOPMENT_TEAM": "T4BPBL797M",
+        "ENABLE_PREVIEWS": "YES",
+        "GENERATE_INFOPLIST_FILE": "YES",
+        "INFOPLIST_FILE": "sportplanLiveActivity/Info.plist",
+        "INFOPLIST_KEY_CFBundleDisplayName": "Sportplan",
+        "LD_RUNPATH_SEARCH_PATHS": "@executable_path/Frameworks @executable_path/../../Frameworks",
+        "MARKETING_VERSION": "1.0",
+        "PRODUCT_BUNDLE_IDENTIFIER": "com.rgorbachev.sportplan.LiveActivity",
+        "PRODUCT_NAME": "$(TARGET_NAME)",
+        "SDKROOT": "iphoneos",
+        "SKIP_INSTALL": "YES",
+        "STRING_CATALOG_GENERATE_SYMBOLS": "YES",
+        "SUPPORTED_PLATFORMS": "iphoneos iphonesimulator",
+        "SUPPORTS_MACCATALYST": "NO",
+        "SWIFT_APPROACHABLE_CONCURRENCY": "YES",
+        "SWIFT_DEFAULT_ACTOR_ISOLATION": "MainActor",
+        "SWIFT_EMIT_LOC_STRINGS": "YES",
+        "SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY": "YES",
+        "SWIFT_VERSION": "6.0",
+        "TARGETED_DEVICE_FAMILY": "1",
       },
     },
   ],

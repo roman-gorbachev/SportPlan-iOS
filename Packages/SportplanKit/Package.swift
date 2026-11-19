@@ -22,6 +22,7 @@ let package = Package(
     products: [
         .library(name: "Domain", targets: ["Domain"]),
         .library(name: "DesignSystem", targets: ["DesignSystem"]),
+        .library(name: "WorkoutActivity", targets: ["WorkoutActivity"]),
     ],
     targets: [
         .target(
@@ -32,6 +33,10 @@ let package = Package(
             name: "DesignSystem",
             resources: [.copy("Resources/Fonts")],
             swiftSettings: mainActorByDefault
+        ),
+        .target(
+            name: "WorkoutActivity",
+            swiftSettings: approachableConcurrency
         ),
         .testTarget(
             name: "DomainTests",

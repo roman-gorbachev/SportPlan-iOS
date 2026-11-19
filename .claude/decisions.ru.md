@@ -246,6 +246,13 @@ plate              id, weight_g UNIQUE CHECK(250…50000), color_hex
 - Шрифты в расширении — проверить; запасной вариант — системный шрифт с моноширинными цифрами.
 - План — `.claude/stage-7-plan.ru.md`.
 
+## Этап 7.1: таргет расширения (19.11.2026)
+- Таргет `sportplanLiveActivity` добавлен правкой `project.xcproj`; ключи сверены с исходниками `apple/xcode-project-format` и прогоном `xcprojformatter`, расширение встраивается и регистрируется в симуляторе. Мастер Xcode не понадобился.
+- Проверка платформы в `WorkoutActivity` — `#if os(iOS)`, а не `#if canImport(ActivityKit)`: на macOS ActivityKit импортируется, но `ActivityAttributes` там недоступен.
+- `WorkoutActivityPlate` — свой `Codable`-тип, а не `PlateStackItem`: библиотека не зависит от `DesignSystem` (MainActor), виджет сам переводит в `PlateStackItem`.
+- Исключение из правила explicit `return`: в развёрнутом содержимом `DynamicIsland` `return` роняет компилятор («failed to produce diagnostic»), регионы пишутся в форме builder. Записано в `CLAUDE.md`.
+- Вид Live Activity пока заглушка (название упражнения и значок) — настоящие экраны в 7.3.
+
 ## Этапы
 0. Решения ✔
 1. Каркас: проект, таргеты, пакет, DI, заглушки токенов, локализация, три вкладки.
