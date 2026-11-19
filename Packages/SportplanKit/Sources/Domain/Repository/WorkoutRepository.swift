@@ -13,4 +13,5 @@ public protocol WorkoutRepository: Sendable {
     func finish(workoutId: UUID, at date: Date) async throws
     func cancel(workoutId: UUID) async throws
     func previousSets(exerciseId: UUID) async throws -> [SetEntry]
+    func observeExerciseHistory(exerciseId: UUID) -> AsyncThrowingStream<ExerciseHistory?, any Error>
 }

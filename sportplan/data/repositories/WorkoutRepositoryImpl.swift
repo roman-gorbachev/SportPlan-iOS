@@ -180,6 +180,13 @@ nonisolated final class WorkoutRepositoryImpl: WorkoutRepository {
         }
     }
 
+    func observeExerciseHistory(exerciseId: UUID) -> AsyncThrowingStream<ExerciseHistory?, any Error> {
+        let observation = ValueObservation.tracking { db in
+            return try Self.fetchExerciseHistory(db, exerciseId: exerciseId)
+        }
+        return database.stream(of: observation)
+    }
+
     private static func nextPosition(_ db: Database, sql: String, arguments: StatementArguments) throws -> Int {
         guard let maximum = try Int.fetchOne(db, sql: sql, arguments: arguments) else {
             return firstPosition
@@ -225,7 +232,8 @@ nonisolated final class WorkoutRepositoryImpl: WorkoutRepository {
                 workoutExercise: try record.toDomainModel(),
                 exercise: exercise,
                 sets: setsByExerciseId[record.id, default: []],
-                previousSets: try fetchPreviousSets(db, exerciseId: record.exerciseId)
+                previousSets: try fetchPreviousSets(db, exerciseId: record.exerciseId),
+                recordBaseline: RecordBaseline(sets: try fetchFinishedWorkingSets(db, exerciseId: record.exerciseId))
             )
         }
         return ActiveWorkout(workout: workout, programName: programName, exercises: exercises)
@@ -273,5 +281,59 @@ nonisolated final class WorkoutRepositoryImpl: WorkoutRepository {
         ).map { record in
             return record.toDomainModel()
         }
+    }
+
+    private static func fetchFinishedWorkingSets(_ db: Database, exerciseId: UUID) throws -> [SetEntry] {
+        return try SetEntryRecord.fetchAll(
+            db,
+            sql: """
+                SELECT set_entry.* FROM set_entry
+                JOIN workout_exercise ON workout_exercise.id = set_entry.workout_exercise_id
+                JOIN workout ON workout.id = workout_exercise.workout_id
+                WHERE workout_exercise.exercise_id = ?
+                AND workout.finished_at IS NOT NULL
+                AND set_entry.completed_at IS NOT NULL
+                AND set_entry.is_warmup = 0
+                """,
+            arguments: [exerciseId.databaseText]
+        ).map { record in
+            return record.toDomainModel()
+        }
+    }
+
+    private static func fetchExerciseHistory(_ db: Database, exerciseId: UUID) throws -> ExerciseHistory? {
+        guard let exercise = try fetchLibraryExercises(db, ids: [exerciseId])[exerciseId] else {
+            return nil
+        }
+        let workoutExercises = try WorkoutExerciseRecord
+            .filter(Column("exercise_id") == exerciseId.databaseText)
+            .fetchAll(db)
+        let workoutIdByItemId = Dictionary(uniqueKeysWithValues: workoutExercises.map { record in
+            return (record.id, record.workoutId)
+        })
+        let sets = try SetEntryRecord
+            .filter(workoutExercises.map(\.id.databaseText).contains(Column("workout_exercise_id")))
+            .filter(Column("completed_at") != nil)
+            .filter(Column("is_warmup") == false)
+            .order(Column("position"))
+            .fetchAll(db)
+            .map { record in
+                return record.toDomainModel()
+            }
+        let setsByWorkoutId = Dictionary(grouping: sets) { entry in
+            return workoutIdByItemId[entry.workoutExerciseId]
+        }
+        let workouts = try WorkoutRecord
+            .filter(setsByWorkoutId.keys.compactMap { workoutId in return workoutId?.databaseText }.contains(Column("id")))
+            .order(Column("started_at").desc)
+            .fetchAll(db)
+        let sessions = workouts.map { workout in
+            return ExerciseSession(
+                workoutId: workout.id,
+                date: workout.startedAt,
+                sets: setsByWorkoutId[workout.id, default: []]
+            )
+        }
+        return ExerciseHistory(exercise: exercise, sessions: sessions)
     }
 }

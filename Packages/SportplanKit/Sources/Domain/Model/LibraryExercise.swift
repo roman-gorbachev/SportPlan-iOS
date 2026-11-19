@@ -24,6 +24,10 @@ public struct LibraryExercise: Identifiable, Hashable, Sendable {
         return exercise.metric
     }
 
+    public var recordProfile: RecordProfile {
+        return RecordProfile(loadKind: loadKind, metric: metric)
+    }
+
     public var weightStep: Weight {
         return equipment?.weightStep ?? Self.bodyweightWeightStep
     }

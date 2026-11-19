@@ -310,4 +310,74 @@ struct WorkoutRepositoryImplTests {
         #expect(active.workout.programDay?.label == context.day.label)
         #expect(active.programName == nil)
     }
+
+    @Test func exerciseHistoryHasCompletedWorkingSetsNewestFirst() async throws {
+        let context = try await Self.makeContext()
+        let day = TimeInterval(86_400)
+        try await Self.finishedWorkout(
+            context: context,
+            startedAt: DatabaseFixtures.referenceDate,
+            sets: [
+                (kilograms: 40, reps: 10, isWarmup: true, completed: true),
+                (kilograms: 60, reps: 8, isWarmup: false, completed: true),
+            ]
+        )
+        try await Self.finishedWorkout(
+            context: context,
+            startedAt: DatabaseFixtures.referenceDate.addingTimeInterval(day),
+            sets: [(kilograms: 62.5, reps: 8, isWarmup: false, completed: true)]
+        )
+        let workout = Self.makeWorkout(day: nil, startedAt: DatabaseFixtures.referenceDate.addingTimeInterval(day * 2))
+        let bench = Self.makeExercise(workoutId: workout.id, exerciseId: context.bench.id, position: 0)
+        let dips = Self.makeExercise(workoutId: workout.id, exerciseId: context.dips.id, position: 1)
+        try await context.repository.start(workout, exercises: [bench, dips], sets: [
+            Self.makeSet(workoutExerciseId: bench.id, position: 0, kilograms: 65, reps: 5, completed: true),
+            Self.makeSet(workoutExerciseId: bench.id, position: 1, kilograms: 65, reps: 5, completed: false),
+            Self.makeSet(workoutExerciseId: dips.id, position: 0, kilograms: 0, reps: 12, completed: true),
+        ])
+
+        var iterator = context.repository.observeExerciseHistory(exerciseId: context.bench.id).makeAsyncIterator()
+        let history = try #require(try await iterator.next() ?? nil)
+
+        #expect(history.exercise.id == context.bench.id)
+        #expect(history.sessions.map(\.workoutId).first == workout.id)
+        #expect(history.sessions.map { session in return session.sets.map(\.weight) } == [
+            [Weight(kilograms: 65)],
+            [Weight(kilograms: 62.5)],
+            [Weight(kilograms: 60)],
+        ])
+
+        try await context.repository.addSet(
+            Self.makeSet(workoutExerciseId: bench.id, position: 2, kilograms: 67.5, reps: 5, completed: true)
+        )
+        let updated = try #require(try await iterator.next() ?? nil)
+        #expect(updated.sessions.first?.sets.map(\.weight) == [Weight(kilograms: 65), Weight(kilograms: 67.5)])
+    }
+
+    @Test func exerciseHistoryOfAMissingExerciseIsNil() async throws {
+        let context = try await Self.makeContext()
+        var iterator = context.repository.observeExerciseHistory(exerciseId: UUID()).makeAsyncIterator()
+
+        #expect(try await iterator.next() == .some(nil))
+    }
+
+    @Test func activeRecordBaselineComesFromFinishedWorkoutsOnly() async throws {
+        let context = try await Self.makeContext()
+        try await Self.finishedWorkout(
+            context: context,
+            startedAt: DatabaseFixtures.referenceDate,
+            sets: [(kilograms: 60, reps: 8, isWarmup: false, completed: true)]
+        )
+        let workout = Self.makeWorkout(day: nil, startedAt: DatabaseFixtures.referenceDate.addingTimeInterval(86_400))
+        let item = Self.makeExercise(workoutId: workout.id, exerciseId: context.bench.id, position: 0)
+        let equal = Self.makeSet(workoutExerciseId: item.id, position: 0, kilograms: 60, reps: 8, completed: true)
+        try await context.repository.start(workout, exercises: [item], sets: [equal])
+
+        let active = try #require(try await context.repository.activeWorkout())
+
+        #expect(active.exercises.first?.recordSetIds.isEmpty == true)
+        #expect(active.exercises.first?.recordBaseline == RecordBaseline(sets: [
+            Self.makeSet(workoutExerciseId: item.id, position: 0, kilograms: 60, reps: 8, completed: true),
+        ]))
+    }
 }

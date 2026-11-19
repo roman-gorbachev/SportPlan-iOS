@@ -8,17 +8,20 @@ public struct ActiveWorkoutExercise: Identifiable, Hashable, Sendable {
     public let exercise: LibraryExercise
     public let sets: [SetEntry]
     public let previousSets: [SetEntry]
+    public let recordBaseline: RecordBaseline
 
     public init(
         workoutExercise: WorkoutExercise,
         exercise: LibraryExercise,
         sets: [SetEntry],
-        previousSets: [SetEntry]
+        previousSets: [SetEntry],
+        recordBaseline: RecordBaseline = .empty
     ) {
         self.workoutExercise = workoutExercise
         self.exercise = exercise
         self.sets = sets
         self.previousSets = previousSets
+        self.recordBaseline = recordBaseline
     }
 
     public var id: WorkoutExercise.ID {
@@ -41,6 +44,10 @@ public struct ActiveWorkoutExercise: Identifiable, Hashable, Sendable {
         return previousSets.filter { entry in
             return !entry.isWarmup
         }
+    }
+
+    public var recordSetIds: Set<UUID> {
+        return recordBaseline.recordSetIds(in: sets, profile: exercise.recordProfile)
     }
 
     public func set(id: UUID) -> SetEntry? {

@@ -164,6 +164,35 @@ final class FakeWorkoutRepository: WorkoutRepository {
         }
     }
 
+    func observeExerciseHistory(exerciseId: UUID) -> AsyncThrowingStream<ExerciseHistory?, any Error> {
+        let history = state.withLock { state in
+            return Self.makeHistory(state, exerciseId: exerciseId)
+        }
+        return AsyncThrowingStream { continuation in
+            continuation.yield(history)
+            continuation.finish()
+        }
+    }
+
+    private static func makeHistory(_ state: State, exerciseId: UUID) -> ExerciseHistory? {
+        guard let exercise = state.library[exerciseId] else {
+            return nil
+        }
+        let sessions = state.workouts.compactMap { workout -> ExerciseSession? in
+            let itemIds = Set(state.workoutExercises.filter { item in
+                return item.workoutId == workout.id && item.exerciseId == exerciseId
+            }.map(\.id))
+            let sets = state.sets.filter { entry in
+                return itemIds.contains(entry.workoutExerciseId) && entry.isCompleted && !entry.isWarmup
+            }
+            guard !sets.isEmpty else {
+                return nil
+            }
+            return ExerciseSession(workoutId: workout.id, date: workout.startedAt, sets: sets)
+        }
+        return ExerciseHistory(exercise: exercise, sessions: sessions)
+    }
+
     private static func makeActive(_ state: State) -> ActiveWorkout? {
         guard let workout = state.workouts.first(where: { workout in return workout.finishedAt == nil }) else {
             return nil
