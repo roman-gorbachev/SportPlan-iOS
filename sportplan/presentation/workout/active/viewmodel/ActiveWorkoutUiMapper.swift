@@ -13,7 +13,8 @@ enum ActiveWorkoutUiMapper {
         note: String,
         editor: SetEditorUiData?,
         confirmation: ActiveWorkoutConfirmation?,
-        isShowingError: Bool
+        isShowingError: Bool,
+        dismissedProgressionIds: Set<UUID>
     ) -> ActiveWorkoutUiData {
         let currentSetId = workout.currentSet?.entry.id
         let restTimer = rest.map { rest in
@@ -29,7 +30,8 @@ enum ActiveWorkoutUiMapper {
                     item,
                     plates: plates,
                     currentSetId: currentSetId,
-                    restTimer: item.id == restExerciseId ? restTimer : nil
+                    restTimer: item.id == restExerciseId ? restTimer : nil,
+                    showsProgression: !dismissedProgressionIds.contains(item.id)
                 )
             },
             note: note,
@@ -89,13 +91,15 @@ enum ActiveWorkoutUiMapper {
         _ item: ActiveWorkoutExercise,
         plates: [Plate],
         currentSetId: UUID?,
-        restTimer: RestTimerItem?
+        restTimer: RestTimerItem?,
+        showsProgression: Bool
     ) -> ActiveExerciseItem {
         let recordSetIds = item.recordSetIds
         return ActiveExerciseItem(
             id: item.id,
             name: item.exercise.exercise.name,
             summary: exerciseSummary(item),
+            progression: showsProgression ? progressionHint(item) : nil,
             sets: item.sets.enumerated().map { index, entry in
                 return makeRow(
                     entry,
@@ -107,6 +111,18 @@ enum ActiveWorkoutUiMapper {
                 )
             },
             restTimer: restTimer
+        )
+    }
+
+    private static func progressionHint(_ item: ActiveWorkoutExercise) -> ProgressionHintItem? {
+        guard let weight = item.progressionWeight else {
+            return nil
+        }
+        let weightText = String(localized: "workout.progression.weight \(WeightFormatting.kilograms(weight))")
+        return ProgressionHintItem(
+            message: String(localized: "workout.progression.message"),
+            weightText: weightText,
+            accessibilityLabel: String(localized: "workout.progression.accessibility \(weightText)")
         )
     }
 

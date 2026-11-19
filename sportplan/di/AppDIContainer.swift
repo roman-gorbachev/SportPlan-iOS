@@ -93,6 +93,7 @@ final class AppDIContainer {
         scheduler: restNotificationCenter,
         now: { return Date() }
     )
+    private lazy var applyProgressionUseCase = ApplyProgressionUseCase(repository: workoutRepository)
     private lazy var skipRestUseCase = SkipRestUseCase(repository: workoutRepository, scheduler: restNotificationCenter)
 
     private lazy var activeWorkoutStore = ActiveWorkoutStore(observeActiveWorkout: observeActiveWorkoutUseCase)
@@ -232,7 +233,8 @@ extension AppDIContainer {
             finishWorkout: finishWorkoutUseCase,
             cancelWorkout: cancelWorkoutUseCase,
             adjustRest: adjustRestUseCase,
-            skipRest: skipRestUseCase
+            skipRest: skipRestUseCase,
+            applyProgression: applyProgressionUseCase
         )
     }
 

@@ -19,6 +19,7 @@ final class ActiveWorkoutViewModel {
     @ObservationIgnored private let cancelWorkout: CancelWorkoutUseCase
     @ObservationIgnored private let adjustRest: AdjustRestUseCase
     @ObservationIgnored private let skipRest: SkipRestUseCase
+    @ObservationIgnored private let applyProgression: ApplyProgressionUseCase
     @ObservationIgnored private var hasLoaded = false
     @ObservationIgnored private var workout: ActiveWorkout?
     @ObservationIgnored private var rest: RestPeriod?
@@ -29,6 +30,7 @@ final class ActiveWorkoutViewModel {
     @ObservationIgnored private var noteSaveTask: Task<Void, Never>?
     @ObservationIgnored private var confirmation: ActiveWorkoutConfirmation?
     @ObservationIgnored private var isShowingError = false
+    @ObservationIgnored private var dismissedProgressionIds: Set<UUID> = []
 
     private(set) var activeWorkoutUiState: ActiveWorkoutUiState = .loading
 
@@ -45,7 +47,8 @@ final class ActiveWorkoutViewModel {
         finishWorkout: FinishWorkoutUseCase,
         cancelWorkout: CancelWorkoutUseCase,
         adjustRest: AdjustRestUseCase,
-        skipRest: SkipRestUseCase
+        skipRest: SkipRestUseCase,
+        applyProgression: ApplyProgressionUseCase
     ) {
         self.store = store
         self.observePlates = observePlates
@@ -60,6 +63,7 @@ final class ActiveWorkoutViewModel {
         self.cancelWorkout = cancelWorkout
         self.adjustRest = adjustRest
         self.skipRest = skipRest
+        self.applyProgression = applyProgression
     }
 
     var pickerTarget: ExercisePickerTarget? {
@@ -201,6 +205,17 @@ final class ActiveWorkoutViewModel {
         }
     }
 
+    func applyProgression(workoutExerciseId: UUID) async {
+        await perform {
+            try await self.applyProgression.execute(workoutExerciseId: workoutExerciseId)
+        }
+    }
+
+    func dismissProgression(workoutExerciseId: UUID) {
+        dismissedProgressionIds.insert(workoutExerciseId)
+        publish()
+    }
+
     func updateNote(_ text: String) {
         guard let workoutId = workout?.id else {
             return
@@ -333,6 +348,7 @@ final class ActiveWorkoutViewModel {
         noteSaveTask?.cancel()
         noteSaveTask = nil
         confirmation = nil
+        dismissedProgressionIds = []
     }
 
     private func publish() {
@@ -356,7 +372,8 @@ final class ActiveWorkoutViewModel {
             note: noteDraft ?? workout.workout.note ?? "",
             editor: editor,
             confirmation: confirmation,
-            isShowingError: isShowingError
+            isShowingError: isShowingError,
+            dismissedProgressionIds: dismissedProgressionIds
         ))
     }
 }

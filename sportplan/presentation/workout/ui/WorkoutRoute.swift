@@ -79,6 +79,10 @@ struct WorkoutRoute: View {
             run { await viewModel.addSet(workoutExerciseId: workoutExerciseId, isWarmup: isWarmup) }
         case let .removeSet(id):
             run { await viewModel.removeSet(id: id) }
+        case let .applyProgression(workoutExerciseId):
+            run { await viewModel.applyProgression(workoutExerciseId: workoutExerciseId) }
+        case let .dismissProgression(workoutExerciseId):
+            viewModel.dismissProgression(workoutExerciseId: workoutExerciseId)
         case let .updateNote(text):
             viewModel.updateNote(text)
         case .closeEditor:

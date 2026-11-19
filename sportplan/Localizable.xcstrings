@@ -3464,6 +3464,61 @@
         }
       }
     },
+    "workout.progression.accessibility %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В прошлый раз всё выполнено, попробуй %@"
+          }
+        }
+      }
+    },
+    "workout.progression.apply" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поставить"
+          }
+        }
+      }
+    },
+    "workout.progression.dismiss" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скрыть подсказку"
+          }
+        }
+      }
+    },
+    "workout.progression.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В прошлый раз всё выполнено — попробуй"
+          }
+        }
+      }
+    },
+    "workout.progression.weight %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ кг"
+          }
+        }
+      }
+    },
     "workout.set.addedWeight %@" : {
       "extractionState" : "manual",
       "localizations" : {

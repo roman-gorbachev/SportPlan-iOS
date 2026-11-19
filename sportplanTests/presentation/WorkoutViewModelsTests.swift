@@ -15,6 +15,7 @@ struct WorkoutViewModelsTests {
     private static let twentyKilograms = 20.0
     private static let stackWithoutTwenty = [15.0, 5.0]
     private static let completedInSecondWorkout = 2
+    private static let topOfTargetReps = 12
 
     private struct Fixture {
         let database: AppDatabase
@@ -75,7 +76,8 @@ struct WorkoutViewModelsTests {
             finishWorkout: FinishWorkoutUseCase(repository: workouts, scheduler: scheduler, now: now),
             cancelWorkout: CancelWorkoutUseCase(repository: workouts, scheduler: scheduler),
             adjustRest: adjustRest,
-            skipRest: SkipRestUseCase(repository: workouts, scheduler: scheduler)
+            skipRest: SkipRestUseCase(repository: workouts, scheduler: scheduler),
+            applyProgression: ApplyProgressionUseCase(repository: workouts)
         )
         return Fixture(
             database: database,
@@ -474,6 +476,66 @@ struct WorkoutViewModelsTests {
             return data.exercises.first?.sets.filter { row in return row.state == .completed }.count == Self.completedInSecondWorkout
         }
         #expect(data.exercises.first?.sets.map(\.isRecord) == [false, true, false])
+    }
+
+    private static func finishWorkoutAtTopOfRange(_ fixture: Fixture) async throws {
+        let workouts = WorkoutRepositoryImpl(database: fixture.database)
+        let now: @Sendable () -> Date = { return Date() }
+        let complete = CompleteSetUseCase(repository: workouts, scheduler: fixture.scheduler, now: now)
+        await fixture.start.start(dayId: fixture.day.id)
+        let first = try #require(try await workouts.activeWorkout()?.exercises.first)
+        for entry in first.sets {
+            try await complete.execute(setId: entry.id, draft: Self.draft(entry, kilograms: 60, reps: Self.topOfTargetReps))
+        }
+        try await FinishWorkoutUseCase(repository: workouts, scheduler: fixture.scheduler, now: now).execute()
+        await fixture.start.start(dayId: fixture.day.id)
+    }
+
+    @Test func progressionHintAppliesTheNextWeightToPendingSets() async throws {
+        let fixture = try await Self.makeFixture { bench, plank in return [bench, plank] }
+        let tasks = Self.startObserving(fixture)
+        defer {
+            tasks.forEach { task in task.cancel() }
+        }
+        try await Self.finishWorkoutAtTopOfRange(fixture)
+
+        let hinted = try await Self.data(fixture.active) { data in
+            return data.exercises.first?.progression != nil
+        }
+        #expect(hinted.exercises.first?.progression?.weightText == "62,5 кг")
+        #expect(hinted.exercises.last?.progression == nil)
+
+        let benchId = try #require(hinted.exercises.first?.id)
+        await fixture.active.applyProgression(workoutExerciseId: benchId)
+        let applied = try await Self.data(fixture.active) { data in
+            return data.exercises.first?.progression == nil
+        }
+        #expect(applied.exercises.first?.sets.map(Self.weight(of:)) == ["62,5", "62,5", "62,5"])
+    }
+
+    @Test func dismissedProgressionHintStaysHidden() async throws {
+        let fixture = try await Self.makeFixture { bench, _ in return [bench] }
+        let tasks = Self.startObserving(fixture)
+        defer {
+            tasks.forEach { task in task.cancel() }
+        }
+        try await Self.finishWorkoutAtTopOfRange(fixture)
+        let hinted = try await Self.data(fixture.active) { data in
+            return data.exercises.first?.progression != nil
+        }
+        let benchId = try #require(hinted.exercises.first?.id)
+
+        fixture.active.dismissProgression(workoutExerciseId: benchId)
+        let dismissed = try await Self.data(fixture.active) { data in
+            return data.exercises.first?.progression == nil
+        }
+        #expect(dismissed.exercises.first?.sets.map(Self.weight(of:)) == ["60", "60", "60"])
+
+        await fixture.active.addSet(workoutExerciseId: benchId, isWarmup: false)
+        let extended = try await Self.data(fixture.active) { data in
+            return data.exercises.first?.sets.count == 4
+        }
+        #expect(extended.exercises.first?.progression == nil)
     }
 
     private static func draft(_ entry: SetEntry, kilograms: Double, reps: Int) -> SetEntryDraft {

@@ -106,6 +106,14 @@ struct ActiveWorkoutScreen: View {
 
     private func exerciseSection(_ exercise: ActiveExerciseItem) -> some View {
         return Section {
+            if let progression = exercise.progression {
+                ProgressionHintView(
+                    hint: progression,
+                    onApply: { onAction(.applyProgression(workoutExerciseId: exercise.id)) },
+                    onDismiss: { onAction(.dismissProgression(workoutExerciseId: exercise.id)) }
+                )
+                .listRowSeparator(.hidden)
+            }
             ForEach(exercise.sets) { row in
                 return SetRow(
                     row: row,
@@ -174,7 +182,9 @@ struct ActiveWorkoutScreen: View {
             .buttonStyle(ChipButtonStyle())
             .frame(maxWidth: .infinity)
             .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
         }
+        .listSectionSeparator(.hidden)
     }
 
     private var noteSection: some View {
@@ -267,13 +277,18 @@ struct ActiveWorkoutScreen: View {
         totalText: "из 2:00",
         nextText: "отдых · дальше 65 × 8"
     )
-    let bench = ActiveExerciseItem(id: UUID(), name: "Жим лёжа", summary: "2 из 3 · 8–12 повт.", sets: [
+    let progression = ProgressionHintItem(
+        message: "В прошлый раз всё выполнено — попробуй",
+        weightText: "67,5 кг",
+        accessibilityLabel: "В прошлый раз всё выполнено, попробуй 67,5 кг"
+    )
+    let bench = ActiveExerciseItem(id: UUID(), name: "Жим лёжа", summary: "2 из 3 · 8–12 повт.", progression: progression, sets: [
         SetRowItem(id: UUID(), number: 1, value: .weightReps(weight: "40", reps: "10"), valueAccessibility: "40 кг, 10 повторов", isWarmup: true, isRecord: false, state: .completed, caption: "было 40 × 10", plates: nil, isTimed: false, isEditable: true),
         SetRowItem(id: UUID(), number: 2, value: .weightReps(weight: "65", reps: "8"), valueAccessibility: "65 кг, 8 повторов", isWarmup: false, isRecord: true, state: .completed, caption: "было 62,5 × 8", plates: plates, isTimed: false, isEditable: true),
         SetRowItem(id: UUID(), number: 3, value: .weightReps(weight: "65", reps: "8"), valueAccessibility: "65 кг, 8 повторов", isWarmup: false, isRecord: false, state: .current, caption: "было 62,5 × 7", plates: plates, isTimed: false, isEditable: true),
         SetRowItem(id: UUID(), number: 4, value: .weightReps(weight: "65", reps: "8"), valueAccessibility: "65 кг, 8 повторов", isWarmup: false, isRecord: false, state: .planned, caption: "план", plates: plates, isTimed: false, isEditable: true),
     ], restTimer: rest)
-    let plank = ActiveExerciseItem(id: UUID(), name: "Планка", summary: "0 из 2", sets: [
+    let plank = ActiveExerciseItem(id: UUID(), name: "Планка", summary: "0 из 2", progression: nil, sets: [
         SetRowItem(id: UUID(), number: 1, value: .duration(text: "1:15", runningSince: Date().addingTimeInterval(-47)), valueAccessibility: "1 минута 15 секунд", isWarmup: false, isRecord: false, state: .running, caption: "идёт · было 1:15", plates: nil, isTimed: true, isEditable: false),
         SetRowItem(id: UUID(), number: 2, value: .bodyweightReps(addedWeight: nil, reps: "12"), valueAccessibility: "12 повторов", isWarmup: false, isRecord: false, state: .planned, caption: nil, plates: nil, isTimed: false, isEditable: true),
     ], restTimer: nil)
