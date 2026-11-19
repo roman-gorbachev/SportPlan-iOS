@@ -44,6 +44,11 @@ let package = Package(
             swiftSettings: approachableConcurrency
         ),
         .testTarget(
+            name: "WorkoutActivityTests",
+            dependencies: ["WorkoutActivity"],
+            swiftSettings: approachableConcurrency
+        ),
+        .testTarget(
             name: "DesignSystemTests",
             dependencies: ["DesignSystem"],
             swiftSettings: mainActorByDefault

@@ -68,7 +68,7 @@ Layers with a strict dependency direction `presentation → domain → data`.
   - `domain` wiring lives in the package; use cases take repositories via init and expose a single `execute`-style entry point.
   - `presentation/` — feature folders, each with `ui/`, `viewmodel/`, `models/`, `states/`.
   - `di/AppDIContainer.swift` — the single composition root; every repository and use case is a `private lazy var`, `buildXViewModel()` factories in an extension. No DI framework.
-- **Widget Extension** — Live Activity only. `ActivityAttributes` is compiled into both targets; no App Groups.
+- **Widget Extension** — Live Activity only. `ActivityAttributes` is compiled into both targets; no App Groups. The extension has its own `Localizable.xcstrings` for fixed captions; everything else arrives localized in the content state. A timer `Text` is never interpolated into a localized string (Live Activities then render it in words); put the caption and the timer side by side.
 
 ### Presentation pattern
 - ViewModels are `@Observable final class`, hold collaborators as `@ObservationIgnored private let`, and expose a single `private(set) var xUiState` enum (`.loading` / `.success(data:)` / `.error(error:)`) plus a `XUiData` struct.
