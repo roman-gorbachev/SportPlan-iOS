@@ -1,6 +1,28 @@
 {
   "sourceLanguage" : "ru",
   "strings" : {
+    "activity.next %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "дальше %@"
+          }
+        }
+      }
+    },
+    "activity.set %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "подход %lld"
+          }
+        }
+      }
+    },
     "addExercise.add" : {
       "extractionState" : "manual",
       "localizations" : {

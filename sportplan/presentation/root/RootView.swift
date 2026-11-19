@@ -32,5 +32,8 @@ struct RootView: View {
         .task {
             await container.observeActiveWorkout()
         }
+        .task {
+            await container.observeWorkoutActivity()
+        }
     }
 }

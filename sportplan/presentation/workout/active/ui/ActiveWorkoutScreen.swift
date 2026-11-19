@@ -121,12 +121,14 @@ struct ActiveWorkoutScreen: View {
                     onSkip: { onAction(.skipRest) }
                 )
             }
-            HStack(spacing: Spacing.xs) {
-                addSetButton(title: String(localized: "workout.active.addSet")) {
-                    onAction(.addSet(workoutExerciseId: exercise.id, isWarmup: false))
-                }
-                addSetButton(title: String(localized: "workout.active.addWarmup")) {
-                    onAction(.addSet(workoutExerciseId: exercise.id, isWarmup: true))
+            ViewThatFits(in: .horizontal) {
+                return Group {
+                    HStack(spacing: Spacing.xs) {
+                        addSetButtons(exerciseId: exercise.id)
+                    }
+                    VStack(spacing: .zero) {
+                        addSetButtons(exerciseId: exercise.id)
+                    }
                 }
             }
         } header: {
@@ -135,11 +137,25 @@ struct ActiveWorkoutScreen: View {
         .appListRow()
     }
 
+    private func addSetButtons(exerciseId: UUID) -> some View {
+        return Group {
+            addSetButton(title: String(localized: "workout.active.addSet")) {
+                onAction(.addSet(workoutExerciseId: exerciseId, isWarmup: false))
+            }
+            addSetButton(title: String(localized: "workout.active.addWarmup")) {
+                onAction(.addSet(workoutExerciseId: exerciseId, isWarmup: true))
+            }
+        }
+    }
+
     private func addSetButton(title: String, action: @escaping () -> Void) -> some View {
         return Button(action: action) {
             return Label(title, systemImage: "plus")
+                .labelStyle(.titleAndIcon)
                 .appStyle(Typography.callout)
                 .foregroundStyle(Palette.textPrimary)
+                .lineLimit(1)
+                .fixedSize()
                 .frame(maxWidth: .infinity, minHeight: Self.addSetButtonHeight)
                 .contentShape(Rectangle())
         }

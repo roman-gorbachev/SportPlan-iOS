@@ -15,9 +15,7 @@ enum ActiveWorkoutUiMapper {
         confirmation: ActiveWorkoutConfirmation?,
         isShowingError: Bool
     ) -> ActiveWorkoutUiData {
-        let currentSetId = workout.exercises.lazy.flatMap(\.sets).first { entry in
-            return !entry.isCompleted
-        }?.id
+        let currentSetId = workout.currentSet?.entry.id
         let restTimer = rest.map { rest in
             return RestTimerMapper.makeItem(workout: workout, rest: rest)
         }

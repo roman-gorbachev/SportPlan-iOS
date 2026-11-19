@@ -63,6 +63,18 @@ public struct ActiveWorkout: Identifiable, Hashable, Sendable {
         }?.0
     }
 
+    public var currentSet: WorkoutSetReference? {
+        if let trigger = restTrigger {
+            return nextPlannedSet(after: trigger)
+        }
+        for item in exercises {
+            if let entry = item.firstIncompleteSet {
+                return WorkoutSetReference(exercise: item, entry: entry)
+            }
+        }
+        return nil
+    }
+
     public func nextPlannedSet(after reference: WorkoutSetReference) -> WorkoutSetReference? {
         guard let index = exercises.firstIndex(where: { item in return item.id == reference.exercise.id }) else {
             return nil

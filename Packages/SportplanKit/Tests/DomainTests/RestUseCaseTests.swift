@@ -165,4 +165,31 @@ struct RestUseCaseTests {
         #expect(next.entry.id == setup.benchSets[1].id)
         #expect(next.number == 2)
     }
+
+    @Test func currentSetStartsAtTheFirstIncompleteSet() async throws {
+        let setup = try await Self.makeSetup()
+
+        let active = try #require(try await setup.workouts.activeWorkout())
+        #expect(active.currentSet?.entry.id == setup.benchSets[0].id)
+        #expect(active.currentSet?.number == 1)
+    }
+
+    @Test func currentSetFollowsTheLatestCompletedSet() async throws {
+        let setup = try await Self.makeSetup()
+        try await Self.complete(setup.squatSets[0], in: setup)
+
+        let active = try #require(try await setup.workouts.activeWorkout())
+        #expect(active.currentSet?.entry.id == setup.benchSets[0].id)
+        #expect(active.currentSet?.exercise.exercise.exercise.name == "Жим лёжа")
+    }
+
+    @Test func currentSetIsEmptyWhenEverySetIsDone() async throws {
+        let setup = try await Self.makeSetup()
+        for entry in setup.benchSets + setup.squatSets {
+            try await Self.complete(entry, in: setup)
+        }
+
+        let active = try #require(try await setup.workouts.activeWorkout())
+        #expect(active.currentSet == nil)
+    }
 }

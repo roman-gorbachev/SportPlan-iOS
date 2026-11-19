@@ -1,5 +1,6 @@
 import Domain
 import Foundation
+import WorkoutActivity
 
 final class AppDIContainer {
     private static let appVersionKey = "CFBundleShortVersionString"
@@ -89,6 +90,12 @@ final class AppDIContainer {
     private lazy var loadPlatesUseCase = LoadPlatesUseCase(repository: plateRepository)
 
     private lazy var activeWorkoutStore = ActiveWorkoutStore(observeActiveWorkout: observeActiveWorkoutUseCase)
+    private lazy var workoutActivityController: any WorkoutActivityController = WorkoutActivityControllerImpl()
+    private lazy var workoutActivityCoordinator = WorkoutActivityCoordinator(
+        store: activeWorkoutStore,
+        loadPlates: loadPlatesUseCase,
+        controller: workoutActivityController
+    )
 
     init() {
         do {
@@ -107,6 +114,10 @@ final class AppDIContainer {
 extension AppDIContainer {
     func observeActiveWorkout() async {
         await activeWorkoutStore.observe()
+    }
+
+    func observeWorkoutActivity() async {
+        await workoutActivityCoordinator.observe()
     }
 
     func buildSettingsViewModel() -> SettingsViewModel {
