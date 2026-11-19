@@ -9,16 +9,29 @@ final class FakeWorkoutRepository: WorkoutRepository {
         var sets: [SetEntry] = []
         var library: [UUID: LibraryExercise] = [:]
         var previousSets: [UUID: [SetEntry]] = [:]
+        var previousWorkoutExercises: [UUID: WorkoutExercise] = [:]
+        var updateSetsCallCount = 0
     }
 
     private let state = Mutex(State())
 
-    init(library: [LibraryExercise] = [], previousSets: [UUID: [SetEntry]] = [:]) {
+    init(
+        library: [LibraryExercise] = [],
+        previousSets: [UUID: [SetEntry]] = [:],
+        previousWorkoutExercises: [UUID: WorkoutExercise] = [:]
+    ) {
         state.withLock { state in
             for item in library {
                 state.library[item.id] = item
             }
             state.previousSets = previousSets
+            state.previousWorkoutExercises = previousWorkoutExercises
+        }
+    }
+
+    var updateSetsCallCount: Int {
+        return state.withLock { state in
+            return state.updateSetsCallCount
         }
     }
 
@@ -94,6 +107,20 @@ final class FakeWorkoutRepository: WorkoutRepository {
             var updated = entry
             updated.position = state.sets[index].position
             state.sets[index] = updated
+        }
+    }
+
+    func updateSets(_ entries: [SetEntry]) async throws {
+        state.withLock { state in
+            state.updateSetsCallCount += 1
+            for entry in entries {
+                guard let index = state.sets.firstIndex(where: { stored in return stored.id == entry.id }) else {
+                    continue
+                }
+                var updated = entry
+                updated.position = state.sets[index].position
+                state.sets[index] = updated
+            }
         }
     }
 
@@ -219,7 +246,8 @@ final class FakeWorkoutRepository: WorkoutRepository {
                     workoutExercise: item,
                     exercise: exercise,
                     sets: sets,
-                    previousSets: state.previousSets[item.exerciseId, default: []]
+                    previousSets: state.previousSets[item.exerciseId, default: []],
+                    previousWorkoutExercise: state.previousWorkoutExercises[item.exerciseId]
                 )
             }
         return ActiveWorkout(workout: workout, programName: nil, exercises: exercises)

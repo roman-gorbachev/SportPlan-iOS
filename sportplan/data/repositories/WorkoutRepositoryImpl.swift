@@ -82,19 +82,31 @@ nonisolated final class WorkoutRepositoryImpl: WorkoutRepository {
 
     func updateSet(_ entry: SetEntry) async throws {
         try await database.writer.write { db in
-            let updated = try SetEntryRecord
-                .filter(Column("id") == entry.id.databaseText)
-                .updateAll(
-                    db,
-                    Column("weight_g").set(to: entry.weight.grams),
-                    Column("reps").set(to: entry.reps),
-                    Column("duration_sec").set(to: entry.durationSeconds),
-                    Column("started_at").set(to: entry.startedAt),
-                    Column("completed_at").set(to: entry.completedAt)
-                )
-            guard updated > 0 else {
-                throw WorkoutError.notFound
+            try Self.update(db, entry: entry)
+        }
+    }
+
+    func updateSets(_ entries: [SetEntry]) async throws {
+        try await database.writer.write { db in
+            for entry in entries {
+                try Self.update(db, entry: entry)
             }
+        }
+    }
+
+    private static func update(_ db: Database, entry: SetEntry) throws {
+        let updated = try SetEntryRecord
+            .filter(Column("id") == entry.id.databaseText)
+            .updateAll(
+                db,
+                Column("weight_g").set(to: entry.weight.grams),
+                Column("reps").set(to: entry.reps),
+                Column("duration_sec").set(to: entry.durationSeconds),
+                Column("started_at").set(to: entry.startedAt),
+                Column("completed_at").set(to: entry.completedAt)
+            )
+        guard updated > 0 else {
+            throw WorkoutError.notFound
         }
     }
 
@@ -228,11 +240,15 @@ nonisolated final class WorkoutRepositoryImpl: WorkoutRepository {
             guard let exercise = libraryById[record.exerciseId] else {
                 return nil
             }
+            let previous = try fetchPreviousWorkoutExercise(db, exerciseId: record.exerciseId)
             return ActiveWorkoutExercise(
                 workoutExercise: try record.toDomainModel(),
                 exercise: exercise,
                 sets: setsByExerciseId[record.id, default: []],
-                previousSets: try fetchPreviousSets(db, exerciseId: record.exerciseId),
+                previousSets: try previous.map { previous in
+                    return try fetchCompletedSets(db, workoutExerciseId: previous.id)
+                } ?? [],
+                previousWorkoutExercise: try previous?.toDomainModel(),
                 recordBaseline: RecordBaseline(sets: try fetchFinishedWorkingSets(db, exerciseId: record.exerciseId))
             )
         }
@@ -256,31 +272,42 @@ nonisolated final class WorkoutRepositoryImpl: WorkoutRepository {
         })
     }
 
-    private static func fetchPreviousSets(_ db: Database, exerciseId: UUID) throws -> [SetEntry] {
-        return try SetEntryRecord.fetchAll(
+    private static func fetchPreviousWorkoutExercise(_ db: Database, exerciseId: UUID) throws -> WorkoutExerciseRecord? {
+        return try WorkoutExerciseRecord.fetchOne(
             db,
             sql: """
-                SELECT * FROM set_entry
-                WHERE completed_at IS NOT NULL
-                AND workout_exercise_id = (
-                    SELECT workout_exercise.id FROM workout_exercise
-                    JOIN workout ON workout.id = workout_exercise.workout_id
-                    WHERE workout_exercise.exercise_id = ?
-                    AND workout.finished_at IS NOT NULL
-                    AND EXISTS (
-                        SELECT 1 FROM set_entry AS completed
-                        WHERE completed.workout_exercise_id = workout_exercise.id
-                        AND completed.completed_at IS NOT NULL
-                    )
-                    ORDER BY workout.started_at DESC
-                    LIMIT 1
+                SELECT workout_exercise.* FROM workout_exercise
+                JOIN workout ON workout.id = workout_exercise.workout_id
+                WHERE workout_exercise.exercise_id = ?
+                AND workout.finished_at IS NOT NULL
+                AND EXISTS (
+                    SELECT 1 FROM set_entry AS completed
+                    WHERE completed.workout_exercise_id = workout_exercise.id
+                    AND completed.completed_at IS NOT NULL
                 )
-                ORDER BY position
+                ORDER BY workout.started_at DESC
+                LIMIT 1
                 """,
             arguments: [exerciseId.databaseText]
-        ).map { record in
-            return record.toDomainModel()
+        )
+    }
+
+    private static func fetchPreviousSets(_ db: Database, exerciseId: UUID) throws -> [SetEntry] {
+        guard let previous = try fetchPreviousWorkoutExercise(db, exerciseId: exerciseId) else {
+            return []
         }
+        return try fetchCompletedSets(db, workoutExerciseId: previous.id)
+    }
+
+    private static func fetchCompletedSets(_ db: Database, workoutExerciseId: UUID) throws -> [SetEntry] {
+        return try SetEntryRecord
+            .filter(Column("workout_exercise_id") == workoutExerciseId.databaseText)
+            .filter(Column("completed_at") != nil)
+            .order(Column("position"))
+            .fetchAll(db)
+            .map { record in
+                return record.toDomainModel()
+            }
     }
 
     private static func fetchFinishedWorkingSets(_ db: Database, exerciseId: UUID) throws -> [SetEntry] {

@@ -85,10 +85,20 @@ struct WorkoutRepositoryImplTests {
     private static func finishedWorkout(
         context: Context,
         startedAt: Date,
+        hasTargets: Bool = true,
         sets: [(kilograms: Double, reps: Int, isWarmup: Bool, completed: Bool)]
     ) async throws {
-        let workout = makeWorkout(day: context.day, startedAt: startedAt)
-        let item = makeExercise(workoutId: workout.id, exerciseId: context.bench.id, position: 0)
+        let workout = makeWorkout(day: hasTargets ? context.day : nil, startedAt: startedAt)
+        let planned = makeExercise(workoutId: workout.id, exerciseId: context.bench.id, position: 0)
+        let item = hasTargets ? planned : WorkoutExercise(
+            id: planned.id,
+            workoutId: planned.workoutId,
+            exerciseId: planned.exerciseId,
+            position: planned.position,
+            targetSets: nil,
+            targetReps: nil,
+            restSeconds: planned.restSeconds
+        )
         let entries = sets.enumerated().map { position, values in
             return makeSet(
                 workoutExerciseId: item.id,
@@ -177,6 +187,73 @@ struct WorkoutRepositoryImplTests {
         try await context.repository.start(workout, exercises: [item], sets: [])
         let active = try #require(try await context.repository.activeWorkout())
         #expect(active.exercises.first?.previousSets.map(\.reps) == [10, 8, 7])
+    }
+
+    @Test func activeExerciseCarriesTargetsOfThePreviousWorkout() async throws {
+        let context = try await Self.makeContext()
+        let day = TimeInterval(86_400)
+        try await Self.finishedWorkout(
+            context: context,
+            startedAt: DatabaseFixtures.referenceDate,
+            sets: [(kilograms: 60, reps: 12, isWarmup: false, completed: true)]
+        )
+        let workout = Self.makeWorkout(day: context.day, startedAt: DatabaseFixtures.referenceDate.addingTimeInterval(day))
+        let item = Self.makeExercise(workoutId: workout.id, exerciseId: context.bench.id, position: 0)
+        let dips = Self.makeExercise(workoutId: workout.id, exerciseId: context.dips.id, position: 1)
+        try await context.repository.start(workout, exercises: [item, dips], sets: [])
+
+        let active = try #require(try await context.repository.activeWorkout())
+        let previous = try #require(active.exercises.first?.previousWorkoutExercise)
+        #expect(previous.targetSets == 3)
+        #expect(previous.targetReps == RepRange(min: 8, max: 12))
+        #expect(previous.workoutId != workout.id)
+        #expect(active.exercises.last?.previousWorkoutExercise == nil)
+    }
+
+    @Test func previousWorkoutOutsideThePlanHasNoTargets() async throws {
+        let context = try await Self.makeContext()
+        let day = TimeInterval(86_400)
+        try await Self.finishedWorkout(
+            context: context,
+            startedAt: DatabaseFixtures.referenceDate,
+            hasTargets: false,
+            sets: [(kilograms: 60, reps: 12, isWarmup: false, completed: true)]
+        )
+        let workout = Self.makeWorkout(day: context.day, startedAt: DatabaseFixtures.referenceDate.addingTimeInterval(day))
+        try await context.repository.start(
+            workout,
+            exercises: [Self.makeExercise(workoutId: workout.id, exerciseId: context.bench.id, position: 0)],
+            sets: []
+        )
+
+        let active = try #require(try await context.repository.activeWorkout())
+        let previous = try #require(active.exercises.first?.previousWorkoutExercise)
+        #expect(previous.targetSets == nil)
+        #expect(previous.targetReps == nil)
+        #expect(active.exercises.first?.previousSets.map(\.reps) == [12])
+    }
+
+    @Test func updateSetsWritesEveryEntryInOneObservedChange() async throws {
+        let context = try await Self.makeContext()
+        let workout = Self.makeWorkout(day: context.day)
+        let item = Self.makeExercise(workoutId: workout.id, exerciseId: context.bench.id, position: 0)
+        let sets = (0..<3).map { position in
+            return Self.makeSet(workoutExerciseId: item.id, position: position, kilograms: 60, reps: 12, completed: false)
+        }
+        try await context.repository.start(workout, exercises: [item], sets: sets)
+        var iterator = context.repository.observeActive().makeAsyncIterator()
+        _ = try await iterator.next()
+
+        let heavier = sets.map { entry in
+            var changed = entry
+            changed.weight = Weight(kilograms: 62.5)
+            return changed
+        }
+        try await context.repository.updateSets(heavier)
+
+        let updated = try #require(try await iterator.next() ?? nil)
+        #expect(updated.exercises.first?.sets.map(\.weight) == Array(repeating: Weight(kilograms: 62.5), count: 3))
+        #expect(updated.exercises.first?.sets.map(\.reps) == [12, 12, 12])
     }
 
     @Test func addExerciseAppendsAndRejectsDuplicates() async throws {

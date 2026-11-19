@@ -7,6 +7,7 @@ public protocol WorkoutRepository: Sendable {
     func addExercise(_ workoutExercise: WorkoutExercise, sets: [SetEntry]) async throws
     func addSet(_ entry: SetEntry) async throws
     func updateSet(_ entry: SetEntry) async throws
+    func updateSets(_ entries: [SetEntry]) async throws
     func removeSet(id: UUID) async throws
     func updateNote(workoutId: UUID, note: String?) async throws
     func updateRest(workoutId: UUID, rest: RestPeriod?) async throws

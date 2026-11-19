@@ -8,6 +8,7 @@ public struct ActiveWorkoutExercise: Identifiable, Hashable, Sendable {
     public let exercise: LibraryExercise
     public let sets: [SetEntry]
     public let previousSets: [SetEntry]
+    public let previousWorkoutExercise: WorkoutExercise?
     public let recordBaseline: RecordBaseline
 
     public init(
@@ -15,12 +16,14 @@ public struct ActiveWorkoutExercise: Identifiable, Hashable, Sendable {
         exercise: LibraryExercise,
         sets: [SetEntry],
         previousSets: [SetEntry],
+        previousWorkoutExercise: WorkoutExercise? = nil,
         recordBaseline: RecordBaseline = .empty
     ) {
         self.workoutExercise = workoutExercise
         self.exercise = exercise
         self.sets = sets
         self.previousSets = previousSets
+        self.previousWorkoutExercise = previousWorkoutExercise
         self.recordBaseline = recordBaseline
     }
 
@@ -44,6 +47,22 @@ public struct ActiveWorkoutExercise: Identifiable, Hashable, Sendable {
         return previousSets.filter { entry in
             return !entry.isWarmup
         }
+    }
+
+    public var pendingWorkingSets: [SetEntry] {
+        return workingSets.filter { entry in
+            return !entry.isCompleted
+        }
+    }
+
+    public var progressionWeight: Weight? {
+        guard let suggested = ProgressionSuggestion.weight(for: self) else {
+            return nil
+        }
+        let hasLighterPendingSet = pendingWorkingSets.contains { entry in
+            return entry.weight < suggested
+        }
+        return hasLighterPendingSet ? suggested : nil
     }
 
     public var recordSetIds: Set<UUID> {
