@@ -11,10 +11,13 @@ struct WorkoutActivityCoordinatorTests {
     private static let pollAttempts = 300
     private static let settleDelay = Duration.milliseconds(150)
     private static let loadedWeight = Weight(kilograms: 60)
+    private static let twentyKilograms = 20.0
+    private static let stackWithoutTwenty = [15.0, 5.0]
 
     private struct Fixture {
         let day: ProgramDay
         let workouts: WorkoutRepositoryImpl
+        let plates: PlateRepositoryImpl
         let store: ActiveWorkoutStore
         let coordinator: WorkoutActivityCoordinator
         let controller: RecordingWorkoutActivityController
@@ -38,9 +41,10 @@ struct WorkoutActivityCoordinatorTests {
         let workouts = WorkoutRepositoryImpl(database: database)
         let store = ActiveWorkoutStore(observeActiveWorkout: ObserveActiveWorkoutUseCase(repository: workouts))
         let controller = RecordingWorkoutActivityController()
+        let plates = PlateRepositoryImpl(database: database)
         let coordinator = WorkoutActivityCoordinator(
             store: store,
-            loadPlates: LoadPlatesUseCase(repository: PlateRepositoryImpl(database: database)),
+            observePlates: ObservePlatesUseCase(repository: plates),
             controller: controller
         )
         let now: @Sendable () -> Date = { return Date() }
@@ -49,6 +53,7 @@ struct WorkoutActivityCoordinatorTests {
         return Fixture(
             day: day,
             workouts: workouts,
+            plates: plates,
             store: store,
             coordinator: coordinator,
             controller: controller,
@@ -191,4 +196,31 @@ struct WorkoutActivityCoordinatorTests {
         try await Self.waitForEnd(fixture, count: 1)
         #expect(fixture.controller.shown.isEmpty)
     }
+
+    @Test func plateChangesResendTheStack() async throws {
+        let fixture = try await Self.makeFixture()
+        let tasks = Self.startObserving(fixture)
+        defer {
+            tasks.forEach { task in task.cancel() }
+        }
+        _ = try await Self.shown(fixture) { shown in return shown.content.phase == .set }
+
+        let sets = try await Self.sets(fixture)
+        var heavier = SetEntryDraft(sets[0])
+        heavier.weight = Self.loadedWeight
+        try await UpdateSetUseCase(repository: fixture.workouts).execute(setId: sets[0].id, draft: heavier)
+        _ = try await Self.shown(fixture) { shown in
+            return shown.content.plates.map(\.kilograms) == [Self.twentyKilograms]
+        }
+
+        let twenty = try #require(try await fixture.plates.plates().first { plate in
+            return plate.weight.kilograms == Self.twentyKilograms
+        })
+        try await fixture.plates.delete(id: twenty.id)
+        let reloaded = try await Self.shown(fixture) { shown in
+            return shown.content.plates.map(\.kilograms) == Self.stackWithoutTwenty
+        }
+        #expect(reloaded.content.loadText == "60 × 8")
+    }
 }
+

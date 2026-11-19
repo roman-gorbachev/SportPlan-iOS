@@ -11,14 +11,14 @@ final class WorkoutActivityCoordinator {
     }
 
     private let store: ActiveWorkoutStore
-    private let loadPlates: LoadPlatesUseCase
+    private let observePlates: ObservePlatesUseCase
     private let controller: any WorkoutActivityController
     private var shown: Shown = .unknown
     private var isObserving = false
 
-    init(store: ActiveWorkoutStore, loadPlates: LoadPlatesUseCase, controller: any WorkoutActivityController) {
+    init(store: ActiveWorkoutStore, observePlates: ObservePlatesUseCase, controller: any WorkoutActivityController) {
         self.store = store
-        self.loadPlates = loadPlates
+        self.observePlates = observePlates
         self.controller = controller
     }
 
@@ -30,13 +30,40 @@ final class WorkoutActivityCoordinator {
         defer {
             isObserving = false
         }
-        let plates = (try? await loadPlates.execute()) ?? []
-        let store = store
-        let snapshots = Observations {
-            return store.snapshot
+        let plateSet = ObservedPlateSet()
+        await withDiscardingTaskGroup { group in
+            group.addTask {
+                await self.follow(plateSet)
+            }
+            group.addTask {
+                await self.applyChanges(plateSet)
+            }
         }
-        for await snapshot in snapshots {
-            await apply(snapshot, plates: plates)
+    }
+
+    private func follow(_ plateSet: ObservedPlateSet) async {
+        do {
+            for try await plates in observePlates.execute() {
+                plateSet.plates = plates
+            }
+        } catch {
+            guard !Task.isCancelled, plateSet.plates == nil else {
+                return
+            }
+            plateSet.plates = []
+        }
+    }
+
+    private func applyChanges(_ plateSet: ObservedPlateSet) async {
+        let store = store
+        let changes = Observations {
+            return ObservedChange(snapshot: store.snapshot, plates: plateSet.plates)
+        }
+        for await change in changes {
+            guard let plates = change.plates else {
+                continue
+            }
+            await apply(change.snapshot, plates: plates)
         }
     }
 
@@ -63,4 +90,14 @@ final class WorkoutActivityCoordinator {
             return
         }
     }
+}
+
+@Observable
+private final class ObservedPlateSet {
+    var plates: [Plate]?
+}
+
+private struct ObservedChange: Sendable {
+    let snapshot: ActiveWorkoutSnapshot
+    let plates: [Plate]?
 }

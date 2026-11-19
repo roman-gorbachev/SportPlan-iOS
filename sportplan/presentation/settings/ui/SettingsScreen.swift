@@ -26,17 +26,20 @@ struct SettingsScreen: View {
     }
 
     private var equipmentSummary: String {
-        guard data.equipmentCount > 0 else {
-            return String(localized: "settings.gym.empty")
+        let equipmentText = data.equipmentCount > 0
+            ? String(localized: "settings.gym.equipmentCount \(data.equipmentCount)")
+            : String(localized: "settings.gym.empty")
+        guard data.plateCount > 0 else {
+            return equipmentText
         }
-        return String(localized: "settings.gym.equipmentCount \(data.equipmentCount)")
+        return String(localized: "settings.gym.summary \(equipmentText) \(String(localized: "settings.gym.plateCount \(data.plateCount)"))")
     }
 }
 
 #Preview {
     FontRegistry.registerFonts()
     return NavigationStack {
-        return SettingsScreen(data: SettingsUiData(equipmentCount: 6, appVersion: "1.0"), onOpenGym: {})
+        return SettingsScreen(data: SettingsUiData(equipmentCount: 6, plateCount: 7, appVersion: "1.0"), onOpenGym: {})
             .navigationTitle(String(localized: "settings.title"))
     }
 }

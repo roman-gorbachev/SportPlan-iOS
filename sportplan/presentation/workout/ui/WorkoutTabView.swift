@@ -25,7 +25,8 @@ struct WorkoutTabView: View {
             .navigationDestination(for: GymDestination.self) { _ in
                 return GymRoute(
                     viewModel: container.buildGymViewModel(),
-                    makeEditorViewModel: container.buildEquipmentEditorViewModel
+                    makeEditorViewModel: container.buildEquipmentEditorViewModel,
+                    makePlateEditorViewModel: container.buildPlateEditorViewModel
                 )
             }
         }

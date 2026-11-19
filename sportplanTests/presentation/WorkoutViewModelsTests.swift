@@ -1,3 +1,4 @@
+import DesignSystem
 import Domain
 import Foundation
 import GRDB
@@ -9,6 +10,10 @@ struct WorkoutViewModelsTests {
     private static let pollInterval = Duration.milliseconds(10)
     private static let pollAttempts = 300
     private static let shortRestSeconds = 1
+
+    private static let stackedWeight = Weight(kilograms: 60)
+    private static let twentyKilograms = 20.0
+    private static let stackWithoutTwenty = [15.0, 5.0]
 
     private struct Fixture {
         let database: AppDatabase
@@ -58,7 +63,7 @@ struct WorkoutViewModelsTests {
         let adjustRest = AdjustRestUseCase(repository: workouts, scheduler: scheduler, now: now)
         let active = ActiveWorkoutViewModel(
             store: store,
-            loadPlates: LoadPlatesUseCase(repository: PlateRepositoryImpl(database: database)),
+            observePlates: ObservePlatesUseCase(repository: PlateRepositoryImpl(database: database)),
             addSet: AddSetUseCase(repository: workouts),
             updateSet: UpdateSetUseCase(repository: workouts),
             completeSet: CompleteSetUseCase(repository: workouts, scheduler: scheduler, now: now),
@@ -156,7 +161,7 @@ struct WorkoutViewModelsTests {
                 await active.observe()
             },
             Task {
-                await active.loadPlateSet()
+                await active.observePlateSet()
             },
         ]
     }
@@ -413,4 +418,39 @@ struct WorkoutViewModelsTests {
         }
         #expect(workoutCount == 0)
     }
+
+    @Test func plateChangesUpdateTheStackDuringTheWorkout() async throws {
+        let fixture = try await Self.makeFixture { bench, _ in return [bench] }
+        let tasks = Self.startObserving(fixture)
+        defer {
+            tasks.forEach { task in task.cancel() }
+        }
+        await fixture.start.start(dayId: fixture.day.id)
+        _ = try await Self.data(fixture.active)
+
+        let workouts = WorkoutRepositoryImpl(database: fixture.database)
+        let firstSet = try #require(try await workouts.activeWorkout()?.exercises.first?.sets.first)
+        var heavier = SetEntryDraft(firstSet)
+        heavier.weight = Self.stackedWeight
+        try await UpdateSetUseCase(repository: workouts).execute(setId: firstSet.id, draft: heavier)
+        let loaded = try await Self.data(fixture.active) { data in
+            return Self.firstRowPlates(data) == [Self.twentyKilograms]
+        }
+        #expect(Self.firstRowPlates(loaded) == [Self.twentyKilograms])
+
+        let plates = PlateRepositoryImpl(database: fixture.database)
+        let twenty = try #require(try await plates.plates().first { plate in
+            return plate.weight.kilograms == Self.twentyKilograms
+        })
+        try await plates.delete(id: twenty.id)
+        let reloaded = try await Self.data(fixture.active) { data in
+            return Self.firstRowPlates(data) == Self.stackWithoutTwenty
+        }
+        #expect(Self.firstRowPlates(reloaded) == Self.stackWithoutTwenty)
+    }
+
+    private static func firstRowPlates(_ data: ActiveWorkoutUiData) -> [Double]? {
+        return data.exercises.first?.sets.first?.plates?.plates.map(\.kilograms)
+    }
 }
+

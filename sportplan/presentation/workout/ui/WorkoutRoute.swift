@@ -49,7 +49,7 @@ struct WorkoutRoute: View {
             await viewModel.observe()
         }
         .task {
-            await viewModel.loadPlateSet()
+            await viewModel.observePlateSet()
         }
         .sheet(item: $pickerTarget) { target in
             return ExercisePickerRoute(

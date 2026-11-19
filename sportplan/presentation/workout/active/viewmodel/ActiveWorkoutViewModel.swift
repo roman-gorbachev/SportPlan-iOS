@@ -7,7 +7,7 @@ final class ActiveWorkoutViewModel {
     private static let noteSaveDelay = Duration.milliseconds(600)
 
     @ObservationIgnored private let store: ActiveWorkoutStore
-    @ObservationIgnored private let loadPlates: LoadPlatesUseCase
+    @ObservationIgnored private let observePlates: ObservePlatesUseCase
     @ObservationIgnored private let addSet: AddSetUseCase
     @ObservationIgnored private let updateSet: UpdateSetUseCase
     @ObservationIgnored private let completeSet: CompleteSetUseCase
@@ -34,7 +34,7 @@ final class ActiveWorkoutViewModel {
 
     init(
         store: ActiveWorkoutStore,
-        loadPlates: LoadPlatesUseCase,
+        observePlates: ObservePlatesUseCase,
         addSet: AddSetUseCase,
         updateSet: UpdateSetUseCase,
         completeSet: CompleteSetUseCase,
@@ -48,7 +48,7 @@ final class ActiveWorkoutViewModel {
         skipRest: SkipRestUseCase
     ) {
         self.store = store
-        self.loadPlates = loadPlates
+        self.observePlates = observePlates
         self.addSet = addSet
         self.updateSet = updateSet
         self.completeSet = completeSet
@@ -79,13 +79,19 @@ final class ActiveWorkoutViewModel {
         }
     }
 
-    func loadPlateSet() async {
+    func observePlateSet() async {
         do {
-            plates = try await loadPlates.execute()
+            for try await plates in observePlates.execute() {
+                self.plates = plates
+                publish()
+            }
         } catch {
+            guard !Task.isCancelled else {
+                return
+            }
             plates = []
+            publish()
         }
-        publish()
     }
 
     func tapSetAction(setId: UUID) async {

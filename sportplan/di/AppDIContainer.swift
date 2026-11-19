@@ -19,6 +19,12 @@ final class AppDIContainer {
     private lazy var saveEquipmentUseCase = SaveEquipmentUseCase(repository: equipmentRepository, now: { return Date() })
     private lazy var archiveEquipmentUseCase = ArchiveEquipmentUseCase(repository: equipmentRepository)
 
+    private lazy var observePlatesUseCase = ObservePlatesUseCase(repository: plateRepository)
+    private lazy var loadPlateEditorUseCase = LoadPlateEditorUseCase(repository: plateRepository)
+    private lazy var savePlateUseCase = SavePlateUseCase(repository: plateRepository)
+    private lazy var deletePlateUseCase = DeletePlateUseCase(repository: plateRepository)
+    private lazy var resetPlatesToStandardUseCase = ResetPlatesToStandardUseCase(repository: plateRepository)
+
     private lazy var observeExerciseLibraryUseCase = ObserveExerciseLibraryUseCase(repository: exerciseRepository)
     private lazy var observeEquipmentChoicesUseCase = ObserveEquipmentChoicesUseCase(repository: equipmentRepository)
     private lazy var createExerciseUseCase = CreateExerciseUseCase(
@@ -87,13 +93,12 @@ final class AppDIContainer {
         now: { return Date() }
     )
     private lazy var skipRestUseCase = SkipRestUseCase(repository: workoutRepository, scheduler: restNotificationCenter)
-    private lazy var loadPlatesUseCase = LoadPlatesUseCase(repository: plateRepository)
 
     private lazy var activeWorkoutStore = ActiveWorkoutStore(observeActiveWorkout: observeActiveWorkoutUseCase)
     private lazy var workoutActivityController: any WorkoutActivityController = WorkoutActivityControllerImpl()
     private lazy var workoutActivityCoordinator = WorkoutActivityCoordinator(
         store: activeWorkoutStore,
-        loadPlates: loadPlatesUseCase,
+        observePlates: observePlatesUseCase,
         controller: workoutActivityController
     )
 
@@ -121,11 +126,28 @@ extension AppDIContainer {
     }
 
     func buildSettingsViewModel() -> SettingsViewModel {
-        return SettingsViewModel(observeGymEquipment: observeGymEquipmentUseCase, appVersion: appVersion)
+        return SettingsViewModel(
+            observeGymEquipment: observeGymEquipmentUseCase,
+            observePlates: observePlatesUseCase,
+            appVersion: appVersion
+        )
     }
 
     func buildGymViewModel() -> GymViewModel {
-        return GymViewModel(observeGymEquipment: observeGymEquipmentUseCase)
+        return GymViewModel(
+            observeGymEquipment: observeGymEquipmentUseCase,
+            observePlates: observePlatesUseCase,
+            resetPlatesToStandard: resetPlatesToStandardUseCase
+        )
+    }
+
+    func buildPlateEditorViewModel(target: PlateEditorTarget) -> PlateEditorViewModel {
+        return PlateEditorViewModel(
+            target: target,
+            loadPlateEditor: loadPlateEditorUseCase,
+            savePlate: savePlateUseCase,
+            deletePlate: deletePlateUseCase
+        )
     }
 
     func buildEquipmentEditorViewModel(target: EquipmentEditorTarget) -> EquipmentEditorViewModel {
@@ -198,7 +220,7 @@ extension AppDIContainer {
     func buildActiveWorkoutViewModel() -> ActiveWorkoutViewModel {
         return ActiveWorkoutViewModel(
             store: activeWorkoutStore,
-            loadPlates: loadPlatesUseCase,
+            observePlates: observePlatesUseCase,
             addSet: addSetUseCase,
             updateSet: updateSetUseCase,
             completeSet: completeSetUseCase,
