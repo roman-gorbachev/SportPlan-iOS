@@ -185,7 +185,10 @@
         "GENERATE_INFOPLIST_FILE": "YES",
         "INFOPLIST_FILE": "sportplanLiveActivity/Info.plist",
         "INFOPLIST_KEY_CFBundleDisplayName": "Sportplan",
-        "LD_RUNPATH_SEARCH_PATHS": "@executable_path/Frameworks @executable_path/../../Frameworks",
+        "LD_RUNPATH_SEARCH_PATHS": [
+          "@executable_path/Frameworks",
+          "@executable_path/../../Frameworks",
+        ],
         "MARKETING_VERSION": "1.0",
         "PRODUCT_BUNDLE_IDENTIFIER": "com.rgorbachev.sportplan.LiveActivity",
         "PRODUCT_NAME": "$(TARGET_NAME)",
