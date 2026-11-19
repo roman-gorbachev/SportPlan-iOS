@@ -32,34 +32,56 @@ struct RestTimerPanel: View {
                 .tint(Palette.ink)
                 .accessibilityHidden(true)
             }
-            HStack(spacing: Spacing.xs) {
-                panelButton(
-                    title: String(localized: "rest.panel.shorten"),
-                    accessibilityLabel: String(localized: "rest.panel.shorten.accessibility")
-                ) {
-                    onAdjust(-RestPeriod.adjustmentStepSeconds)
+            ViewThatFits(in: .horizontal) {
+                return Group {
+                    HStack(spacing: Spacing.xs) {
+                        adjustButtons
+                        skipButton(expands: false)
+                    }
+                    VStack(spacing: Spacing.xs) {
+                        HStack(spacing: Spacing.xs) {
+                            adjustButtons
+                        }
+                        skipButton(expands: true)
+                    }
                 }
-                panelButton(
-                    title: String(localized: "rest.panel.extend"),
-                    accessibilityLabel: String(localized: "rest.panel.extend.accessibility")
-                ) {
-                    onAdjust(RestPeriod.adjustmentStepSeconds)
-                }
-                Button(action: onSkip) {
-                    return Text(String(localized: "rest.panel.skip"))
-                        .lineLimit(1)
-                        .fixedSize()
-                }
-                .buttonStyle(SunkenButtonStyle())
             }
         }
         .padding(.vertical, Spacing.xs)
+    }
+
+    private var adjustButtons: some View {
+        return Group {
+            panelButton(
+                title: String(localized: "rest.panel.shorten"),
+                accessibilityLabel: String(localized: "rest.panel.shorten.accessibility")
+            ) {
+                onAdjust(-RestPeriod.adjustmentStepSeconds)
+            }
+            panelButton(
+                title: String(localized: "rest.panel.extend"),
+                accessibilityLabel: String(localized: "rest.panel.extend.accessibility")
+            ) {
+                onAdjust(RestPeriod.adjustmentStepSeconds)
+            }
+        }
+    }
+
+    private func skipButton(expands: Bool) -> some View {
+        return Button(action: onSkip) {
+            return Text(String(localized: "rest.panel.skip"))
+                .lineLimit(1)
+                .fixedSize()
+                .frame(maxWidth: expands ? .infinity : nil)
+        }
+        .buttonStyle(SunkenButtonStyle())
     }
 
     private func panelButton(title: String, accessibilityLabel: String?, action: @escaping () -> Void) -> some View {
         return Button(action: action) {
             return Text(title)
                 .lineLimit(1)
+                .fixedSize()
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(SunkenButtonStyle())
