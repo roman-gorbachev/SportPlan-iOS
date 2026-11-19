@@ -7,6 +7,7 @@ struct LibraryScreen: View {
     let onSearchQueryChange: @MainActor (String) -> Void
     let onQuickAdd: (QuickExercise) -> Void
     let onAddCustom: () -> Void
+    let onOpenExercise: (UUID) -> Void
     let onArchive: (UUID) -> Void
     let onConfirmArchive: (UUID) -> Void
     let onCancelArchive: () -> Void
@@ -41,7 +42,9 @@ struct LibraryScreen: View {
             ForEach(data.sections) { section in
                 return Section {
                     ForEach(section.exercises) { item in
-                        return LibraryExerciseRow(item: item)
+                        return NavigationRow(title: item.name, subtitle: item.detail) {
+                            onOpenExercise(item.id)
+                        }
                             .swipeActions(edge: .trailing) {
                                 DestructiveSwipeButton(title: String(localized: "library.archive"), systemImage: "archivebox") {
                                     onArchive(item.id)
@@ -116,6 +119,7 @@ struct LibraryScreen: View {
             onSearchQueryChange: { _ in },
             onQuickAdd: { _ in },
             onAddCustom: {},
+            onOpenExercise: { _ in },
             onArchive: { _ in },
             onConfirmArchive: { _ in },
             onCancelArchive: {},
@@ -134,6 +138,7 @@ struct LibraryScreen: View {
             onSearchQueryChange: { _ in },
             onQuickAdd: { _ in },
             onAddCustom: {},
+            onOpenExercise: { _ in },
             onArchive: { _ in },
             onConfirmArchive: { _ in },
             onCancelArchive: {},

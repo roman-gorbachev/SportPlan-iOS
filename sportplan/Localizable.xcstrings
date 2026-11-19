@@ -663,6 +663,272 @@
         }
       }
     },
+    "exerciseCard.bodyweight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Свой вес"
+          }
+        }
+      }
+    },
+    "exerciseCard.chart.axisDate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дата"
+          }
+        }
+      }
+    },
+    "exerciseCard.chart.axisValue" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Значение"
+          }
+        }
+      }
+    },
+    "exerciseCard.chart.empty %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: пока нет данных"
+          }
+        }
+      }
+    },
+    "exerciseCard.chart.noPoints %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет подходов до %lld повторов — расчётный 1ПМ по ним не считается."
+          }
+        }
+      }
+    },
+    "exerciseCard.chart.single %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@"
+          }
+        }
+      }
+    },
+    "exerciseCard.chart.summary %@ %@ %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ за %2$@: с %3$@ до %4$@"
+          }
+        }
+      }
+    },
+    "exerciseCard.chart.window %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld недели"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld недель"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld неделя"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld недели"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "exerciseCard.delta.down %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "−%@"
+          }
+        }
+      }
+    },
+    "exerciseCard.delta.up %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%@"
+          }
+        }
+      }
+    },
+    "exerciseCard.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сделай первый подход — здесь появятся график и рекорды."
+          }
+        }
+      }
+    },
+    "exerciseCard.metric.maxDuration" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Макс. длительность"
+          }
+        }
+      }
+    },
+    "exerciseCard.metric.maxReps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Макс. повторов"
+          }
+        }
+      }
+    },
+    "exerciseCard.metric.maxWeight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Макс. вес"
+          }
+        }
+      }
+    },
+    "exerciseCard.metric.oneRepMax" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Расчётный 1ПМ"
+          }
+        }
+      }
+    },
+    "exerciseCard.metric.picker" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Метрика графика"
+          }
+        }
+      }
+    },
+    "exerciseCard.record.epley" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "по Эпли"
+          }
+        }
+      }
+    },
+    "exerciseCard.record.maxWeighted" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Макс. отягощение"
+          }
+        }
+      }
+    },
+    "exerciseCard.sessions.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подходы по тренировкам"
+          }
+        }
+      }
+    },
+    "exerciseCard.sets.separator" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " · "
+          }
+        }
+      }
+    },
+    "exerciseCard.unit.reps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "повт."
+          }
+        }
+      }
+    },
+    "exerciseCard.valueWithUnit %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
     "format.commaSeparated %@ %@" : {
       "extractionState" : "manual",
       "localizations" : {

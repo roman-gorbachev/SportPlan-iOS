@@ -6,15 +6,18 @@ struct LibraryRoute: View {
     @State private var addTarget: AddExerciseTarget?
     private let makeAddExerciseViewModel: (AddExerciseTarget) -> AddExerciseViewModel
     private let makeEquipmentEditorViewModel: (EquipmentEditorTarget) -> EquipmentEditorViewModel
+    private let onOpenExercise: (UUID) -> Void
 
     init(
         viewModel: LibraryViewModel,
         makeAddExerciseViewModel: @escaping (AddExerciseTarget) -> AddExerciseViewModel,
-        makeEquipmentEditorViewModel: @escaping (EquipmentEditorTarget) -> EquipmentEditorViewModel
+        makeEquipmentEditorViewModel: @escaping (EquipmentEditorTarget) -> EquipmentEditorViewModel,
+        onOpenExercise: @escaping (UUID) -> Void
     ) {
         _viewModel = State(initialValue: viewModel)
         self.makeAddExerciseViewModel = makeAddExerciseViewModel
         self.makeEquipmentEditorViewModel = makeEquipmentEditorViewModel
+        self.onOpenExercise = onOpenExercise
     }
 
     var body: some View {
@@ -28,6 +31,7 @@ struct LibraryRoute: View {
                     onSearchQueryChange: viewModel.updateSearchQuery,
                     onQuickAdd: { quickExercise in addTarget = .quick(quickExercise) },
                     onAddCustom: { addTarget = .blank },
+                    onOpenExercise: onOpenExercise,
                     onArchive: requestArchive,
                     onConfirmArchive: confirmArchive,
                     onCancelArchive: viewModel.cancelArchive,

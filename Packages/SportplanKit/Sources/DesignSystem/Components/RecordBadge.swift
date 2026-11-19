@@ -6,16 +6,20 @@ public struct RecordBadge: View {
     private static let iconSpacing: CGFloat = 4
 
     private let title: String
+    private let showsIcon: Bool
 
-    public init(title: String) {
+    public init(title: String, showsIcon: Bool = true) {
         self.title = title
+        self.showsIcon = showsIcon
     }
 
     public var body: some View {
         return HStack(spacing: Self.iconSpacing) {
-            Image(systemName: "arrow.up")
-                .fontWeight(.bold)
-                .imageScale(.small)
+            if showsIcon {
+                Image(systemName: "arrow.up")
+                    .fontWeight(.bold)
+                    .imageScale(.small)
+            }
             Text(title)
         }
         .appStyle(Typography.caption)

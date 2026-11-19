@@ -26,6 +26,7 @@ final class AppDIContainer {
     private lazy var resetPlatesToStandardUseCase = ResetPlatesToStandardUseCase(repository: plateRepository)
 
     private lazy var observeExerciseLibraryUseCase = ObserveExerciseLibraryUseCase(repository: exerciseRepository)
+    private lazy var observeExerciseCardUseCase = ObserveExerciseCardUseCase(repository: workoutRepository)
     private lazy var observeEquipmentChoicesUseCase = ObserveEquipmentChoicesUseCase(repository: equipmentRepository)
     private lazy var createExerciseUseCase = CreateExerciseUseCase(
         exerciseRepository: exerciseRepository,
@@ -245,6 +246,10 @@ extension AppDIContainer {
             countProgramDaysUsingExercise: countProgramDaysUsingExerciseUseCase,
             archiveExercise: archiveExerciseUseCase
         )
+    }
+
+    func buildExerciseCardViewModel(exerciseId: UUID) -> ExerciseCardViewModel {
+        return ExerciseCardViewModel(observeExerciseCard: observeExerciseCardUseCase, exerciseId: exerciseId)
     }
 
     func buildAddExerciseViewModel(target: AddExerciseTarget, dayContext: AddExerciseDayContext?) -> AddExerciseViewModel {

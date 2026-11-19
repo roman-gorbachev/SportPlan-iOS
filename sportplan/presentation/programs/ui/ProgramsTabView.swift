@@ -19,8 +19,12 @@ struct ProgramsTabView: View {
                     makeAddExerciseViewModel: { target in
                         return container.buildAddExerciseViewModel(target: target, dayContext: nil)
                     },
-                    makeEquipmentEditorViewModel: container.buildEquipmentEditorViewModel
+                    makeEquipmentEditorViewModel: container.buildEquipmentEditorViewModel,
+                    onOpenExercise: { exerciseId in router.push(ExerciseCardDestination(exerciseId: exerciseId)) }
                 )
+            }
+            .navigationDestination(for: ExerciseCardDestination.self) { destination in
+                return ExerciseCardRoute(viewModel: container.buildExerciseCardViewModel(exerciseId: destination.exerciseId))
             }
             .navigationDestination(for: ProgramDayDestination.self) { destination in
                 return ProgramDayRoute(
