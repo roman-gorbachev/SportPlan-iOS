@@ -37,6 +37,9 @@ struct ProgramsRoute: View {
                     onDeleteProgram: viewModel.requestDelete,
                     onConfirmDelete: confirmDelete,
                     onCancelDelete: viewModel.cancelDelete,
+                    onDeleteDay: viewModel.requestDeleteDay,
+                    onConfirmDeleteDay: confirmDeleteDay,
+                    onCancelDeleteDay: viewModel.cancelDeleteDay,
                     onOpenDay: onOpenDay,
                     onAddDay: { program in dayFormTarget = .new(programId: program.id, programName: program.name) },
                     onDismissError: viewModel.dismissError
@@ -71,6 +74,12 @@ struct ProgramsRoute: View {
     private func confirmDelete(id: UUID) {
         Task {
             await viewModel.confirmDelete(id: id)
+        }
+    }
+
+    private func confirmDeleteDay(id: UUID) {
+        Task {
+            await viewModel.confirmDeleteDay(id: id)
         }
     }
 }

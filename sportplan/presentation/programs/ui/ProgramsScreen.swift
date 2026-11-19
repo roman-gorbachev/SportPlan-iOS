@@ -9,6 +9,9 @@ struct ProgramsScreen: View {
     let onDeleteProgram: (UUID) -> Void
     let onConfirmDelete: (UUID) -> Void
     let onCancelDelete: () -> Void
+    let onDeleteDay: (UUID) -> Void
+    let onConfirmDeleteDay: (UUID) -> Void
+    let onCancelDeleteDay: () -> Void
     let onOpenDay: (UUID) -> Void
     let onAddDay: (ProgramItem) -> Void
     let onDismissError: () -> Void
@@ -54,6 +57,22 @@ struct ProgramsScreen: View {
             Text(String(localized: "programs.delete.message"))
         }
         .alert(
+            dayDeletionTitle,
+            isPresented: Binding(get: { return data.pendingDayDeletion != nil }, set: { isPresented in
+                if !isPresented {
+                    onCancelDeleteDay()
+                }
+            }),
+            presenting: data.pendingDayDeletion
+        ) { confirmation in
+            Button(String(localized: "programs.delete"), role: .destructive) {
+                onConfirmDeleteDay(confirmation.dayId)
+            }
+            Button(String(localized: "common.cancel"), role: .cancel) {}
+        } message: { _ in
+            Text(String(localized: "programDay.delete.message"))
+        }
+        .alert(
             String(localized: "common.error.title"),
             isPresented: Binding(get: { return data.isShowingError }, set: { isPresented in
                 if !isPresented {
@@ -74,6 +93,11 @@ struct ProgramsScreen: View {
                 onRename: { onRenameProgram(program) },
                 onDelete: { onDeleteProgram(program.id) }
             )
+            .swipeActions(edge: .trailing) {
+                DestructiveSwipeButton(title: String(localized: "programs.delete"), systemImage: "trash") {
+                    onDeleteProgram(program.id)
+                }
+            }
             if program.days.isEmpty {
                 Text(String(localized: "programs.days.empty"))
                     .appStyle(Typography.footnote)
@@ -82,6 +106,11 @@ struct ProgramsScreen: View {
             ForEach(program.days) { day in
                 return ProgramDayRow(day: day) {
                     onOpenDay(day.id)
+                }
+                .swipeActions(edge: .trailing) {
+                    DestructiveSwipeButton(title: String(localized: "programDay.delete"), systemImage: "trash") {
+                        onDeleteDay(day.id)
+                    }
                 }
             }
             Button {
@@ -102,6 +131,13 @@ struct ProgramsScreen: View {
         return String(localized: "programs.library.count \(data.exerciseCount)")
     }
 
+    private var dayDeletionTitle: String {
+        guard let pendingDayDeletion = data.pendingDayDeletion else {
+            return ""
+        }
+        return String(localized: "programDay.delete.title \(pendingDayDeletion.dayName)")
+    }
+
     private var deletionTitle: String {
         guard let pendingDeletion = data.pendingDeletion else {
             return ""
@@ -119,7 +155,7 @@ struct ProgramsScreen: View {
         ]),
         ProgramItem(id: UUID(), name: "Разгрузка", summary: "нет дней", days: []),
     ]
-    let data = ProgramsUiData(exerciseCount: 24, programs: programs, pendingDeletion: nil, isShowingError: false)
+    let data = ProgramsUiData(exerciseCount: 24, programs: programs, pendingDeletion: nil, pendingDayDeletion: nil, isShowingError: false)
     return NavigationStack {
         return ProgramsScreen(
             data: data,
@@ -129,6 +165,9 @@ struct ProgramsScreen: View {
             onDeleteProgram: { _ in },
             onConfirmDelete: { _ in },
             onCancelDelete: {},
+            onDeleteDay: { _ in },
+            onConfirmDeleteDay: { _ in },
+            onCancelDeleteDay: {},
             onOpenDay: { _ in },
             onAddDay: { _ in },
             onDismissError: {}
@@ -139,7 +178,7 @@ struct ProgramsScreen: View {
 
 #Preview("Empty") {
     FontRegistry.registerFonts()
-    let data = ProgramsUiData(exerciseCount: 0, programs: [], pendingDeletion: nil, isShowingError: false)
+    let data = ProgramsUiData(exerciseCount: 0, programs: [], pendingDeletion: nil, pendingDayDeletion: nil, isShowingError: false)
     return NavigationStack {
         return ProgramsScreen(
             data: data,
@@ -149,6 +188,9 @@ struct ProgramsScreen: View {
             onDeleteProgram: { _ in },
             onConfirmDelete: { _ in },
             onCancelDelete: {},
+            onDeleteDay: { _ in },
+            onConfirmDeleteDay: { _ in },
+            onCancelDeleteDay: {},
             onOpenDay: { _ in },
             onAddDay: { _ in },
             onDismissError: {}

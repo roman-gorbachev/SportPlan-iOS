@@ -40,13 +40,13 @@ struct ExercisePickerRoute: View {
             .navigationTitle(viewModel.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    return Button(String(localized: "common.done"), action: onClose)
-                }
-                ToolbarItem(placement: .primaryAction) {
+                ToolbarItem(placement: .topBarLeading) {
                     return Button(String(localized: "picker.new")) {
                         addTarget = .blank
                     }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    return Button(String(localized: "common.done"), action: onClose)
                 }
             }
         }

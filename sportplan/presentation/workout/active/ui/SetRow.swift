@@ -10,12 +10,29 @@ struct SetRow: View {
     private static let chipBorderWidth: CGFloat = 1
     private static let valueSpacing: CGFloat = 5
     private static let lineSpacing: CGFloat = 6
+    private static let valueMinimumScaleFactor: CGFloat = 0.5
 
     let row: SetRowItem
     let onEdit: () -> Void
     let onAction: () -> Void
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var body: some View {
+        return VStack(alignment: .leading, spacing: Spacing.xs) {
+            mainLine
+            if dynamicTypeSize.isAccessibilitySize, let plates = row.plates {
+                platesView(plates)
+                    .padding(.leading, Self.numberSize + Spacing.s)
+            }
+        }
+        .frame(minHeight: Self.minimumHeight)
+        .sensoryFeedback(.success, trigger: row.state == .completed) { _, isCompleted in
+            return isCompleted
+        }
+    }
+
+    private var mainLine: some View {
         return HStack(spacing: Spacing.s) {
             Button(action: onEdit) {
                 return HStack(spacing: Spacing.s) {
@@ -33,24 +50,24 @@ struct SetRow: View {
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(accessibilityLabel)
             .accessibilityHint(row.isEditable ? String(localized: "workout.set.edit.hint") : "")
-            if let plates = row.plates {
-                HStack(spacing: Spacing.xxs) {
-                    PlateStack(plates: plates.plates)
-                    if let remainder = plates.remainder {
-                        Text(remainder)
-                            .appStyle(Typography.caption)
-                            .foregroundStyle(Palette.textSecondary)
-                    }
-                }
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(plates.accessibilityLabel)
+            if !dynamicTypeSize.isAccessibilitySize, let plates = row.plates {
+                platesView(plates)
             }
             SetActionButton(state: row.state, isTimed: row.isTimed, action: onAction)
         }
-        .frame(minHeight: Self.minimumHeight)
-        .sensoryFeedback(.success, trigger: row.state == .completed) { _, isCompleted in
-            return isCompleted
+    }
+
+    private func platesView(_ plates: SetRowPlates) -> some View {
+        return HStack(spacing: Spacing.xxs) {
+            PlateStack(plates: plates.plates)
+            if let remainder = plates.remainder {
+                Text(remainder)
+                    .appStyle(Typography.caption)
+                    .foregroundStyle(Palette.textSecondary)
+            }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(plates.accessibilityLabel)
     }
 
     private var numeralColor: Color {
@@ -106,6 +123,7 @@ struct SetRow: View {
             }
         }
         .lineLimit(1)
+        .minimumScaleFactor(Self.valueMinimumScaleFactor)
     }
 
     @ViewBuilder

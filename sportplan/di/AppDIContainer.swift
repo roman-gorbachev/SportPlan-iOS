@@ -141,7 +141,8 @@ extension AppDIContainer {
         return ProgramsViewModel(
             observeExerciseLibrary: observeExerciseLibraryUseCase,
             observePrograms: observeProgramsUseCase,
-            deleteProgram: deleteProgramUseCase
+            deleteProgram: deleteProgramUseCase,
+            deleteProgramDay: deleteProgramDayUseCase
         )
     }
 

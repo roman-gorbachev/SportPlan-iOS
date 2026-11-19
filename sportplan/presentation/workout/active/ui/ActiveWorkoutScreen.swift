@@ -86,8 +86,9 @@ struct ActiveWorkoutScreen: View {
                     .foregroundStyle(Palette.textPrimary)
                     .accessibilityAddTraits(.isHeader)
             }
+            .padding(.horizontal, Spacing.xs)
             .listRowBackground(Color.clear)
-            .listRowInsets(EdgeInsets(top: .zero, leading: Spacing.xs, bottom: .zero, trailing: Spacing.xs))
+            .listRowInsets(EdgeInsets())
         }
     }
 
@@ -109,7 +110,7 @@ struct ActiveWorkoutScreen: View {
                     onAction: { onAction(.tapSetAction(id: row.id)) }
                 )
                 .swipeActions(edge: .trailing) {
-                    Button(String(localized: "workout.set.delete"), systemImage: "trash", role: .destructive) {
+                    DestructiveSwipeButton(title: String(localized: "workout.set.delete"), systemImage: "trash") {
                         onAction(.removeSet(id: row.id))
                     }
                 }

@@ -7,7 +7,6 @@ extension View {
     }
 
     public func appListRow() -> some View {
-        return listRowBackground(Palette.surface)
-            .listRowSeparatorTint(Palette.separator)
+        return listRowSeparatorTint(Palette.separator)
     }
 }

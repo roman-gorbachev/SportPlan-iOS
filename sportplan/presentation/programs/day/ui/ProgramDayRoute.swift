@@ -45,13 +45,6 @@ struct ProgramDayRoute: View {
                     onMove: move,
                     onDismissError: viewModel.dismissError
                 )
-                .navigationTitle(data.title)
-                .navigationSubtitle(data.subtitle)
-                .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
-                        return Button(editMode.isEditing ? String(localized: "common.done") : String(localized: "programDay.edit"), action: toggleEditing)
-                    }
-                }
             case .missing:
                 Color.clear
                     .task {
@@ -59,6 +52,13 @@ struct ProgramDayRoute: View {
                     }
             case .error:
                 ErrorStateView()
+            }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                return Button(editMode.isEditing ? String(localized: "common.done") : String(localized: "programDay.edit"), action: toggleEditing)
+                    .disabled(!isLoaded)
             }
         }
         .environment(\.editMode, $editMode)
@@ -79,6 +79,13 @@ struct ProgramDayRoute: View {
                 onClose: { pickerTarget = nil }
             )
         }
+    }
+
+    private var isLoaded: Bool {
+        guard case .success = viewModel.dayUiState else {
+            return false
+        }
+        return true
     }
 
     private func toggleEditing() {

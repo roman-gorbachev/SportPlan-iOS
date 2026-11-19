@@ -42,11 +42,10 @@ struct LibraryScreen: View {
                 return Section {
                     ForEach(section.exercises) { item in
                         return LibraryExerciseRow(item: item)
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                Button(String(localized: "library.archive")) {
+                            .swipeActions(edge: .trailing) {
+                                DestructiveSwipeButton(title: String(localized: "library.archive"), systemImage: "archivebox") {
                                     onArchive(item.id)
                                 }
-                                .tint(Palette.destructive)
                             }
                             .confirmationDialog(
                                 archiveTitle,

@@ -2,6 +2,8 @@ import DesignSystem
 import SwiftUI
 
 struct ProgramDayScreen: View {
+    private static let headerCollapseOffset: CGFloat = 48
+
     let data: ProgramDayUiData
     let isEditing: Bool
     let onSelectExercise: (UUID) -> Void
@@ -11,9 +13,11 @@ struct ProgramDayScreen: View {
     let onMove: (IndexSet, Int) -> Void
     let onDismissError: () -> Void
 
+    @State private var isHeaderScrolledAway = false
+
     var body: some View {
         return Group {
-            if data.exercises.isEmpty && !isEditing {
+            if showsEmptyState {
                 EmptyStateView(
                     title: String(localized: "programDay.empty.title"),
                     message: String(localized: "programDay.empty.message"),
@@ -36,6 +40,36 @@ struct ProgramDayScreen: View {
         } message: {
             Text(String(localized: "common.error.message"))
         }
+        .navigationTitle(navigationTitle)
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var showsEmptyState: Bool {
+        return data.exercises.isEmpty && !isEditing
+    }
+
+    private var navigationTitle: String {
+        guard showsEmptyState || isHeaderScrolledAway else {
+            return ""
+        }
+        return data.title
+    }
+
+    private var header: some View {
+        return Section {
+            VStack(alignment: .leading, spacing: Spacing.xs) {
+                Text(data.subtitle)
+                    .appStyle(Typography.callout)
+                    .foregroundStyle(Palette.textSecondary)
+                Text(data.title)
+                    .appStyle(Typography.largeTitle)
+                    .foregroundStyle(Palette.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
+            }
+            .padding(.horizontal, Spacing.xs)
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets())
+        }
     }
 
     private var deleteAction: ((IndexSet) -> Void)? {
@@ -52,8 +86,16 @@ struct ProgramDayScreen: View {
         return onMove
     }
 
+    private func removeExercise(id: UUID) {
+        guard let index = data.exercises.firstIndex(where: { item in return item.id == id }) else {
+            return
+        }
+        onDelete(IndexSet(integer: index))
+    }
+
     private var exerciseList: some View {
         return List {
+            header
             if isEditing {
                 Section {
                     NavigationRow(title: String(localized: "programDay.nameAndLabel"), subtitle: data.fullTitle, action: onEditDay)
@@ -69,6 +111,13 @@ struct ProgramDayScreen: View {
                     }
                     .buttonStyle(.plain)
                     .disabled(isEditing)
+                    .swipeActions(edge: .trailing) {
+                        if !isEditing {
+                            DestructiveSwipeButton(title: String(localized: "goals.remove"), systemImage: "trash") {
+                                removeExercise(id: item.id)
+                            }
+                        }
+                    }
                 }
                 .onDelete(perform: deleteAction)
                 .onMove(perform: moveAction)
@@ -86,7 +135,13 @@ struct ProgramDayScreen: View {
             }
             .appListRow()
         }
+        .listRowSpacing(Spacing.s)
         .appGroupedList()
+        .onScrollGeometryChange(for: Bool.self) { geometry in
+            return geometry.contentOffset.y + geometry.contentInsets.top > Self.headerCollapseOffset
+        } action: { _, isScrolledAway in
+            isHeaderScrolledAway = isScrolledAway
+        }
     }
 }
 
@@ -113,7 +168,5 @@ struct ProgramDayScreen: View {
             onMove: { _, _ in },
             onDismissError: {}
         )
-        .navigationTitle(data.title)
-        .navigationSubtitle(data.subtitle)
     }
 }

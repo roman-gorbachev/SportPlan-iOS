@@ -7,9 +7,11 @@ final class ProgramsViewModel {
     @ObservationIgnored private let observeExerciseLibrary: ObserveExerciseLibraryUseCase
     @ObservationIgnored private let observePrograms: ObserveProgramsUseCase
     @ObservationIgnored private let deleteProgram: DeleteProgramUseCase
+    @ObservationIgnored private let deleteProgramDay: DeleteProgramDayUseCase
     @ObservationIgnored private var exerciseCount: Int?
     @ObservationIgnored private var programs: [ProgramSummary]?
     @ObservationIgnored private var pendingDeletion: ProgramDeletionConfirmation?
+    @ObservationIgnored private var pendingDayDeletion: ProgramDayDeletionConfirmation?
     @ObservationIgnored private var isShowingError = false
 
     private(set) var programsUiState: ProgramsUiState = .loading
@@ -17,11 +19,13 @@ final class ProgramsViewModel {
     init(
         observeExerciseLibrary: ObserveExerciseLibraryUseCase,
         observePrograms: ObserveProgramsUseCase,
-        deleteProgram: DeleteProgramUseCase
+        deleteProgram: DeleteProgramUseCase,
+        deleteProgramDay: DeleteProgramDayUseCase
     ) {
         self.observeExerciseLibrary = observeExerciseLibrary
         self.observePrograms = observePrograms
         self.deleteProgram = deleteProgram
+        self.deleteProgramDay = deleteProgramDay
     }
 
     func observeLibrary() async {
@@ -70,6 +74,31 @@ final class ProgramsViewModel {
         publish()
     }
 
+    func requestDeleteDay(id: UUID) {
+        let days = programs?.flatMap(\.days) ?? []
+        guard let day = days.first(where: { summary in return summary.id == id }) else {
+            return
+        }
+        pendingDayDeletion = ProgramDayDeletionConfirmation(dayId: id, dayName: day.day.name)
+        publish()
+    }
+
+    func confirmDeleteDay(id: UUID) async {
+        pendingDayDeletion = nil
+        publish()
+        do {
+            try await deleteProgramDay.execute(id: id)
+        } catch {
+            isShowingError = true
+            publish()
+        }
+    }
+
+    func cancelDeleteDay() {
+        pendingDayDeletion = nil
+        publish()
+    }
+
     func dismissError() {
         isShowingError = false
         publish()
@@ -90,6 +119,7 @@ final class ProgramsViewModel {
             exerciseCount: exerciseCount,
             programs: programs.map(Self.makeItem),
             pendingDeletion: pendingDeletion,
+            pendingDayDeletion: pendingDayDeletion,
             isShowingError: isShowingError
         ))
     }
