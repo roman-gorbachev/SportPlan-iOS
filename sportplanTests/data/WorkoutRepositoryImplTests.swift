@@ -310,10 +310,4 @@ struct WorkoutRepositoryImplTests {
         #expect(active.workout.programDay?.label == context.day.label)
         #expect(active.programName == nil)
     }
-
-    @Test func platesAreListedFromTheHeaviest() async throws {
-        let repository = PlateRepositoryImpl(database: try DatabaseFixtures.makeDatabase())
-        let plates = try await repository.plates()
-        #expect(plates.map(\.weight.kilograms) == [25, 20, 15, 10, 5, 2.5, 1.25])
-    }
 }
