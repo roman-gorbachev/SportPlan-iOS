@@ -60,14 +60,14 @@ struct LibraryScreen: View {
                             } message: { confirmation in
                                 Text(archiveMessage(confirmation))
                             }
-                            .appListRow()
+                            .appPlainRow()
                     }
                 } header: {
                     ListSectionHeader(title: section.title)
                 }
             }
         }
-        .appGroupedList()
+        .appPlainList()
         .overlay {
             if data.sections.isEmpty {
                 ContentUnavailableView.search(text: data.searchQuery)

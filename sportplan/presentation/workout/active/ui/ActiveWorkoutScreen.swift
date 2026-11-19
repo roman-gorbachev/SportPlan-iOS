@@ -20,7 +20,7 @@ struct ActiveWorkoutScreen: View {
             addExerciseSection
             noteSection
         }
-        .appGroupedList()
+        .appPlainList()
         .navigationTitle(data.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -86,10 +86,13 @@ struct ActiveWorkoutScreen: View {
                     .foregroundStyle(Palette.textPrimary)
                     .accessibilityAddTraits(.isHeader)
             }
-            .padding(.horizontal, Spacing.xs)
+            .padding(.horizontal, Spacing.m)
+            .padding(.vertical, Spacing.s)
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets())
+            .listRowSeparator(.hidden)
         }
+        .listSectionSeparator(.hidden)
     }
 
     private var emptyHint: some View {
@@ -110,7 +113,7 @@ struct ActiveWorkoutScreen: View {
                     onAction: { onAction(.tapSetAction(id: row.id)) }
                 )
                 .swipeActions(edge: .trailing) {
-                    DestructiveSwipeButton(title: String(localized: "workout.set.delete"), systemImage: "trash") {
+                    DestructiveSwipeButton(title: String(localized: "workout.set.delete")) {
                         onAction(.removeSet(id: row.id))
                     }
                 }
@@ -135,7 +138,7 @@ struct ActiveWorkoutScreen: View {
         } header: {
             ActiveExerciseHeader(exercise: exercise)
         }
-        .appListRow()
+        .appPlainRow()
     }
 
     private func addSetButtons(exerciseId: UUID) -> some View {
@@ -188,7 +191,7 @@ struct ActiveWorkoutScreen: View {
             ListSectionHeader(title: String(localized: "workout.note.title"))
                 .textCase(nil)
         }
-        .appListRow()
+        .appPlainRow()
     }
 
     private var menu: some View {

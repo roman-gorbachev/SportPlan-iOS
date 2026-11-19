@@ -20,7 +20,7 @@ struct ProgramsScreen: View {
         return List {
             Section {
                 NavigationRow(title: String(localized: "programs.library.title"), subtitle: exerciseSummary, action: onOpenLibrary)
-                    .appListRow()
+                    .appPlainRow()
             }
             if data.programs.isEmpty {
                 Section {
@@ -39,7 +39,7 @@ struct ProgramsScreen: View {
                 }
             }
         }
-        .appGroupedList()
+        .appPlainList()
         .alert(
             deletionTitle,
             isPresented: Binding(get: { return data.pendingDeletion != nil }, set: { isPresented in
@@ -94,7 +94,7 @@ struct ProgramsScreen: View {
                 onDelete: { onDeleteProgram(program.id) }
             )
             .swipeActions(edge: .trailing) {
-                DestructiveSwipeButton(title: String(localized: "programs.delete"), systemImage: "trash") {
+                DestructiveSwipeButton(title: String(localized: "programs.delete")) {
                     onDeleteProgram(program.id)
                 }
             }
@@ -108,7 +108,7 @@ struct ProgramsScreen: View {
                     onOpenDay(day.id)
                 }
                 .swipeActions(edge: .trailing) {
-                    DestructiveSwipeButton(title: String(localized: "programDay.delete"), systemImage: "trash") {
+                    DestructiveSwipeButton(title: String(localized: "programDay.delete")) {
                         onDeleteDay(day.id)
                     }
                 }
@@ -121,7 +121,7 @@ struct ProgramsScreen: View {
             }
             .foregroundStyle(Palette.accent)
         }
-        .appListRow()
+        .appPlainRow()
     }
 
     private var exerciseSummary: String {

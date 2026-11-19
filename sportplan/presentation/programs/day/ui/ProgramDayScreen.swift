@@ -66,10 +66,13 @@ struct ProgramDayScreen: View {
                     .foregroundStyle(Palette.textPrimary)
                     .accessibilityAddTraits(.isHeader)
             }
-            .padding(.horizontal, Spacing.xs)
+            .padding(.horizontal, Spacing.m)
+            .padding(.vertical, Spacing.s)
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets())
+            .listRowSeparator(.hidden)
         }
+        .listSectionSeparator(.hidden)
     }
 
     private var deleteAction: ((IndexSet) -> Void)? {
@@ -100,7 +103,7 @@ struct ProgramDayScreen: View {
                 Section {
                     NavigationRow(title: String(localized: "programDay.nameAndLabel"), subtitle: data.fullTitle, action: onEditDay)
                 }
-                .appListRow()
+                .appPlainRow()
             }
             Section {
                 ForEach(data.exercises) { item in
@@ -113,7 +116,7 @@ struct ProgramDayScreen: View {
                     .disabled(isEditing)
                     .swipeActions(edge: .trailing) {
                         if !isEditing {
-                            DestructiveSwipeButton(title: String(localized: "goals.remove"), systemImage: "trash") {
+                            DestructiveSwipeButton(title: String(localized: "goals.remove")) {
                                 removeExercise(id: item.id)
                             }
                         }
@@ -133,10 +136,9 @@ struct ProgramDayScreen: View {
                     .appStyle(Typography.footnote)
                     .foregroundStyle(Palette.textSecondary)
             }
-            .appListRow()
+            .appPlainRow()
         }
-        .listRowSpacing(Spacing.s)
-        .appGroupedList()
+        .appPlainList()
         .onScrollGeometryChange(for: Bool.self) { geometry in
             return geometry.contentOffset.y + geometry.contentInsets.top > Self.headerCollapseOffset
         } action: { _, isScrolledAway in

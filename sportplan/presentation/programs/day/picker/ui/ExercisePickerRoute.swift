@@ -41,7 +41,7 @@ struct ExercisePickerRoute: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    return Button(String(localized: "picker.new")) {
+                    return Button(String(localized: "picker.new"), systemImage: "plus") {
                         addTarget = .blank
                     }
                 }
