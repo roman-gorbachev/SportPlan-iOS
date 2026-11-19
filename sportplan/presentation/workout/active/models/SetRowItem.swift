@@ -6,6 +6,7 @@ struct SetRowItem: Identifiable {
     let value: SetRowValue
     let valueAccessibility: String
     let isWarmup: Bool
+    let isRecord: Bool
     let state: SetRowState
     let caption: String?
     let plates: SetRowPlates?

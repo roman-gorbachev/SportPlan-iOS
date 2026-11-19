@@ -3352,6 +3352,28 @@
         }
       }
     },
+    "workout.set.record" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Рекорд"
+          }
+        }
+      }
+    },
+    "workout.set.record.accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "новый рекорд"
+          }
+        }
+      }
+    },
     "workout.set.reps.spoken %lld" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -11,12 +11,16 @@ struct SetRow: View {
     private static let valueSpacing: CGFloat = 5
     private static let lineSpacing: CGFloat = 6
     private static let valueMinimumScaleFactor: CGFloat = 0.5
+    private static let badgeAppearScale: CGFloat = 0.92
+    private static let badgeAppearDuration: TimeInterval = 0.32
+    private static let badgeFadeDuration: TimeInterval = 0.15
 
     let row: SetRowItem
     let onEdit: () -> Void
     let onAction: () -> Void
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         return VStack(alignment: .leading, spacing: Spacing.xs) {
@@ -27,8 +31,11 @@ struct SetRow: View {
             }
         }
         .frame(minHeight: Self.minimumHeight)
-        .sensoryFeedback(.success, trigger: row.state == .completed) { _, isCompleted in
-            return isCompleted
+        .sensoryFeedback(trigger: row.state == .completed) { _, isCompleted in
+            guard isCompleted else {
+                return nil
+            }
+            return row.isRecord ? .success : .impact(weight: .medium)
         }
     }
 
@@ -150,7 +157,7 @@ struct SetRow: View {
 
     @ViewBuilder
     private var detailLine: some View {
-        if row.isWarmup || row.caption != nil {
+        if row.isWarmup || row.isRecord || row.caption != nil {
             HStack(spacing: Spacing.xs) {
                 if row.isWarmup {
                     Text(String(localized: "workout.set.warmup"))
@@ -163,6 +170,10 @@ struct SetRow: View {
                                 .strokeBorder(Palette.separatorStrong, lineWidth: Self.chipBorderWidth)
                         }
                 }
+                if row.isRecord {
+                    RecordBadge(title: String(localized: "workout.set.record"))
+                        .transition(badgeTransition)
+                }
                 if row.state == .running {
                     Circle()
                         .fill(Palette.accent)
@@ -174,7 +185,22 @@ struct SetRow: View {
                         .foregroundStyle(Palette.textSecondary)
                 }
             }
+            .animation(badgeAnimation, value: row.isRecord)
         }
+    }
+
+    private var badgeTransition: AnyTransition {
+        guard !reduceMotion else {
+            return .opacity
+        }
+        return .scale(scale: Self.badgeAppearScale).combined(with: .opacity)
+    }
+
+    private var badgeAnimation: Animation {
+        guard !reduceMotion else {
+            return .easeInOut(duration: Self.badgeFadeDuration)
+        }
+        return .spring(duration: Self.badgeAppearDuration)
     }
 
     private var accessibilityLabel: String {
@@ -183,6 +209,9 @@ struct SetRow: View {
             parts.append(String(localized: "workout.set.warmup"))
         }
         parts.append(row.valueAccessibility)
+        if row.isRecord {
+            parts.append(String(localized: "workout.set.record.accessibility"))
+        }
         if let caption = row.caption {
             parts.append(caption)
         }

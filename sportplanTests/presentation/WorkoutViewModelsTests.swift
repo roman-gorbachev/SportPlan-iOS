@@ -14,6 +14,7 @@ struct WorkoutViewModelsTests {
     private static let stackedWeight = Weight(kilograms: 60)
     private static let twentyKilograms = 20.0
     private static let stackWithoutTwenty = [15.0, 5.0]
+    private static let completedInSecondWorkout = 2
 
     private struct Fixture {
         let database: AppDatabase
@@ -447,6 +448,39 @@ struct WorkoutViewModelsTests {
             return Self.firstRowPlates(data) == Self.stackWithoutTwenty
         }
         #expect(Self.firstRowPlates(reloaded) == Self.stackWithoutTwenty)
+    }
+
+    @Test func setAboveThePreviousBestIsMarkedAsARecord() async throws {
+        let fixture = try await Self.makeFixture { bench, _ in return [bench] }
+        let tasks = Self.startObserving(fixture)
+        defer {
+            tasks.forEach { task in task.cancel() }
+        }
+        let workouts = WorkoutRepositoryImpl(database: fixture.database)
+        let now: @Sendable () -> Date = { return Date() }
+        let complete = CompleteSetUseCase(repository: workouts, scheduler: fixture.scheduler, now: now)
+
+        await fixture.start.start(dayId: fixture.day.id)
+        let first = try #require(try await workouts.activeWorkout()?.exercises.first)
+        try await complete.execute(setId: first.sets[0].id, draft: Self.draft(first.sets[0], kilograms: 60, reps: 8))
+        try await FinishWorkoutUseCase(repository: workouts, scheduler: fixture.scheduler, now: now).execute()
+
+        await fixture.start.start(dayId: fixture.day.id)
+        let second = try #require(try await workouts.activeWorkout()?.exercises.first)
+        try await complete.execute(setId: second.sets[0].id, draft: Self.draft(second.sets[0], kilograms: 60, reps: 8))
+        try await complete.execute(setId: second.sets[1].id, draft: Self.draft(second.sets[1], kilograms: 62.5, reps: 8))
+
+        let data = try await Self.data(fixture.active) { data in
+            return data.exercises.first?.sets.filter { row in return row.state == .completed }.count == Self.completedInSecondWorkout
+        }
+        #expect(data.exercises.first?.sets.map(\.isRecord) == [false, true, false])
+    }
+
+    private static func draft(_ entry: SetEntry, kilograms: Double, reps: Int) -> SetEntryDraft {
+        var draft = SetEntryDraft(entry)
+        draft.weight = Weight(kilograms: kilograms)
+        draft.reps = reps
+        return draft
     }
 
     private static func firstRowPlates(_ data: ActiveWorkoutUiData) -> [Double]? {

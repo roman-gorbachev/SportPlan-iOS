@@ -91,6 +91,7 @@ enum ActiveWorkoutUiMapper {
         currentSetId: UUID?,
         restTimer: RestTimerItem?
     ) -> ActiveExerciseItem {
+        let recordSetIds = item.recordSetIds
         return ActiveExerciseItem(
             id: item.id,
             name: item.exercise.exercise.name,
@@ -101,7 +102,8 @@ enum ActiveWorkoutUiMapper {
                     number: index + firstSetNumber,
                     item: item,
                     plates: plates,
-                    isCurrent: entry.id == currentSetId
+                    isCurrent: entry.id == currentSetId,
+                    isRecord: recordSetIds.contains(entry.id)
                 )
             },
             restTimer: restTimer
@@ -123,7 +125,8 @@ enum ActiveWorkoutUiMapper {
         number: Int,
         item: ActiveWorkoutExercise,
         plates: [Plate],
-        isCurrent: Bool
+        isCurrent: Bool,
+        isRecord: Bool
     ) -> SetRowItem {
         let exercise = item.exercise
         let state = rowState(entry, isCurrent: isCurrent)
@@ -133,6 +136,7 @@ enum ActiveWorkoutUiMapper {
             value: rowValue(entry, exercise: exercise),
             valueAccessibility: valueAccessibility(entry, exercise: exercise),
             isWarmup: entry.isWarmup,
+            isRecord: isRecord,
             state: state,
             caption: caption(entry, item: item, state: state),
             plates: rowPlates(entry, exercise: exercise, plates: plates),
