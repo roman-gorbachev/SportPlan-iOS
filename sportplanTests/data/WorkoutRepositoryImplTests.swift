@@ -431,6 +431,50 @@ struct WorkoutRepositoryImplTests {
         #expect(updated.sessions.first?.sets.map(\.weight) == [Weight(kilograms: 65), Weight(kilograms: 67.5)])
     }
 
+    @Test func finishedWorkoutsAreNewestFirstWithCompletedSetsAndProgramName() async throws {
+        let context = try await Self.makeContext()
+        let day = TimeInterval(86_400)
+        try await Self.finishedWorkout(
+            context: context,
+            startedAt: DatabaseFixtures.referenceDate,
+            sets: [
+                (kilograms: 40, reps: 10, isWarmup: true, completed: true),
+                (kilograms: 60, reps: 8, isWarmup: false, completed: true),
+                (kilograms: 60, reps: 8, isWarmup: false, completed: false),
+            ]
+        )
+        try await Self.finishedWorkout(
+            context: context,
+            startedAt: DatabaseFixtures.referenceDate.addingTimeInterval(day),
+            hasTargets: false,
+            sets: [(kilograms: 62.5, reps: 8, isWarmup: false, completed: true)]
+        )
+        let active = Self.makeWorkout(day: nil, startedAt: DatabaseFixtures.referenceDate.addingTimeInterval(day * 2))
+        try await context.repository.start(active, exercises: [], sets: [])
+
+        var iterator = context.repository.observeFinished().makeAsyncIterator()
+        let finished = try #require(try await iterator.next())
+
+        #expect(finished.count == 2)
+        #expect(!finished.contains { workout in return workout.id == active.id })
+        #expect(finished.map(\.programName) == [nil, "Сила 3×"])
+        #expect(finished.last?.exercises.first?.exercise.id == context.bench.id)
+        #expect(finished.last?.exercises.first?.sets.map(\.isWarmup) == [true, false])
+        #expect(finished.last?.workingSetCount == 1)
+
+        let oldest = try #require(finished.last)
+        try await context.repository.deleteFinished(workoutId: oldest.id)
+        try await context.repository.deleteFinished(workoutId: active.id)
+        let remaining = try #require(try await iterator.next())
+
+        #expect(remaining.map(\.id) == [finished[0].id])
+        #expect(try await context.repository.activeWorkout()?.workout.id == active.id)
+        let orphanSets = try await context.database.reader.read { db in
+            return try SetEntryRecord.fetchCount(db)
+        }
+        #expect(orphanSets == 1)
+    }
+
     @Test func exerciseHistoryOfAMissingExerciseIsNil() async throws {
         let context = try await Self.makeContext()
         var iterator = context.repository.observeExerciseHistory(exerciseId: UUID()).makeAsyncIterator()

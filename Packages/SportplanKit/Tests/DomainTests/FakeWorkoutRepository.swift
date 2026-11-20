@@ -227,6 +227,69 @@ final class FakeWorkoutRepository: WorkoutRepository {
         }
     }
 
+    func observeFinished() -> AsyncThrowingStream<[FinishedWorkout], any Error> {
+        let finished = state.withLock { state in
+            return Self.makeFinished(state)
+        }
+        return AsyncThrowingStream { continuation in
+            continuation.yield(finished)
+            continuation.finish()
+        }
+    }
+
+    func deleteFinished(workoutId: UUID) async throws {
+        state.withLock { state in
+            guard state.workouts.contains(where: { workout in return workout.id == workoutId && workout.finishedAt != nil }) else {
+                return
+            }
+            let itemIds = Set(state.workoutExercises.filter { item in
+                return item.workoutId == workoutId
+            }.map(\.id))
+            state.sets.removeAll { entry in
+                return itemIds.contains(entry.workoutExerciseId)
+            }
+            state.workoutExercises.removeAll { item in
+                return item.workoutId == workoutId
+            }
+            state.workouts.removeAll { workout in
+                return workout.id == workoutId
+            }
+        }
+    }
+
+    private static func makeFinished(_ state: State) -> [FinishedWorkout] {
+        return state.workouts
+            .filter { workout in
+                return workout.finishedAt != nil
+            }
+            .sorted { lhs, rhs in
+                return lhs.startedAt > rhs.startedAt
+            }
+            .map { workout in
+                let exercises = state.workoutExercises
+                    .filter { item in
+                        return item.workoutId == workout.id
+                    }
+                    .sorted { lhs, rhs in
+                        return lhs.position < rhs.position
+                    }
+                    .compactMap { item -> FinishedWorkoutExercise? in
+                        guard let exercise = state.library[item.exerciseId] else {
+                            return nil
+                        }
+                        let sets = state.sets
+                            .filter { entry in
+                                return entry.workoutExerciseId == item.id && entry.isCompleted
+                            }
+                            .sorted { lhs, rhs in
+                                return lhs.position < rhs.position
+                            }
+                        return FinishedWorkoutExercise(workoutExercise: item, exercise: exercise, sets: sets)
+                    }
+                return FinishedWorkout(workout: workout, programName: nil, exercises: exercises)
+            }
+    }
+
     private static func makeHistory(_ state: State, exerciseId: UUID) -> ExerciseHistory? {
         guard let exercise = state.library[exerciseId] else {
             return nil

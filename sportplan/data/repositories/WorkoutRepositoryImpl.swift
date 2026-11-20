@@ -224,6 +224,22 @@ nonisolated final class WorkoutRepositoryImpl: WorkoutRepository {
         return database.stream(of: observation)
     }
 
+    func observeFinished() -> AsyncThrowingStream<[FinishedWorkout], any Error> {
+        let observation = ValueObservation.tracking { db in
+            return try Self.fetchFinished(db)
+        }
+        return database.stream(of: observation)
+    }
+
+    func deleteFinished(workoutId: UUID) async throws {
+        try await database.writer.write { db in
+            _ = try WorkoutRecord
+                .filter(Column("id") == workoutId.databaseText)
+                .filter(Column("finished_at") != nil)
+                .deleteAll(db)
+        }
+    }
+
     private static func nextPosition(_ db: Database, sql: String, arguments: StatementArguments) throws -> Int {
         guard let maximum = try Int.fetchOne(db, sql: sql, arguments: arguments) else {
             return firstPosition
@@ -278,6 +294,75 @@ nonisolated final class WorkoutRepositoryImpl: WorkoutRepository {
             )
         }
         return ActiveWorkout(workout: workout, programName: programName, exercises: exercises)
+    }
+
+    private static func fetchFinished(_ db: Database) throws -> [FinishedWorkout] {
+        let workouts = try WorkoutRecord
+            .filter(Column("finished_at") != nil)
+            .order(Column("started_at").desc)
+            .fetchAll(db)
+        let programNames = try fetchProgramNamesByDayId(db)
+        let workoutExercises = try WorkoutExerciseRecord.fetchAll(
+            db,
+            sql: """
+                SELECT workout_exercise.* FROM workout_exercise
+                JOIN workout ON workout.id = workout_exercise.workout_id
+                WHERE workout.finished_at IS NOT NULL
+                ORDER BY workout_exercise.position
+                """
+        )
+        let sets = try SetEntryRecord.fetchAll(
+            db,
+            sql: """
+                SELECT set_entry.* FROM set_entry
+                JOIN workout_exercise ON workout_exercise.id = set_entry.workout_exercise_id
+                JOIN workout ON workout.id = workout_exercise.workout_id
+                WHERE workout.finished_at IS NOT NULL AND set_entry.completed_at IS NOT NULL
+                ORDER BY set_entry.position
+                """
+        )
+        let setsByItemId = Dictionary(grouping: sets.map { record in
+            return record.toDomainModel()
+        }) { entry in
+            return entry.workoutExerciseId
+        }
+        let libraryById = try fetchLibraryExercises(db, ids: Array(Set(workoutExercises.map(\.exerciseId))))
+        let itemsByWorkoutId = Dictionary(grouping: try workoutExercises.compactMap { record -> FinishedWorkoutExercise? in
+            guard let exercise = libraryById[record.exerciseId] else {
+                return nil
+            }
+            return FinishedWorkoutExercise(
+                workoutExercise: try record.toDomainModel(),
+                exercise: exercise,
+                sets: setsByItemId[record.id, default: []]
+            )
+        }) { item in
+            return item.workoutExercise.workoutId
+        }
+        return try workouts.map { record in
+            return FinishedWorkout(
+                workout: try record.toDomainModel(),
+                programName: record.programDayId.flatMap { dayId in
+                    return programNames[dayId.databaseText]
+                },
+                exercises: itemsByWorkoutId[record.id, default: []]
+            )
+        }
+    }
+
+    private static func fetchProgramNamesByDayId(_ db: Database) throws -> [String: String] {
+        let rows = try Row.fetchAll(
+            db,
+            sql: """
+                SELECT program_day.id AS day_id, program.name AS program_name FROM program_day
+                JOIN program ON program.id = program_day.program_id
+                """
+        )
+        return Dictionary(uniqueKeysWithValues: rows.map { row in
+            let dayId: String = row["day_id"]
+            let programName: String = row["program_name"]
+            return (dayId, programName)
+        })
     }
 
     private static func fetchLibraryExercises(_ db: Database, ids: [UUID]) throws -> [UUID: LibraryExercise] {
