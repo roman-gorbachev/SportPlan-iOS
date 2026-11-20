@@ -7,6 +7,13 @@ nonisolated final class RestNotificationCenter: NSObject, RestNotificationSchedu
     private static let setEndIdentifier = "set.finished"
     private static let authorizationOptions: UNAuthorizationOptions = [.alert, .sound]
     private static let minimumInterval: TimeInterval = 1
+    private static let alertSoundName = UNNotificationSoundName(AlertSoundPlayer.soundFileName)
+
+    private let soundPlayer: AlertSoundPlayer
+
+    init(soundPlayer: AlertSoundPlayer) {
+        self.soundPlayer = soundPlayer
+    }
 
     func activate() {
         UNUserNotificationCenter.current().delegate = self
@@ -56,7 +63,10 @@ nonisolated final class RestNotificationCenter: NSObject, RestNotificationSchedu
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-        return [.sound]
+        guard soundPlayer.playThroughHeadphones() else {
+            return [.sound]
+        }
+        return []
     }
 
     private func content(for request: RestNotificationRequest) -> UNNotificationContent {
@@ -67,8 +77,7 @@ nonisolated final class RestNotificationCenter: NSObject, RestNotificationSchedu
         } else {
             content.body = String(localized: "rest.notification.finish")
         }
-        content.sound = .default
-        content.interruptionLevel = .timeSensitive
+        content.sound = UNNotificationSound(named: Self.alertSoundName)
         return content
     }
 
@@ -80,8 +89,7 @@ nonisolated final class RestNotificationCenter: NSObject, RestNotificationSchedu
         } else {
             content.body = String(localized: "set.notification.bodyWithoutNumber \(request.exerciseName)")
         }
-        content.sound = .default
-        content.interruptionLevel = .timeSensitive
+        content.sound = UNNotificationSound(named: Self.alertSoundName)
         return content
     }
 

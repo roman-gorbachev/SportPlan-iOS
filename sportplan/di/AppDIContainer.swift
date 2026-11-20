@@ -6,7 +6,7 @@ final class AppDIContainer {
     private static let appVersionKey = "CFBundleShortVersionString"
 
     private let appDatabase: AppDatabase
-    private let restNotificationCenter = RestNotificationCenter()
+    private let restNotificationCenter = RestNotificationCenter(soundPlayer: AlertSoundPlayer())
 
     private lazy var equipmentRepository: any EquipmentRepository = EquipmentRepositoryImpl(database: appDatabase)
     private lazy var exerciseRepository: any ExerciseRepository = ExerciseRepositoryImpl(database: appDatabase)
