@@ -11,7 +11,8 @@ struct RestTimerAccessoryModifier: ViewModifier {
                     if let restingData {
                         RestTimerAccessory(
                             data: restingData,
-                            onExtend: { Task { await viewModel.extendRest() } },
+                            onAdjust: { seconds in Task { await viewModel.adjustRest(seconds: seconds) } },
+                            onSkip: { Task { await viewModel.skipRest() } },
                             onOpen: onOpen
                         )
                     }

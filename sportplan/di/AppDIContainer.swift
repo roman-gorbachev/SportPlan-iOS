@@ -243,7 +243,7 @@ extension AppDIContainer {
     }
 
     func buildRestTimerViewModel() -> RestTimerViewModel {
-        return RestTimerViewModel(store: activeWorkoutStore, adjustRest: adjustRestUseCase)
+        return RestTimerViewModel(store: activeWorkoutStore, adjustRest: adjustRestUseCase, skipRest: skipRestUseCase)
     }
 
     func buildLibraryViewModel() -> LibraryViewModel {

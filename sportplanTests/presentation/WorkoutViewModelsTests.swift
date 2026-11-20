@@ -10,6 +10,7 @@ struct WorkoutViewModelsTests {
     private static let pollInterval = Duration.milliseconds(10)
     private static let pollAttempts = 300
     private static let shortRestSeconds = 1
+    private static let storedDatePrecision: TimeInterval = 0.001
 
     private static let stackedWeight = Weight(kilograms: 60)
     private static let twentyKilograms = 20.0
@@ -63,6 +64,7 @@ struct WorkoutViewModelsTests {
         )
         let store = ActiveWorkoutStore(observeActiveWorkout: ObserveActiveWorkoutUseCase(repository: workouts))
         let adjustRest = AdjustRestUseCase(repository: workouts, scheduler: scheduler, now: now)
+        let skipRest = SkipRestUseCase(repository: workouts, scheduler: scheduler)
         let active = ActiveWorkoutViewModel(
             store: store,
             observePlates: ObservePlatesUseCase(repository: PlateRepositoryImpl(database: database)),
@@ -76,7 +78,7 @@ struct WorkoutViewModelsTests {
             finishWorkout: FinishWorkoutUseCase(repository: workouts, scheduler: scheduler, now: now),
             cancelWorkout: CancelWorkoutUseCase(repository: workouts, scheduler: scheduler),
             adjustRest: adjustRest,
-            skipRest: SkipRestUseCase(repository: workouts, scheduler: scheduler),
+            skipRest: skipRest,
             applyProgression: ApplyProgressionUseCase(repository: workouts)
         )
         return Fixture(
@@ -87,7 +89,7 @@ struct WorkoutViewModelsTests {
             start: start,
             active: active,
             store: store,
-            restTimer: RestTimerViewModel(store: store, adjustRest: adjustRest),
+            restTimer: RestTimerViewModel(store: store, adjustRest: adjustRest, skipRest: skipRest),
             scheduler: scheduler
         )
     }
@@ -310,6 +312,37 @@ struct WorkoutViewModelsTests {
         _ = try await Self.data(fixture.active) { data in
             return data.exercises.first?.restTimer == nil
         }
+        #expect(try await Self.restingItem(fixture.restTimer, expectingIdle: true) == nil)
+        #expect(fixture.scheduler.scheduled == nil)
+    }
+
+    @Test func restAccessoryAdjustsAndSkipsTheRest() async throws {
+        let fixture = try await Self.makeFixture { bench, _ in return [bench] }
+        let tasks = Self.startObserving(fixture)
+        defer {
+            tasks.forEach { task in task.cancel() }
+        }
+        await fixture.start.start(dayId: fixture.day.id)
+        let rows = try #require(try await Self.data(fixture.active).exercises.first).sets
+        await fixture.active.tapSetAction(setId: rows[0].id)
+        let resting = try #require(try await Self.restingItem(fixture.restTimer))
+
+        await fixture.restTimer.adjustRest(seconds: -RestPeriod.adjustmentStepSeconds)
+        let shortenedEnd = resting.endsAt.addingTimeInterval(TimeInterval(-RestPeriod.adjustmentStepSeconds))
+        for _ in 0..<Self.pollAttempts {
+            if case let .resting(data) = fixture.restTimer.restTimerUiState,
+               abs(data.endsAt.timeIntervalSince(shortenedEnd)) < Self.storedDatePrecision {
+                break
+            }
+            try await Task.sleep(for: Self.pollInterval)
+        }
+        guard case let .resting(shortened) = fixture.restTimer.restTimerUiState else {
+            Issue.record("Rest ended instead of being shortened")
+            return
+        }
+        #expect(abs(shortened.endsAt.timeIntervalSince(shortenedEnd)) < Self.storedDatePrecision)
+
+        await fixture.restTimer.skipRest()
         #expect(try await Self.restingItem(fixture.restTimer, expectingIdle: true) == nil)
         #expect(fixture.scheduler.scheduled == nil)
     }

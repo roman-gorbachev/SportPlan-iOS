@@ -6,13 +6,15 @@ import Observation
 final class RestTimerViewModel {
     @ObservationIgnored private let store: ActiveWorkoutStore
     @ObservationIgnored private let adjustRest: AdjustRestUseCase
+    @ObservationIgnored private let skipRest: SkipRestUseCase
 
     private(set) var restTimerUiState: RestTimerUiState = .idle
     private(set) var restFinishedCount = 0
 
-    init(store: ActiveWorkoutStore, adjustRest: AdjustRestUseCase) {
+    init(store: ActiveWorkoutStore, adjustRest: AdjustRestUseCase, skipRest: SkipRestUseCase) {
         self.store = store
         self.adjustRest = adjustRest
+        self.skipRest = skipRest
     }
 
     func observe() async {
@@ -30,7 +32,11 @@ final class RestTimerViewModel {
         }
     }
 
-    func extendRest() async {
-        try? await adjustRest.execute(seconds: RestPeriod.adjustmentStepSeconds)
+    func adjustRest(seconds: Int) async {
+        try? await adjustRest.execute(seconds: seconds)
+    }
+
+    func skipRest() async {
+        try? await skipRest.execute()
     }
 }
