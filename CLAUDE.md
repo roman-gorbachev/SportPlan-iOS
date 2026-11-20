@@ -15,7 +15,8 @@ Layout:
 Source documents:
 - `docs/code-brief.md` — approved scope, architecture, data model.
 - `.design/design-brief.md` — design brief and status; `.design/` also holds the design canvas snapshot (`system/Color`, `system/Type` define the token names to use in `DesignSystem`).
-- `.claude/decisions.md` — log of decisions and the reasoning behind them.
+- `docs/decisions.md` — log of decisions and the reasoning behind them.
+- `docs/roadmap.md` — what is done and what remains.
 
 When the briefs and the code disagree, raise it instead of silently picking one.
 
@@ -25,7 +26,7 @@ When the briefs and the code disagree, raise it instead of silently picking one.
 The app is built in stages, one block at a time. Discuss a stage before planning it, and plan it before implementing it. Do not jump ahead to later stages or add features outside the approved scope; anything not in `docs/code-brief.md` is discussed first.
 
 ### Files
-Save all Claude-generated documents (plans, decisions, review summaries, task lists) in the `.claude/` folder at the repo root, written in English, as `.md` files (e.g. `.claude/<topic>-plan.md`). Design documents live in `.design/` and are written in English too. App UI strings stay Russian (the String Catalog's source language). Stage plans, review plans and the decision log written before 20.11.2026 stay in Russian as history; new entries in `decisions.md` are English.
+All documents are written in English as `.md` files. Decisions go to `docs/decisions.md` and progress to `docs/roadmap.md`; other Claude-generated documents (plans, review summaries, task lists) go in the `.claude/` folder at the repo root (e.g. `.claude/<topic>-plan.md`). Design documents live in `.design/`. App UI strings stay Russian (the String Catalog's source language). Entries in `decisions.md` written before 20.11.2026 stay in Russian as history and name plan files that were since removed; new entries are English.
 
 ### Commit Messages
 Every commit message follows this structure:

@@ -8,7 +8,7 @@ Main principle: **don't overload it**. New features are added only by agreement.
 
 Design is done separately (`.design/design-brief.md`). The code must easily take the design system tokens: colors, fonts and spacing live in one place.
 
-Development goes in stages, one block at a time; each stage is discussed before it starts. The full decision log is `.claude/decisions.md`.
+Development goes in stages, one block at a time; each stage is discussed before it starts. The full decision log is `docs/decisions.md`, progress is in `docs/roadmap.md`.
 
 ---
 

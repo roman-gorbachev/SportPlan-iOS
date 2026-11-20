@@ -440,8 +440,9 @@ plate              id, weight_g UNIQUE CHECK(250…50000), color_hex
 - В проекте добавлен `ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon`.
 
 ## Documents in English (20.11.2026)
-- The briefs (`docs/code-brief.md`, `.design/design-brief.md`), `.design/README.md`, `roadmap.md` and `CLAUDE.md` are in English. The `.ru.md` suffix is dropped: Claude documents are now `.claude/<topic>.md`.
-- Stage plans, review plans and this log before this entry stay in Russian as history; new plans and new entries here are English.
+- The briefs (`docs/code-brief.md`, `.design/design-brief.md`), `.design/README.md`, the roadmap and `CLAUDE.md` are in English. The `.ru.md` suffix is dropped.
+- The decision log and the roadmap moved from `.claude/` to `docs/`. The stage and review plans were removed: their decisions and results are recorded in this log, so the older entries still name plan files that no longer exist.
+- This log before this entry stays in Russian as history; new entries are English, and new plans in `.claude/` are English `.md`.
 - The `.dc.html` mockups and the app UI strings (`Localizable.xcstrings`, source language `ru`) stay Russian.
 - A new canvas export into `.design/` may overwrite the translated `design-brief.md` and `README.md`; check them after an export.
 
