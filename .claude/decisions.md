@@ -439,14 +439,14 @@ plate              id, weight_g UNIQUE CHECK(250…50000), color_hex
 - Тонированный вариант — макетный, переведённый в оттенки серого: систему тонирует сама.
 - В проекте добавлен `ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon`.
 
-## Этапы
-0. Решения ✔
-1. Каркас: проект, таргеты, пакет, DI, заглушки токенов, локализация, три вкладки.
-2. БД: схема, миграции, репозитории, тесты.
-3+. По одному блоку: оборудование и упражнения → программы → активная тренировка → таймер и уведомления → Live Activity → блины → рекорды и графики → прогрессия → история и heatmap → экспорт/импорт. Экраны — когда готов дизайн.
-
 ## Documents in English (20.11.2026)
 - The briefs (`docs/code-brief.md`, `.design/design-brief.md`), `.design/README.md`, `roadmap.md` and `CLAUDE.md` are in English. The `.ru.md` suffix is dropped: Claude documents are now `.claude/<topic>.md`.
 - Stage plans, review plans and this log before this entry stay in Russian as history; new plans and new entries here are English.
 - The `.dc.html` mockups and the app UI strings (`Localizable.xcstrings`, source language `ru`) stay Russian.
 - A new canvas export into `.design/` may overwrite the translated `design-brief.md` and `README.md`; check them after an export.
+
+## Этапы
+0. Решения ✔
+1. Каркас: проект, таргеты, пакет, DI, заглушки токенов, локализация, три вкладки.
+2. БД: схема, миграции, репозитории, тесты.
+3+. По одному блоку: оборудование и упражнения → программы → активная тренировка → таймер и уведомления → Live Activity → блины → рекорды и графики → прогрессия → история и heatmap → экспорт/импорт. Экраны — когда готов дизайн.
