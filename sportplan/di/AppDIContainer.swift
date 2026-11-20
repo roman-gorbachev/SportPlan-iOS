@@ -81,6 +81,10 @@ final class AppDIContainer {
         equipmentRepository: equipmentRepository
     )
     private lazy var addSetUseCase = AddSetUseCase(repository: workoutRepository)
+    private lazy var removeExerciseFromWorkoutUseCase = RemoveExerciseFromWorkoutUseCase(
+        repository: workoutRepository,
+        scheduler: restNotificationCenter
+    )
     private lazy var updateSetUseCase = UpdateSetUseCase(repository: workoutRepository)
     private lazy var completeSetUseCase = CompleteSetUseCase(
         repository: workoutRepository,
@@ -250,6 +254,7 @@ extension AppDIContainer {
             startTimedSet: startTimedSetUseCase,
             stopTimedSet: stopTimedSetUseCase,
             removeSet: removeSetUseCase,
+            removeExerciseFromWorkout: removeExerciseFromWorkoutUseCase,
             updateWorkoutNote: updateWorkoutNoteUseCase,
             finishWorkout: finishWorkoutUseCase,
             cancelWorkout: cancelWorkoutUseCase,

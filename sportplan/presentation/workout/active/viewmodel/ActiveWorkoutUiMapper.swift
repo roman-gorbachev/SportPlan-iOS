@@ -96,6 +96,7 @@ enum ActiveWorkoutUiMapper {
         let recordSetIds = item.recordSetIds
         return ActiveExerciseItem(
             id: item.id,
+            exerciseId: item.exercise.id,
             name: item.exercise.exercise.name,
             summary: exerciseSummary(item),
             progression: showsProgression ? progressionHint(item) : nil,

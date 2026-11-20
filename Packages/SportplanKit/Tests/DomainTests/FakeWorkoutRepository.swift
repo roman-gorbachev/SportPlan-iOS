@@ -135,6 +135,17 @@ final class FakeWorkoutRepository: WorkoutRepository {
         }
     }
 
+    func removeExercise(workoutExerciseId: UUID) async throws {
+        state.withLock { state in
+            state.workoutExercises.removeAll { item in
+                return item.id == workoutExerciseId
+            }
+            state.sets.removeAll { entry in
+                return entry.workoutExerciseId == workoutExerciseId
+            }
+        }
+    }
+
     func updateNote(workoutId: UUID, note: String?) async throws {
         state.withLock { state in
             guard let index = state.workouts.firstIndex(where: { workout in return workout.id == workoutId }) else {

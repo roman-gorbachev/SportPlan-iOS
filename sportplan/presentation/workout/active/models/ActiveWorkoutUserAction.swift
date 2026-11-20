@@ -9,6 +9,8 @@ enum ActiveWorkoutUserAction {
     case tapSetAction(id: UUID)
     case addSet(workoutExerciseId: UUID, isWarmup: Bool)
     case removeSet(id: UUID)
+    case openExerciseCard(exerciseId: UUID)
+    case requestRemoveExercise(workoutExerciseId: UUID)
     case applyProgression(workoutExerciseId: UUID)
     case dismissProgression(workoutExerciseId: UUID)
     case updateNote(String)

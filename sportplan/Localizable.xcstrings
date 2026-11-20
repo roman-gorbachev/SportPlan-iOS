@@ -3431,6 +3431,39 @@
         }
       }
     },
+    "workout.confirm.removeExercise.button" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Убрать"
+          }
+        }
+      }
+    },
+    "workout.confirm.removeExercise.message %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выполненные подходы удалятся: %lld. В справочнике и программе упражнение останется."
+          }
+        }
+      }
+    },
+    "workout.confirm.removeExercise.title %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Убрать «%@» из тренировки?"
+          }
+        }
+      }
+    },
     "workout.day.label %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3636,6 +3669,39 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Программ пока нет"
+          }
+        }
+      }
+    },
+    "workout.exercise.card" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Карточка упражнения"
+          }
+        }
+      }
+    },
+    "workout.exercise.menu %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Действия с упражнением «%@»"
+          }
+        }
+      }
+    },
+    "workout.exercise.remove" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Убрать из тренировки"
           }
         }
       }

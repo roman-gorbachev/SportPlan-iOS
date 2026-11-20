@@ -116,6 +116,12 @@ nonisolated final class WorkoutRepositoryImpl: WorkoutRepository {
         }
     }
 
+    func removeExercise(workoutExerciseId: UUID) async throws {
+        try await database.writer.write { db in
+            _ = try WorkoutExerciseRecord.filter(Column("id") == workoutExerciseId.databaseText).deleteAll(db)
+        }
+    }
+
     func updateNote(workoutId: UUID, note: String?) async throws {
         try await database.writer.write { db in
             let updated = try WorkoutRecord

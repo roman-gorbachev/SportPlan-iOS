@@ -15,12 +15,21 @@ struct WorkoutTabView: View {
                 makeEquipmentEditorViewModel: container.buildEquipmentEditorViewModel,
                 onOpenDay: { dayId in router.push(WorkoutPreviewDestination(dayId: dayId)) },
                 onOpenSettings: { router.push(SettingsDestination()) },
+                onOpenExercise: { exerciseId in router.push(ExerciseCardDestination(exerciseId: exerciseId)) },
                 onCreateProgram: onCreateProgram
             )
             .navigationDestination(for: WorkoutPreviewDestination.self) { destination in
                 return WorkoutPreviewRoute(
                     viewModel: container.buildWorkoutPreviewViewModel(dayId: destination.dayId),
                     onStarted: { router.popToRoot() }
+                )
+            }
+            .navigationDestination(for: ExerciseCardDestination.self) { destination in
+                return ExerciseCardRoute(
+                    viewModel: container.buildExerciseCardViewModel(exerciseId: destination.exerciseId),
+                    exerciseId: destination.exerciseId,
+                    makeEditorViewModel: container.buildExerciseEditorViewModel,
+                    onArchived: { router.pop() }
                 )
             }
             .navigationDestination(for: SettingsDestination.self) { _ in

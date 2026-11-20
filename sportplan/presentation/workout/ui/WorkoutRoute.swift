@@ -9,6 +9,7 @@ struct WorkoutRoute: View {
     private let makeEquipmentEditorViewModel: (EquipmentEditorTarget) -> EquipmentEditorViewModel
     private let onOpenDay: (UUID) -> Void
     private let onOpenSettings: () -> Void
+    private let onOpenExercise: (UUID) -> Void
     private let onCreateProgram: () -> Void
 
     init(
@@ -19,6 +20,7 @@ struct WorkoutRoute: View {
         makeEquipmentEditorViewModel: @escaping (EquipmentEditorTarget) -> EquipmentEditorViewModel,
         onOpenDay: @escaping (UUID) -> Void,
         onOpenSettings: @escaping () -> Void,
+        onOpenExercise: @escaping (UUID) -> Void,
         onCreateProgram: @escaping () -> Void
     ) {
         _viewModel = State(initialValue: viewModel)
@@ -28,6 +30,7 @@ struct WorkoutRoute: View {
         self.makeEquipmentEditorViewModel = makeEquipmentEditorViewModel
         self.onOpenDay = onOpenDay
         self.onOpenSettings = onOpenSettings
+        self.onOpenExercise = onOpenExercise
         self.onCreateProgram = onCreateProgram
     }
 
@@ -83,6 +86,10 @@ struct WorkoutRoute: View {
             run { await viewModel.addSet(workoutExerciseId: workoutExerciseId, isWarmup: isWarmup) }
         case let .removeSet(id):
             run { await viewModel.removeSet(id: id) }
+        case let .openExerciseCard(exerciseId):
+            onOpenExercise(exerciseId)
+        case let .requestRemoveExercise(workoutExerciseId):
+            run { await viewModel.requestRemoveExercise(workoutExerciseId: workoutExerciseId) }
         case let .applyProgression(workoutExerciseId):
             run { await viewModel.applyProgression(workoutExerciseId: workoutExerciseId) }
         case let .dismissProgression(workoutExerciseId):

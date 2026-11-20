@@ -14,6 +14,7 @@ final class ActiveWorkoutViewModel {
     @ObservationIgnored private let startTimedSet: StartTimedSetUseCase
     @ObservationIgnored private let stopTimedSet: StopTimedSetUseCase
     @ObservationIgnored private let removeSet: RemoveSetUseCase
+    @ObservationIgnored private let removeExerciseFromWorkout: RemoveExerciseFromWorkoutUseCase
     @ObservationIgnored private let updateWorkoutNote: UpdateWorkoutNoteUseCase
     @ObservationIgnored private let finishWorkout: FinishWorkoutUseCase
     @ObservationIgnored private let cancelWorkout: CancelWorkoutUseCase
@@ -43,6 +44,7 @@ final class ActiveWorkoutViewModel {
         startTimedSet: StartTimedSetUseCase,
         stopTimedSet: StopTimedSetUseCase,
         removeSet: RemoveSetUseCase,
+        removeExerciseFromWorkout: RemoveExerciseFromWorkoutUseCase,
         updateWorkoutNote: UpdateWorkoutNoteUseCase,
         finishWorkout: FinishWorkoutUseCase,
         cancelWorkout: CancelWorkoutUseCase,
@@ -58,6 +60,7 @@ final class ActiveWorkoutViewModel {
         self.startTimedSet = startTimedSet
         self.stopTimedSet = stopTimedSet
         self.removeSet = removeSet
+        self.removeExerciseFromWorkout = removeExerciseFromWorkout
         self.updateWorkoutNote = updateWorkoutNote
         self.finishWorkout = finishWorkout
         self.cancelWorkout = cancelWorkout
@@ -201,6 +204,25 @@ final class ActiveWorkoutViewModel {
         }
     }
 
+    func requestRemoveExercise(workoutExerciseId: UUID) async {
+        guard let item = workout?.exercise(id: workoutExerciseId) else {
+            return
+        }
+        let completedSetCount = item.sets.filter { entry in
+            return entry.isCompleted
+        }.count
+        guard completedSetCount > 0 else {
+            await removeExercise(workoutExerciseId: workoutExerciseId)
+            return
+        }
+        confirmation = .removeExercise(
+            workoutExerciseId: workoutExerciseId,
+            name: item.exercise.exercise.name,
+            completedSetCount: completedSetCount
+        )
+        publish()
+    }
+
     func applyProgression(workoutExerciseId: UUID) async {
         await perform {
             try await self.applyProgression.execute(workoutExerciseId: workoutExerciseId)
@@ -260,6 +282,8 @@ final class ActiveWorkoutViewModel {
             await perform {
                 try await self.cancelWorkout.execute()
             }
+        case let .removeExercise(workoutExerciseId, _, _):
+            await removeExercise(workoutExerciseId: workoutExerciseId)
         }
     }
 
@@ -309,6 +333,13 @@ final class ActiveWorkoutViewModel {
     private func saveNote(_ text: String, workoutId: UUID) async {
         await perform {
             try await self.updateWorkoutNote.execute(workoutId: workoutId, note: text)
+        }
+    }
+
+    private func removeExercise(workoutExerciseId: UUID) async {
+        dismissedProgressionIds.remove(workoutExerciseId)
+        await perform {
+            try await self.removeExerciseFromWorkout.execute(workoutExerciseId: workoutExerciseId)
         }
     }
 

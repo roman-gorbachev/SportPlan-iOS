@@ -147,6 +147,39 @@ struct RestUseCaseTests {
         #expect(setup.scheduler.scheduledSetEnd == nil)
     }
 
+    @Test func removingTheExerciseOfTheRestResetsTheRest() async throws {
+        let setup = try await Self.makeSetup()
+        try await Self.complete(setup.benchSets[0], in: setup)
+        #expect(Self.rest(setup) != nil)
+        try await RemoveExerciseFromWorkoutUseCase(repository: setup.workouts, scheduler: setup.scheduler)
+            .execute(workoutExerciseId: setup.benchSets[0].workoutExerciseId)
+        #expect(Self.rest(setup) == nil)
+        #expect(setup.scheduler.cancelCount == 1)
+        #expect(setup.workouts.workoutExercises.count == 1)
+        #expect(setup.workouts.sets.map(\.id) == setup.squatSets.map(\.id))
+    }
+
+    @Test func removingAnotherExerciseKeepsTheRest() async throws {
+        let setup = try await Self.makeSetup()
+        try await Self.complete(setup.benchSets[0], in: setup)
+        try await RemoveExerciseFromWorkoutUseCase(repository: setup.workouts, scheduler: setup.scheduler)
+            .execute(workoutExerciseId: setup.squatSets[0].workoutExerciseId)
+        #expect(Self.rest(setup) != nil)
+        #expect(setup.scheduler.cancelCount == 0)
+    }
+
+    @Test func removingTheExerciseOfARunningSetCancelsTheSetEnd() async throws {
+        let setup = try await Self.makeSetup(benchMetric: .duration)
+        var entry = setup.benchSets[0]
+        entry.durationSeconds = 30
+        try await setup.workouts.updateSet(entry)
+        try await StartTimedSetUseCase(repository: setup.workouts, scheduler: setup.scheduler, now: setup.clock.now)
+            .execute(setId: entry.id)
+        try await RemoveExerciseFromWorkoutUseCase(repository: setup.workouts, scheduler: setup.scheduler)
+            .execute(workoutExerciseId: entry.workoutExerciseId)
+        #expect(setup.scheduler.scheduledSetEnd == nil)
+    }
+
     @Test func adjustingMovesTheEndAndReschedules() async throws {
         let setup = try await Self.makeSetup()
         try await Self.complete(setup.benchSets[0], in: setup)

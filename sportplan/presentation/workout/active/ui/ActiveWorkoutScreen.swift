@@ -145,7 +145,11 @@ struct ActiveWorkoutScreen: View {
                 }
             }
         } header: {
-            ActiveExerciseHeader(exercise: exercise)
+            ActiveExerciseHeader(
+                exercise: exercise,
+                onOpenCard: { onAction(.openExerciseCard(exerciseId: exercise.exerciseId)) },
+                onRemove: { onAction(.requestRemoveExercise(workoutExerciseId: exercise.id)) }
+            )
         }
         .appPlainRow()
     }
@@ -237,6 +241,8 @@ struct ActiveWorkoutScreen: View {
             return String(localized: "workout.confirm.discard.title")
         case .cancel:
             return String(localized: "workout.confirm.cancel.title")
+        case let .removeExercise(_, name, _):
+            return String(localized: "workout.confirm.removeExercise.title \(name)")
         case nil:
             return ""
         }
@@ -250,6 +256,8 @@ struct ActiveWorkoutScreen: View {
             return String(localized: "workout.confirm.discard.message")
         case .cancel:
             return String(localized: "workout.confirm.cancel.message")
+        case let .removeExercise(_, _, completedSetCount):
+            return String(localized: "workout.confirm.removeExercise.message \(completedSetCount)")
         }
     }
 
@@ -259,6 +267,8 @@ struct ActiveWorkoutScreen: View {
             return String(localized: "workout.active.finish")
         case .cancel:
             return String(localized: "workout.active.cancel")
+        case .removeExercise:
+            return String(localized: "workout.confirm.removeExercise.button")
         }
     }
 }
@@ -283,13 +293,13 @@ struct ActiveWorkoutScreen: View {
         weightText: "67,5 кг",
         accessibilityLabel: "В прошлый раз всё выполнено, попробуй 67,5 кг"
     )
-    let bench = ActiveExerciseItem(id: UUID(), name: "Жим лёжа", summary: "2 из 3 · 8–12 повт.", progression: progression, sets: [
+    let bench = ActiveExerciseItem(id: UUID(), exerciseId: UUID(), name: "Жим лёжа", summary: "2 из 3 · 8–12 повт.", progression: progression, sets: [
         SetRowItem(id: UUID(), number: 1, value: .weightReps(weight: "40", reps: "10"), valueAccessibility: "40 кг, 10 повторов", isWarmup: true, isRecord: false, state: .completed, caption: "было 40 × 10", plates: nil, isTimed: false, isEditable: true),
         SetRowItem(id: UUID(), number: 2, value: .weightReps(weight: "65", reps: "8"), valueAccessibility: "65 кг, 8 повторов", isWarmup: false, isRecord: true, state: .completed, caption: "было 62,5 × 8", plates: plates, isTimed: false, isEditable: true),
         SetRowItem(id: UUID(), number: 3, value: .weightReps(weight: "65", reps: "8"), valueAccessibility: "65 кг, 8 повторов", isWarmup: false, isRecord: false, state: .current, caption: "было 62,5 × 7", plates: plates, isTimed: false, isEditable: true),
         SetRowItem(id: UUID(), number: 4, value: .weightReps(weight: "65", reps: "8"), valueAccessibility: "65 кг, 8 повторов", isWarmup: false, isRecord: false, state: .planned, caption: "план", plates: plates, isTimed: false, isEditable: true),
     ], restTimer: rest)
-    let plank = ActiveExerciseItem(id: UUID(), name: "Планка", summary: "0 из 2", progression: nil, sets: [
+    let plank = ActiveExerciseItem(id: UUID(), exerciseId: UUID(), name: "Планка", summary: "0 из 2", progression: nil, sets: [
         SetRowItem(id: UUID(), number: 1, value: .duration(text: "1:15", runningSince: Date().addingTimeInterval(-47), targetEndsAt: Date().addingTimeInterval(28)), valueAccessibility: "1 минута 15 секунд", isWarmup: false, isRecord: false, state: .running, caption: "идёт · цель 1:15", plates: nil, isTimed: true, isEditable: false),
         SetRowItem(id: UUID(), number: 2, value: .bodyweightReps(addedWeight: nil, reps: "12"), valueAccessibility: "12 повторов", isWarmup: false, isRecord: false, state: .planned, caption: nil, plates: nil, isTimed: false, isEditable: true),
     ], restTimer: nil)

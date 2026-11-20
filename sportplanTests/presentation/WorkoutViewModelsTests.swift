@@ -80,6 +80,7 @@ struct WorkoutViewModelsTests {
             startTimedSet: StartTimedSetUseCase(repository: workouts, scheduler: scheduler, now: now),
             stopTimedSet: StopTimedSetUseCase(repository: workouts, scheduler: scheduler, now: now),
             removeSet: RemoveSetUseCase(repository: workouts, scheduler: scheduler),
+            removeExerciseFromWorkout: RemoveExerciseFromWorkoutUseCase(repository: workouts, scheduler: scheduler),
             updateWorkoutNote: UpdateWorkoutNoteUseCase(repository: workouts),
             finishWorkout: FinishWorkoutUseCase(repository: workouts, scheduler: scheduler, now: now),
             cancelWorkout: CancelWorkoutUseCase(repository: workouts, scheduler: scheduler),
@@ -494,6 +495,46 @@ struct WorkoutViewModelsTests {
             return try WorkoutRecord.fetchCount(db)
         }
         #expect(workoutCount == 0)
+    }
+
+    @Test func removingAnExerciseAsksOnlyWhenSetsAreCompleted() async throws {
+        let fixture = try await Self.makeFixture { bench, plank in return [bench, plank] }
+        let tasks = Self.startObserving(fixture)
+        defer {
+            tasks.forEach { task in task.cancel() }
+        }
+        await fixture.start.start(dayId: fixture.day.id)
+        let initial = try await Self.data(fixture.active) { data in
+            return data.exercises.count == 2
+        }
+        let bench = try #require(initial.exercises.first)
+        let plank = try #require(initial.exercises.last)
+        #expect(bench.exerciseId == fixture.bench.id)
+
+        await fixture.active.requestRemoveExercise(workoutExerciseId: plank.id)
+        _ = try await Self.data(fixture.active) { data in
+            return data.exercises.count == 1
+        }
+
+        await fixture.active.tapSetAction(setId: bench.sets[0].id)
+        _ = try await Self.data(fixture.active) { data in
+            return data.exercises.first?.restTimer != nil
+        }
+        await fixture.active.requestRemoveExercise(workoutExerciseId: bench.id)
+        let asking = try await Self.data(fixture.active) { data in
+            return data.confirmation != nil
+        }
+        guard case let .removeExercise(workoutExerciseId, _, completedSetCount)? = asking.confirmation else {
+            Issue.record("Expected a remove confirmation")
+            return
+        }
+        #expect(workoutExerciseId == bench.id)
+        #expect(completedSetCount == 1)
+        await fixture.active.confirm(.removeExercise(workoutExerciseId: bench.id, name: bench.name, completedSetCount: completedSetCount))
+        _ = try await Self.data(fixture.active) { data in
+            return data.exercises.isEmpty
+        }
+        #expect(fixture.scheduler.scheduled == nil)
     }
 
     @Test func plateChangesUpdateTheStackDuringTheWorkout() async throws {
