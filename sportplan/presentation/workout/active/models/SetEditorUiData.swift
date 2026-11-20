@@ -8,5 +8,4 @@ struct SetEditorUiData: Identifiable {
     let reps: String
     let canDecrementReps: Bool
     let canCopyLastWorkout: Bool
-    let saveTitle: String
 }

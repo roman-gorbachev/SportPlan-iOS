@@ -33,6 +33,7 @@ struct ProgramDayFormScreen: View {
         }
         .appStyle(Typography.body)
         .appGroupedList()
+        .dismissesKeyboard()
         .alert(
             String(localized: "programDay.delete.title \(data.originalName)"),
             isPresented: Binding(get: { return data.isConfirmingDelete }, set: { isPresented in

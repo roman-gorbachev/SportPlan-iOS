@@ -65,8 +65,7 @@ enum ActiveWorkoutUiMapper {
             ),
             reps: (draft.reps ?? Self.missingReps).formatted(),
             canDecrementReps: draft.canDecrementReps,
-            canCopyLastWorkout: item.previousResult(for: entry) != nil,
-            saveTitle: entry.isCompleted ? String(localized: "workout.editor.save") : String(localized: "workout.editor.record")
+            canCopyLastWorkout: item.previousResult(for: entry) != nil
         )
     }
 

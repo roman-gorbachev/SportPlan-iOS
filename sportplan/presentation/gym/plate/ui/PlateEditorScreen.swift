@@ -34,7 +34,7 @@ struct PlateEditorScreen: View {
             .padding(.horizontal, Spacing.m)
             .padding(.vertical, Spacing.xs)
         }
-        .scrollDismissesKeyboard(.immediately)
+        .dismissesKeyboard()
         .background(Palette.background)
         .onAppear {
             isWeightFocused = !data.isExisting

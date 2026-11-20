@@ -21,6 +21,7 @@ struct ActiveWorkoutScreen: View {
             noteSection
         }
         .appPlainList()
+        .dismissesKeyboard()
         .navigationTitle(data.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

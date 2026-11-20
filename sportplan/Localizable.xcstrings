@@ -3222,17 +3222,6 @@
         }
       }
     },
-    "workout.editor.record" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Записать"
-          }
-        }
-      }
-    },
     "workout.editor.reps" : {
       "extractionState" : "manual",
       "localizations" : {

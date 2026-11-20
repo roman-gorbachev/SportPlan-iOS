@@ -55,6 +55,7 @@ struct EquipmentEditorScreen: View {
         }
         .appStyle(Typography.body)
         .appGroupedList()
+        .dismissesKeyboard()
         .confirmationDialog(
             String(localized: "equipment.editor.archive.title \(data.name)"),
             isPresented: $isConfirmingArchive,

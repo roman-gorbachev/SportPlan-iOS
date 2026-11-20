@@ -211,11 +211,18 @@ struct WorkoutViewModelsTests {
         await fixture.active.saveEditor()
 
         let saved = try await Self.data(fixture.active) { data in
-            return data.exercises.first?.sets.first?.state == .completed
+            return data.exercises.first.map { item in return Self.weight(of: item.sets[0]) } == "30"
         }
         #expect(saved.editor == nil)
-        #expect(saved.exercises.first.map { item in return Self.weight(of: item.sets[0]) } == "30")
-        #expect(saved.exercises.first?.sets[1].state == .current)
+        #expect(saved.exercises.first?.sets[0].state == .current)
+        #expect(saved.exercises.first?.sets[1].state == .planned)
+        #expect(saved.exercises.first?.restTimer == nil)
+
+        await fixture.active.tapSetAction(setId: rows[0].id)
+        let completed = try await Self.data(fixture.active) { data in
+            return data.exercises.first?.sets.first?.state == .completed
+        }
+        #expect(completed.exercises.first?.sets[1].state == .current)
 
         fixture.active.openEditor(setId: rows[1].id)
         editor = try #require(try await Self.data(fixture.active).editor)
@@ -223,7 +230,6 @@ struct WorkoutViewModelsTests {
         fixture.active.copyLastWorkoutSet()
         editor = try #require(try await Self.data(fixture.active).editor)
         #expect(editor.weight.value == "20")
-        #expect(editor.saveTitle == "Записать")
     }
 
     @Test func copyTakesTheSameSetFromTheLastWorkout() async throws {
@@ -240,6 +246,10 @@ struct WorkoutViewModelsTests {
         }
         fixture.active.incrementEditorReps()
         await fixture.active.saveEditor()
+        _ = try await Self.data(fixture.active) { data in
+            return data.exercises.first.map { item in return Self.weight(of: item.sets[0]) } == "30"
+        }
+        await fixture.active.tapSetAction(setId: rows[0].id)
         _ = try await Self.data(fixture.active) { data in
             return data.exercises.first?.sets.first?.state == .completed
         }

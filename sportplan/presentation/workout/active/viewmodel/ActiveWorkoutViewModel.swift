@@ -168,16 +168,12 @@ final class ActiveWorkoutViewModel {
     }
 
     func saveEditor() async {
-        guard let editingSetId, let editorDraft, case let (_, entry)? = locate(setId: editingSetId) else {
+        guard let editingSetId, let editorDraft, locate(setId: editingSetId) != nil else {
             return
         }
         closeEditor()
         await perform {
-            if entry.isCompleted {
-                try await self.updateSet.execute(setId: editingSetId, draft: editorDraft)
-            } else {
-                try await self.completeSet.execute(setId: editingSetId, draft: editorDraft)
-            }
+            try await self.updateSet.execute(setId: editingSetId, draft: editorDraft)
         }
     }
 

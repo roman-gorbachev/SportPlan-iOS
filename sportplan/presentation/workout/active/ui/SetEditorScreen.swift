@@ -73,7 +73,7 @@ struct SetEditorScreen: View {
         Button {
             onAction(.saveEditor)
         } label: {
-            return Text(data.saveTitle)
+            return Text(String(localized: "workout.editor.save"))
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(InkButtonStyle())
@@ -96,8 +96,7 @@ struct SetEditorScreen: View {
         ),
         reps: "8",
         canDecrementReps: true,
-        canCopyLastWorkout: true,
-        saveTitle: "Записать"
+        canCopyLastWorkout: true
     )
     return Color.clear
         .sheet(isPresented: .constant(true)) {

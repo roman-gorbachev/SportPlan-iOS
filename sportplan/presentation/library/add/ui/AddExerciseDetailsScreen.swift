@@ -92,6 +92,7 @@ struct AddExerciseDetailsScreen: View {
         }
         .appStyle(Typography.body)
         .appGroupedList()
+        .dismissesKeyboard()
         .alert(
             String(localized: "addExercise.saveError"),
             isPresented: Binding(get: { return data.isShowingSaveError }, set: { isPresented in

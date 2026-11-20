@@ -40,6 +40,7 @@ struct ProgramFormScreen: View {
         }
         .appStyle(Typography.body)
         .appGroupedList()
+        .dismissesKeyboard()
         .alert(
             String(localized: "common.error.title"),
             isPresented: Binding(get: { return data.isShowingSaveError }, set: { isPresented in
