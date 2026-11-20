@@ -24,7 +24,7 @@ struct RootView: View {
                 return ProgramsTabView(container: container, router: programsRouter)
             }
             Tab(AppTab.history.title, systemImage: AppTab.history.systemImage, value: AppTab.history) {
-                return HistoryTabView(router: historyRouter)
+                return HistoryTabView(container: container, router: historyRouter, onStartWorkout: { selectedTab = .workout })
             }
         }
         .tint(Palette.accent)

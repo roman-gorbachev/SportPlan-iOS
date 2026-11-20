@@ -27,6 +27,9 @@ final class AppDIContainer {
 
     private lazy var observeExerciseLibraryUseCase = ObserveExerciseLibraryUseCase(repository: exerciseRepository)
     private lazy var observeExerciseCardUseCase = ObserveExerciseCardUseCase(repository: workoutRepository)
+    private lazy var observeHistoryUseCase = ObserveHistoryUseCase(repository: workoutRepository, now: { return Date() })
+    private lazy var observeFinishedWorkoutUseCase = ObserveFinishedWorkoutUseCase(repository: workoutRepository)
+    private lazy var deleteWorkoutUseCase = DeleteWorkoutUseCase(repository: workoutRepository)
     private lazy var observeEquipmentChoicesUseCase = ObserveEquipmentChoicesUseCase(repository: equipmentRepository)
     private lazy var createExerciseUseCase = CreateExerciseUseCase(
         exerciseRepository: exerciseRepository,
@@ -288,6 +291,22 @@ extension AppDIContainer {
 
     func buildExerciseCardViewModel(exerciseId: UUID) -> ExerciseCardViewModel {
         return ExerciseCardViewModel(observeExerciseCard: observeExerciseCardUseCase, exerciseId: exerciseId)
+    }
+
+    func buildHistoryViewModel() -> HistoryViewModel {
+        return HistoryViewModel(observeHistory: observeHistoryUseCase, now: { return Date() })
+    }
+
+    func buildHistoryDayViewModel(date: Date) -> HistoryDayViewModel {
+        return HistoryDayViewModel(observeHistory: observeHistoryUseCase, date: date)
+    }
+
+    func buildWorkoutDetailsViewModel(workoutId: UUID) -> WorkoutDetailsViewModel {
+        return WorkoutDetailsViewModel(
+            observeFinishedWorkout: observeFinishedWorkoutUseCase,
+            deleteWorkout: deleteWorkoutUseCase,
+            workoutId: workoutId
+        )
     }
 
     func buildExerciseEditorViewModel(exerciseId: UUID) -> ExerciseEditorViewModel {

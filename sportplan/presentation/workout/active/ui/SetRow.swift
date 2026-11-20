@@ -5,9 +5,6 @@ struct SetRow: View {
     private static let numberSize: CGFloat = 28
     private static let minimumHeight: CGFloat = 88
     private static let runningDotSize: CGFloat = 7
-    private static let chipHorizontalPadding: CGFloat = 7
-    private static let chipVerticalPadding: CGFloat = 1
-    private static let chipBorderWidth: CGFloat = 1
     private static let valueSpacing: CGFloat = 5
     private static let lineSpacing: CGFloat = 6
     private static let valueMinimumScaleFactor: CGFloat = 0.5
@@ -162,15 +159,7 @@ struct SetRow: View {
         if row.isWarmup || row.isRecord || row.caption != nil {
             HStack(spacing: Spacing.xs) {
                 if row.isWarmup {
-                    Text(String(localized: "workout.set.warmup"))
-                        .appStyle(Typography.caption)
-                        .foregroundStyle(Palette.warmup)
-                        .padding(.horizontal, Self.chipHorizontalPadding)
-                        .padding(.vertical, Self.chipVerticalPadding)
-                        .overlay {
-                            RoundedRectangle(cornerRadius: CornerRadius.chip)
-                                .strokeBorder(Palette.separatorStrong, lineWidth: Self.chipBorderWidth)
-                        }
+                    WarmupBadge(title: String(localized: "workout.set.warmup"))
                 }
                 if row.isRecord {
                     RecordBadge(title: String(localized: "workout.set.record"))
