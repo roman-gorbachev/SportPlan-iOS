@@ -4,6 +4,7 @@ struct WorkoutTabView: View {
     let container: AppDIContainer
     @Bindable var router: TabRouter
     let onCreateProgram: () -> Void
+    let onImported: () -> Void
 
     var body: some View {
         return NavigationStack(path: $router.path) {
@@ -35,7 +36,8 @@ struct WorkoutTabView: View {
             .navigationDestination(for: SettingsDestination.self) { _ in
                 return SettingsRoute(
                     viewModel: container.buildSettingsViewModel(),
-                    onOpenGym: { router.push(GymDestination()) }
+                    onOpenGym: { router.push(GymDestination()) },
+                    onImported: onImported
                 )
             }
             .navigationDestination(for: GymDestination.self) { _ in

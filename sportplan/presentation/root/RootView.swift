@@ -18,7 +18,15 @@ struct RootView: View {
     var body: some View {
         return TabView(selection: $selectedTab) {
             Tab(AppTab.workout.title, systemImage: AppTab.workout.systemImage, value: AppTab.workout) {
-                return WorkoutTabView(container: container, router: workoutRouter, onCreateProgram: { selectedTab = .programs })
+                return WorkoutTabView(
+                    container: container,
+                    router: workoutRouter,
+                    onCreateProgram: { selectedTab = .programs },
+                    onImported: {
+                        programsRouter.popToRoot()
+                        historyRouter.popToRoot()
+                    }
+                )
             }
             Tab(AppTab.programs.title, systemImage: AppTab.programs.systemImage, value: AppTab.programs) {
                 return ProgramsTabView(container: container, router: programsRouter)

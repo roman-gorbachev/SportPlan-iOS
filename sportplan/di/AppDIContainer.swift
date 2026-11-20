@@ -13,6 +13,11 @@ final class AppDIContainer {
     private lazy var programRepository: any ProgramRepository = ProgramRepositoryImpl(database: appDatabase)
     private lazy var workoutRepository: any WorkoutRepository = WorkoutRepositoryImpl(database: appDatabase)
     private lazy var plateRepository: any PlateRepository = PlateRepositoryImpl(database: appDatabase)
+    private lazy var backupRepository: any BackupRepository = BackupRepositoryImpl(database: appDatabase)
+
+    private lazy var exportBackupUseCase = ExportBackupUseCase(repository: backupRepository, now: { return Date() })
+    private lazy var readBackupUseCase = ReadBackupUseCase(repository: backupRepository)
+    private lazy var importBackupUseCase = ImportBackupUseCase(backupRepository: backupRepository, workoutRepository: workoutRepository)
 
     private lazy var observeGymEquipmentUseCase = ObserveGymEquipmentUseCase(repository: equipmentRepository)
     private lazy var loadEquipmentEditorUseCase = LoadEquipmentEditorUseCase(repository: equipmentRepository)
@@ -157,6 +162,10 @@ extension AppDIContainer {
         return SettingsViewModel(
             observeGymEquipment: observeGymEquipmentUseCase,
             observePlates: observePlatesUseCase,
+            exportBackup: exportBackupUseCase,
+            readBackup: readBackupUseCase,
+            importBackup: importBackupUseCase,
+            workoutStore: activeWorkoutStore,
             appVersion: appVersion
         )
     }
