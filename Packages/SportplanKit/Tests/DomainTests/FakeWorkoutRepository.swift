@@ -10,6 +10,7 @@ final class FakeWorkoutRepository: WorkoutRepository {
         var library: [UUID: LibraryExercise] = [:]
         var previousSets: [UUID: [SetEntry]] = [:]
         var previousWorkoutExercises: [UUID: WorkoutExercise] = [:]
+        var lastWorkoutDates: [UUID: Date] = [:]
         var updateSetsCallCount = 0
     }
 
@@ -18,7 +19,8 @@ final class FakeWorkoutRepository: WorkoutRepository {
     init(
         library: [LibraryExercise] = [],
         previousSets: [UUID: [SetEntry]] = [:],
-        previousWorkoutExercises: [UUID: WorkoutExercise] = [:]
+        previousWorkoutExercises: [UUID: WorkoutExercise] = [:],
+        lastWorkoutDates: [UUID: Date] = [:]
     ) {
         state.withLock { state in
             for item in library {
@@ -26,6 +28,7 @@ final class FakeWorkoutRepository: WorkoutRepository {
             }
             state.previousSets = previousSets
             state.previousWorkoutExercises = previousWorkoutExercises
+            state.lastWorkoutDates = lastWorkoutDates
         }
     }
 
@@ -188,6 +191,18 @@ final class FakeWorkoutRepository: WorkoutRepository {
     func previousSets(exerciseId: UUID) async throws -> [SetEntry] {
         return state.withLock { state in
             return state.previousSets[exerciseId, default: []]
+        }
+    }
+
+    func previousWorkoutExercise(exerciseId: UUID) async throws -> WorkoutExercise? {
+        return state.withLock { state in
+            return state.previousWorkoutExercises[exerciseId]
+        }
+    }
+
+    func lastWorkoutDate(programDayId: UUID) async throws -> Date? {
+        return state.withLock { state in
+            return state.lastWorkoutDates[programDayId]
         }
     }
 

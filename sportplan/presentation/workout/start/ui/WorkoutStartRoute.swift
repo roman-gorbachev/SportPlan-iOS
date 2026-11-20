@@ -2,11 +2,18 @@ import SwiftUI
 
 struct WorkoutStartRoute: View {
     @State private var viewModel: WorkoutStartViewModel
+    private let onOpenDay: (UUID) -> Void
     private let onOpenSettings: () -> Void
     private let onCreateProgram: () -> Void
 
-    init(viewModel: WorkoutStartViewModel, onOpenSettings: @escaping () -> Void, onCreateProgram: @escaping () -> Void) {
+    init(
+        viewModel: WorkoutStartViewModel,
+        onOpenDay: @escaping (UUID) -> Void,
+        onOpenSettings: @escaping () -> Void,
+        onCreateProgram: @escaping () -> Void
+    ) {
         _viewModel = State(initialValue: viewModel)
+        self.onOpenDay = onOpenDay
         self.onOpenSettings = onOpenSettings
         self.onCreateProgram = onCreateProgram
     }
@@ -19,7 +26,7 @@ struct WorkoutStartRoute: View {
             case let .success(data):
                 WorkoutStartScreen(
                     data: data,
-                    onStartDay: startDay,
+                    onSelectDay: onOpenDay,
                     onStartEmpty: startEmpty,
                     onCreateProgram: onCreateProgram,
                     onDismissError: viewModel.dismissError
@@ -39,12 +46,6 @@ struct WorkoutStartRoute: View {
         }
         .task {
             await viewModel.observeProgramList()
-        }
-    }
-
-    private func startDay(_ dayId: UUID) {
-        Task {
-            await viewModel.start(dayId: dayId)
         }
     }
 

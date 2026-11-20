@@ -13,9 +13,16 @@ struct WorkoutTabView: View {
                 makePickerViewModel: container.buildExercisePickerViewModel,
                 makeAddExerciseViewModel: container.buildAddExerciseViewModel,
                 makeEquipmentEditorViewModel: container.buildEquipmentEditorViewModel,
+                onOpenDay: { dayId in router.push(WorkoutPreviewDestination(dayId: dayId)) },
                 onOpenSettings: { router.push(SettingsDestination()) },
                 onCreateProgram: onCreateProgram
             )
+            .navigationDestination(for: WorkoutPreviewDestination.self) { destination in
+                return WorkoutPreviewRoute(
+                    viewModel: container.buildWorkoutPreviewViewModel(dayId: destination.dayId),
+                    onStarted: { router.popToRoot() }
+                )
+            }
             .navigationDestination(for: SettingsDestination.self) { _ in
                 return SettingsRoute(
                     viewModel: container.buildSettingsViewModel(),

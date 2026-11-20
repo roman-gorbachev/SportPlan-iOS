@@ -1,16 +1,28 @@
 public enum ProgressionSuggestion {
     public static func weight(for item: ActiveWorkoutExercise) -> Weight? {
+        return weight(
+            exercise: item.exercise,
+            previousWorkoutExercise: item.previousWorkoutExercise,
+            previousWorkingSets: item.previousWorkingSets
+        )
+    }
+
+    public static func weight(
+        exercise: LibraryExercise,
+        previousWorkoutExercise: WorkoutExercise?,
+        previousWorkingSets: [SetEntry]
+    ) -> Weight? {
         guard
-            item.exercise.metric == .weightReps,
-            let equipment = item.exercise.equipment,
+            exercise.metric == .weightReps,
+            let equipment = exercise.equipment,
             equipment.weightStep > .zero,
-            let previous = item.previousWorkoutExercise,
+            let previous = previousWorkoutExercise,
             let targetSets = previous.targetSets,
             let targetReps = previous.targetReps
         else {
             return nil
         }
-        let previousSets = item.previousWorkingSets.filter { entry in
+        let previousSets = previousWorkingSets.filter { entry in
             return entry.isCompleted
         }
         guard previousSets.count >= targetSets else {

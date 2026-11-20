@@ -23,7 +23,7 @@ struct WorkoutViewModelsTests {
         let day: ProgramDay
         let bench: Exercise
         let plank: Exercise
-        let start: WorkoutStartViewModel
+        let start: WorkoutDayStarter
         let active: ActiveWorkoutViewModel
         let store: ActiveWorkoutStore
         let restTimer: RestTimerViewModel
@@ -57,10 +57,16 @@ struct WorkoutViewModelsTests {
         let workouts = WorkoutRepositoryImpl(database: database)
         let now: @Sendable () -> Date = { return Date() }
         let scheduler = RecordingRestNotificationScheduler()
-        let start = WorkoutStartViewModel(
-            observePrograms: ObserveProgramsUseCase(repository: programs),
-            startWorkoutFromDay: StartWorkoutFromDayUseCase(workoutRepository: workouts, programRepository: programs, now: now),
-            startEmptyWorkout: StartEmptyWorkoutUseCase(repository: workouts, now: now)
+        let startFromDay = StartWorkoutFromDayUseCase(workoutRepository: workouts, programRepository: programs, now: now)
+        let loadPreview = LoadWorkoutPreviewUseCase(workoutRepository: workouts, programRepository: programs, now: now)
+        let start = WorkoutDayStarter(
+            startScreen: WorkoutStartViewModel(
+                observePrograms: ObserveProgramsUseCase(repository: programs),
+                startEmptyWorkout: StartEmptyWorkoutUseCase(repository: workouts, now: now)
+            ),
+            makePreview: { dayId in
+                return WorkoutPreviewViewModel(dayId: dayId, loadWorkoutPreview: loadPreview, startWorkoutFromDay: startFromDay)
+            }
         )
         let store = ActiveWorkoutStore(observeActiveWorkout: ObserveActiveWorkoutUseCase(repository: workouts))
         let adjustRest = AdjustRestUseCase(repository: workouts, scheduler: scheduler, now: now)
@@ -443,6 +449,30 @@ struct WorkoutViewModelsTests {
         }
         #expect(finishedCount == 1)
         #expect(setCount == 1)
+    }
+
+    @Test func previewShowsThePlanAndStartsTheDay() async throws {
+        let fixture = try await Self.makeFixture { bench, plank in return [bench, plank] }
+        let tasks = Self.startObserving(fixture)
+        defer {
+            tasks.forEach { task in task.cancel() }
+        }
+        let preview = fixture.start.makePreview(fixture.day.id)
+        await preview.load()
+        guard case let .success(data) = preview.previewUiState else {
+            Issue.record("Preview did not load")
+            return
+        }
+        #expect(data.name == fixture.day.name)
+        #expect(data.lastWorkout == "ещё не было")
+        #expect(data.exercises.map(\.name) == [fixture.bench.name, fixture.plank.name])
+        #expect(data.exercises[0].plan.hasSuffix("· 20 кг"))
+        #expect(data.tip == "Первая тренировка: веса взяты из программы, поправь их в подходе")
+
+        #expect(await preview.start())
+        let active = try await Self.data(fixture.active)
+        #expect(active.exercises.map(\.name) == [fixture.bench.name, fixture.plank.name])
+        #expect(await preview.start() == false)
     }
 
     @Test func cancelRemovesTheWorkout() async throws {

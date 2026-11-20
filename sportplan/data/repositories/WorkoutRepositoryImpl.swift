@@ -192,6 +192,25 @@ nonisolated final class WorkoutRepositoryImpl: WorkoutRepository {
         }
     }
 
+    func previousWorkoutExercise(exerciseId: UUID) async throws -> WorkoutExercise? {
+        return try await database.reader.read { db in
+            return try Self.fetchPreviousWorkoutExercise(db, exerciseId: exerciseId)?.toDomainModel()
+        }
+    }
+
+    func lastWorkoutDate(programDayId: UUID) async throws -> Date? {
+        return try await database.reader.read { db in
+            return try Date.fetchOne(
+                db,
+                sql: """
+                    SELECT MAX(started_at) FROM workout
+                    WHERE finished_at IS NOT NULL AND program_day_id = ?
+                    """,
+                arguments: [programDayId.databaseText]
+            )
+        }
+    }
+
     func observeExerciseHistory(exerciseId: UUID) -> AsyncThrowingStream<ExerciseHistory?, any Error> {
         let observation = ValueObservation.tracking { db in
             return try Self.fetchExerciseHistory(db, exerciseId: exerciseId)

@@ -61,6 +61,11 @@ final class AppDIContainer {
         programRepository: programRepository,
         now: { return Date() }
     )
+    private lazy var loadWorkoutPreviewUseCase = LoadWorkoutPreviewUseCase(
+        workoutRepository: workoutRepository,
+        programRepository: programRepository,
+        now: { return Date() }
+    )
     private lazy var startEmptyWorkoutUseCase = StartEmptyWorkoutUseCase(repository: workoutRepository, now: { return Date() })
     private lazy var addExerciseToWorkoutUseCase = AddExerciseToWorkoutUseCase(
         workoutRepository: workoutRepository,
@@ -216,10 +221,14 @@ extension AppDIContainer {
     }
 
     func buildWorkoutStartViewModel() -> WorkoutStartViewModel {
-        return WorkoutStartViewModel(
-            observePrograms: observeProgramsUseCase,
-            startWorkoutFromDay: startWorkoutFromDayUseCase,
-            startEmptyWorkout: startEmptyWorkoutUseCase
+        return WorkoutStartViewModel(observePrograms: observeProgramsUseCase, startEmptyWorkout: startEmptyWorkoutUseCase)
+    }
+
+    func buildWorkoutPreviewViewModel(dayId: UUID) -> WorkoutPreviewViewModel {
+        return WorkoutPreviewViewModel(
+            dayId: dayId,
+            loadWorkoutPreview: loadWorkoutPreviewUseCase,
+            startWorkoutFromDay: startWorkoutFromDayUseCase
         )
     }
 

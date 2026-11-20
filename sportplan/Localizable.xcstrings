@@ -3596,6 +3596,96 @@
         }
       }
     },
+    "workout.preview.addedWeight %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%@ кг"
+          }
+        }
+      }
+    },
+    "workout.preview.exercises" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Упражнения"
+          }
+        }
+      }
+    },
+    "workout.preview.tip.first" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Первая тренировка: веса взяты из программы, поправь их в подходе"
+          }
+        }
+      }
+    },
+    "workout.preview.tip.longBreak %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Перерыв %lld дня — начни с прошлых весов"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Перерыв %lld дней — начни с прошлых весов"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Перерыв %lld день — начни с прошлых весов"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Перерыв %lld дня — начни с прошлых весов"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "workout.preview.tip.progression %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: в прошлый раз всё выполнено — попробуй %2$@ кг"
+          }
+        }
+      }
+    },
+    "workout.preview.weight %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ кг"
+          }
+        }
+      }
+    },
     "workout.progression.accessibility %@" : {
       "extractionState" : "manual",
       "localizations" : {

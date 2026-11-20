@@ -5,7 +5,6 @@ import Observation
 @Observable
 final class WorkoutStartViewModel {
     @ObservationIgnored private let observePrograms: ObserveProgramsUseCase
-    @ObservationIgnored private let startWorkoutFromDay: StartWorkoutFromDayUseCase
     @ObservationIgnored private let startEmptyWorkout: StartEmptyWorkoutUseCase
     @ObservationIgnored private var programs: [ProgramSummary]?
     @ObservationIgnored private var isStarting = false
@@ -13,13 +12,8 @@ final class WorkoutStartViewModel {
 
     private(set) var startUiState: WorkoutStartUiState = .loading
 
-    init(
-        observePrograms: ObserveProgramsUseCase,
-        startWorkoutFromDay: StartWorkoutFromDayUseCase,
-        startEmptyWorkout: StartEmptyWorkoutUseCase
-    ) {
+    init(observePrograms: ObserveProgramsUseCase, startEmptyWorkout: StartEmptyWorkoutUseCase) {
         self.observePrograms = observePrograms
-        self.startWorkoutFromDay = startWorkoutFromDay
         self.startEmptyWorkout = startEmptyWorkout
     }
 
@@ -37,35 +31,23 @@ final class WorkoutStartViewModel {
         }
     }
 
-    func start(dayId: UUID) async {
-        await start {
-            try await self.startWorkoutFromDay.execute(dayId: dayId)
-        }
-    }
-
     func startEmpty() async {
-        await start {
-            try await self.startEmptyWorkout.execute()
-        }
-    }
-
-    func dismissError() {
-        isShowingError = false
-        publish()
-    }
-
-    private func start(_ operation: () async throws -> Void) async {
         guard !isStarting else {
             return
         }
         isStarting = true
         publish()
         do {
-            try await operation()
+            try await startEmptyWorkout.execute()
         } catch {
             isShowingError = true
         }
         isStarting = false
+        publish()
+    }
+
+    func dismissError() {
+        isShowingError = false
         publish()
     }
 

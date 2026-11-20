@@ -3,7 +3,7 @@ import SwiftUI
 
 struct WorkoutStartScreen: View {
     let data: WorkoutStartUiData
-    let onStartDay: (UUID) -> Void
+    let onSelectDay: (UUID) -> Void
     let onStartEmpty: () -> Void
     let onCreateProgram: () -> Void
     let onDismissError: () -> Void
@@ -36,7 +36,7 @@ struct WorkoutStartScreen: View {
                 return Group {
                     Section {
                         WorkoutStartNextDayCard(day: program.nextDay, isStarting: data.isStarting) {
-                            onStartDay(program.nextDay.id)
+                            onSelectDay(program.nextDay.id)
                         }
                     } header: {
                         ListSectionHeader(title: program.title)
@@ -46,7 +46,7 @@ struct WorkoutStartScreen: View {
                         Section {
                             ForEach(program.otherDays) { day in
                                 return WorkoutStartDayRow(day: day) {
-                                    onStartDay(day.id)
+                                    onSelectDay(day.id)
                                 }
                                 .disabled(data.isStarting)
                             }
@@ -124,7 +124,7 @@ struct WorkoutStartScreen: View {
         isShowingError: false
     )
     return NavigationStack {
-        return WorkoutStartScreen(data: data, onStartDay: { _ in }, onStartEmpty: {}, onCreateProgram: {}, onDismissError: {})
+        return WorkoutStartScreen(data: data, onSelectDay: { _ in }, onStartEmpty: {}, onCreateProgram: {}, onDismissError: {})
             .navigationTitle("Тренировка")
     }
 }
@@ -134,7 +134,7 @@ struct WorkoutStartScreen: View {
     return NavigationStack {
         return WorkoutStartScreen(
             data: WorkoutStartUiData(programs: [], isStarting: false, isShowingError: false),
-            onStartDay: { _ in },
+            onSelectDay: { _ in },
             onStartEmpty: {},
             onCreateProgram: {},
             onDismissError: {}

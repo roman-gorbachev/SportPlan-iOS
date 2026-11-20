@@ -7,6 +7,7 @@ struct WorkoutRoute: View {
     private let makePickerViewModel: (ExercisePickerTarget) -> ExercisePickerViewModel
     private let makeAddExerciseViewModel: (AddExerciseTarget, AddExerciseDayContext?) -> AddExerciseViewModel
     private let makeEquipmentEditorViewModel: (EquipmentEditorTarget) -> EquipmentEditorViewModel
+    private let onOpenDay: (UUID) -> Void
     private let onOpenSettings: () -> Void
     private let onCreateProgram: () -> Void
 
@@ -16,6 +17,7 @@ struct WorkoutRoute: View {
         makePickerViewModel: @escaping (ExercisePickerTarget) -> ExercisePickerViewModel,
         makeAddExerciseViewModel: @escaping (AddExerciseTarget, AddExerciseDayContext?) -> AddExerciseViewModel,
         makeEquipmentEditorViewModel: @escaping (EquipmentEditorTarget) -> EquipmentEditorViewModel,
+        onOpenDay: @escaping (UUID) -> Void,
         onOpenSettings: @escaping () -> Void,
         onCreateProgram: @escaping () -> Void
     ) {
@@ -24,6 +26,7 @@ struct WorkoutRoute: View {
         self.makePickerViewModel = makePickerViewModel
         self.makeAddExerciseViewModel = makeAddExerciseViewModel
         self.makeEquipmentEditorViewModel = makeEquipmentEditorViewModel
+        self.onOpenDay = onOpenDay
         self.onOpenSettings = onOpenSettings
         self.onCreateProgram = onCreateProgram
     }
@@ -36,6 +39,7 @@ struct WorkoutRoute: View {
             case .noWorkout:
                 WorkoutStartRoute(
                     viewModel: makeStartViewModel(),
+                    onOpenDay: onOpenDay,
                     onOpenSettings: onOpenSettings,
                     onCreateProgram: onCreateProgram
                 )
