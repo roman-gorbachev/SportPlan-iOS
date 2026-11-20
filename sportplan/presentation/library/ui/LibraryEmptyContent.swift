@@ -3,8 +3,10 @@ import Domain
 import SwiftUI
 
 struct LibraryEmptyContent: View {
+    let archivedCount: Int
     let onQuickAdd: (QuickExercise) -> Void
     let onAddCustom: () -> Void
+    let onOpenArchive: () -> Void
 
     var body: some View {
         return ScrollView {
@@ -31,6 +33,10 @@ struct LibraryEmptyContent: View {
                 }
                 .buttonStyle(InkButtonStyle())
                 .padding(.top, Spacing.xs)
+                if archivedCount > 0 {
+                    LibraryArchiveRow(count: archivedCount, action: onOpenArchive)
+                        .padding(.top, Spacing.m)
+                }
             }
             .padding(.horizontal, Spacing.m)
             .padding(.top, Spacing.xxl)

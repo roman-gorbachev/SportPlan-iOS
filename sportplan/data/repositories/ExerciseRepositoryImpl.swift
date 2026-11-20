@@ -35,6 +35,33 @@ nonisolated final class ExerciseRepositoryImpl: ExerciseRepository {
         }
     }
 
+    func observeArchived() -> AsyncThrowingStream<[ArchivedExercise], any Error> {
+        let observation = ValueObservation.tracking { db in
+            let exercises = try ExerciseRecord
+                .filter(Column("is_archived") == true)
+                .fetchAll(db)
+            let equipment = try EquipmentRecord.fetchAll(db)
+            let countRows = try Row.fetchAll(db, sql: """
+                SELECT workout_exercise.exercise_id AS exercise_id, COUNT(DISTINCT workout_exercise.workout_id) AS workout_count
+                FROM workout_exercise
+                JOIN workout ON workout.id = workout_exercise.workout_id
+                JOIN exercise ON exercise.id = workout_exercise.exercise_id
+                WHERE workout.finished_at IS NOT NULL AND exercise.is_archived = 1
+                GROUP BY workout_exercise.exercise_id
+                """)
+            let workoutCounts = Dictionary(uniqueKeysWithValues: countRows.map { row in
+                let exerciseId: String = row["exercise_id"]
+                let workoutCount: Int = row["workout_count"]
+                return (exerciseId, workoutCount)
+            })
+            let library = try Self.makeLibrary(exerciseRecords: exercises, equipmentRecords: equipment)
+            return library.map { item in
+                return ArchivedExercise(exercise: item, workoutCount: workoutCounts[item.id.databaseText] ?? 0)
+            }
+        }
+        return database.stream(of: observation)
+    }
+
     func exercise(id: UUID) async throws -> Exercise? {
         return try await database.reader.read { db in
             return try ExerciseRecord
@@ -90,6 +117,14 @@ nonisolated final class ExerciseRepositoryImpl: ExerciseRepository {
             _ = try PlannedExerciseRecord
                 .filter(Column("exercise_id") == id.databaseText)
                 .deleteAll(db)
+        }
+    }
+
+    func restore(id: UUID) async throws {
+        try await database.writer.write { db in
+            _ = try ExerciseRecord
+                .filter(Column("id") == id.databaseText)
+                .updateAll(db, Column("is_archived").set(to: false))
         }
     }
 

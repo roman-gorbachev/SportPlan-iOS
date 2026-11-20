@@ -35,6 +35,8 @@ final class AppDIContainer {
     )
     private lazy var countProgramDaysUsingExerciseUseCase = CountProgramDaysUsingExerciseUseCase(repository: exerciseRepository)
     private lazy var archiveExerciseUseCase = ArchiveExerciseUseCase(repository: exerciseRepository)
+    private lazy var observeArchivedExercisesUseCase = ObserveArchivedExercisesUseCase(repository: exerciseRepository)
+    private lazy var restoreExerciseUseCase = RestoreExerciseUseCase(repository: exerciseRepository)
     private lazy var loadExerciseEditorUseCase = LoadExerciseEditorUseCase(
         exerciseRepository: exerciseRepository,
         equipmentRepository: equipmentRepository
@@ -272,7 +274,15 @@ extension AppDIContainer {
         return LibraryViewModel(
             observeExerciseLibrary: observeExerciseLibraryUseCase,
             countProgramDaysUsingExercise: countProgramDaysUsingExerciseUseCase,
-            archiveExercise: archiveExerciseUseCase
+            archiveExercise: archiveExerciseUseCase,
+            observeArchivedExercises: observeArchivedExercisesUseCase
+        )
+    }
+
+    func buildExerciseArchiveViewModel() -> ExerciseArchiveViewModel {
+        return ExerciseArchiveViewModel(
+            observeArchivedExercises: observeArchivedExercisesUseCase,
+            restoreExercise: restoreExerciseUseCase
         )
     }
 

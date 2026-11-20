@@ -331,6 +331,107 @@
         }
       }
     },
+    "archive.caption" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скрыто из справочника и выбора. История, рекорды и графики сохраняются."
+          }
+        }
+      }
+    },
+    "archive.footer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вернувшееся упражнение снова появится в справочнике. В дни программ оно не возвращается — добавь заново, если нужно."
+          }
+        }
+      }
+    },
+    "archive.restore" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вернуть"
+          }
+        }
+      }
+    },
+    "archive.restore.accessibility %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вернуть «%@» в справочник"
+          }
+        }
+      }
+    },
+    "archive.restore.error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось вернуть упражнение"
+          }
+        }
+      }
+    },
+    "archive.row.workouts %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld тренировки"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld тренировок"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld тренировка"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld тренировки"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "archive.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Архив"
+          }
+        }
+      }
+    },
     "common.cancel" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1532,6 +1633,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Упражнение пропадёт из справочника. История сохранится."
+          }
+        }
+      }
+    },
+    "library.archive.row" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Архив"
           }
         }
       }

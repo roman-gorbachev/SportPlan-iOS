@@ -8,6 +8,7 @@ struct LibraryScreen: View {
     let onQuickAdd: (QuickExercise) -> Void
     let onAddCustom: () -> Void
     let onOpenExercise: (UUID) -> Void
+    let onOpenArchive: () -> Void
     let onEdit: (UUID) -> Void
     let onArchive: (UUID) -> Void
     let onConfirmArchive: (UUID) -> Void
@@ -17,7 +18,12 @@ struct LibraryScreen: View {
     var body: some View {
         return Group {
             if data.isLibraryEmpty {
-                LibraryEmptyContent(onQuickAdd: onQuickAdd, onAddCustom: onAddCustom)
+                LibraryEmptyContent(
+                    archivedCount: data.archivedCount,
+                    onQuickAdd: onQuickAdd,
+                    onAddCustom: onAddCustom,
+                    onOpenArchive: onOpenArchive
+                )
             } else {
                 exerciseList
                     .searchable(
@@ -78,6 +84,12 @@ struct LibraryScreen: View {
                     ListSectionHeader(title: section.title)
                 }
             }
+            if data.archivedCount > 0, data.searchQuery.isEmpty {
+                Section {
+                    LibraryArchiveRow(count: data.archivedCount, action: onOpenArchive)
+                        .appPlainRow()
+                }
+            }
         }
         .appPlainList()
         .overlay {
@@ -121,7 +133,7 @@ struct LibraryScreen: View {
             LibraryExerciseItem(id: UUID(), name: "Планка", detail: "время"),
         ]),
     ]
-    let data = LibraryUiData(sections: sections, isLibraryEmpty: false, searchQuery: "", pendingArchive: nil, isShowingArchiveError: false)
+    let data = LibraryUiData(sections: sections, isLibraryEmpty: false, searchQuery: "", archivedCount: 2, pendingArchive: nil, isShowingArchiveError: false)
     return NavigationStack {
         return LibraryScreen(
             data: data,
@@ -129,6 +141,7 @@ struct LibraryScreen: View {
             onQuickAdd: { _ in },
             onAddCustom: {},
             onOpenExercise: { _ in },
+            onOpenArchive: {},
             onEdit: { _ in },
             onArchive: { _ in },
             onConfirmArchive: { _ in },
@@ -141,7 +154,7 @@ struct LibraryScreen: View {
 
 #Preview("Empty") {
     FontRegistry.registerFonts()
-    let data = LibraryUiData(sections: [], isLibraryEmpty: true, searchQuery: "", pendingArchive: nil, isShowingArchiveError: false)
+    let data = LibraryUiData(sections: [], isLibraryEmpty: true, searchQuery: "", archivedCount: 2, pendingArchive: nil, isShowingArchiveError: false)
     return NavigationStack {
         return LibraryScreen(
             data: data,
@@ -149,6 +162,7 @@ struct LibraryScreen: View {
             onQuickAdd: { _ in },
             onAddCustom: {},
             onOpenExercise: { _ in },
+            onOpenArchive: {},
             onEdit: { _ in },
             onArchive: { _ in },
             onConfirmArchive: { _ in },

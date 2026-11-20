@@ -7,6 +7,8 @@ final class LibraryViewModel {
     @ObservationIgnored private let observeExerciseLibrary: ObserveExerciseLibraryUseCase
     @ObservationIgnored private let countProgramDaysUsingExercise: CountProgramDaysUsingExerciseUseCase
     @ObservationIgnored private let archiveExercise: ArchiveExerciseUseCase
+    @ObservationIgnored private let observeArchivedExercises: ObserveArchivedExercisesUseCase
+    @ObservationIgnored private var archivedCount = 0
     @ObservationIgnored private var library: ExerciseLibrary?
     @ObservationIgnored private var searchQuery = ""
     @ObservationIgnored private var pendingArchive: LibraryArchiveConfirmation?
@@ -17,11 +19,13 @@ final class LibraryViewModel {
     init(
         observeExerciseLibrary: ObserveExerciseLibraryUseCase,
         countProgramDaysUsingExercise: CountProgramDaysUsingExerciseUseCase,
-        archiveExercise: ArchiveExerciseUseCase
+        archiveExercise: ArchiveExerciseUseCase,
+        observeArchivedExercises: ObserveArchivedExercisesUseCase
     ) {
         self.observeExerciseLibrary = observeExerciseLibrary
         self.countProgramDaysUsingExercise = countProgramDaysUsingExercise
         self.archiveExercise = archiveExercise
+        self.observeArchivedExercises = observeArchivedExercises
     }
 
     func observe() async {
@@ -35,6 +39,21 @@ final class LibraryViewModel {
                 return
             }
             libraryUiState = .error(error: error)
+        }
+    }
+
+    func observeArchive() async {
+        do {
+            for try await archived in observeArchivedExercises.execute() {
+                archivedCount = archived.count
+                publish()
+            }
+        } catch {
+            guard !Task.isCancelled else {
+                return
+            }
+            archivedCount = 0
+            publish()
         }
     }
 
@@ -88,6 +107,7 @@ final class LibraryViewModel {
             sections: visible.sections.map(Self.makeSection),
             isLibraryEmpty: library.isEmpty,
             searchQuery: searchQuery,
+            archivedCount: archivedCount,
             pendingArchive: pendingArchive,
             isShowingArchiveError: isShowingArchiveError
         ))

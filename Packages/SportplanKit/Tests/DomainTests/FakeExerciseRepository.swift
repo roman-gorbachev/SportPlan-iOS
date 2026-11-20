@@ -10,6 +10,8 @@ final class FakeExerciseRepository: ExerciseRepository {
         var programDayCounts: [UUID: Int] = [:]
         var updated: [Exercise] = []
         var exerciseIdsWithCompletedSets: Set<UUID> = []
+        var archived: [ArchivedExercise] = []
+        var restoredIds: [UUID] = []
     }
 
     private let state = Mutex(State())
@@ -17,12 +19,20 @@ final class FakeExerciseRepository: ExerciseRepository {
     init(
         library: [LibraryExercise] = [],
         programDayCounts: [UUID: Int] = [:],
-        exerciseIdsWithCompletedSets: Set<UUID> = []
+        exerciseIdsWithCompletedSets: Set<UUID> = [],
+        archived: [ArchivedExercise] = []
     ) {
         state.withLock { state in
+            state.archived = archived
             state.library = library
             state.programDayCounts = programDayCounts
             state.exerciseIdsWithCompletedSets = exerciseIdsWithCompletedSets
+        }
+    }
+
+    var restoredIds: [UUID] {
+        return state.withLock { state in
+            return state.restoredIds
         }
     }
 
@@ -51,6 +61,22 @@ final class FakeExerciseRepository: ExerciseRepository {
         return AsyncThrowingStream { continuation in
             continuation.yield(library)
             continuation.finish()
+        }
+    }
+
+    func observeArchived() -> AsyncThrowingStream<[ArchivedExercise], any Error> {
+        let archived = state.withLock { state in
+            return state.archived
+        }
+        return AsyncThrowingStream { continuation in
+            continuation.yield(archived)
+            continuation.finish()
+        }
+    }
+
+    func restore(id: UUID) async throws {
+        state.withLock { state in
+            state.restoredIds.append(id)
         }
     }
 

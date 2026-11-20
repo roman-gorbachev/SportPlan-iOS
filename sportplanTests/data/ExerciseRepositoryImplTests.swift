@@ -145,4 +145,32 @@ struct ExerciseRepositoryImplTests {
         }
         #expect(try await repository.hasCompletedSets(exerciseId: exercise.id))
     }
+
+    @Test func archiveListsFinishedWorkoutsAndRestoreReturnsTheExercise() async throws {
+        let database = try DatabaseFixtures.makeDatabase()
+        let repository = ExerciseRepositoryImpl(database: database)
+        let exercise = DatabaseFixtures.makeExercise(load: .bodyweight)
+        let finished = DatabaseFixtures.makeWorkout(day: nil, finishedAt: DatabaseFixtures.referenceDate)
+        let finishedItem = DatabaseFixtures.makeWorkoutExercise(workoutId: finished.id, exerciseId: exercise.id)
+        let active = DatabaseFixtures.makeWorkout(day: nil, finishedAt: nil)
+        let activeItem = DatabaseFixtures.makeWorkoutExercise(workoutId: active.id, exerciseId: exercise.id)
+        try await database.writer.write { db in
+            try ExerciseRecord(exercise).insert(db)
+            try WorkoutRecord(finished).insert(db)
+            try WorkoutExerciseRecord(finishedItem).insert(db)
+            try WorkoutRecord(active).insert(db)
+            try WorkoutExerciseRecord(activeItem).insert(db)
+        }
+        var iterator = repository.observeArchived().makeAsyncIterator()
+        #expect(try await iterator.next() == [])
+
+        try await repository.archive(id: exercise.id)
+        let archived = try await iterator.next()
+        #expect(archived?.map(\.id) == [exercise.id])
+        #expect(archived?.first?.workoutCount == 1)
+
+        try await repository.restore(id: exercise.id)
+        #expect(try await iterator.next() == [])
+        #expect(try await repository.exercise(id: exercise.id)?.isArchived == false)
+    }
 }

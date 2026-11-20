@@ -9,19 +9,22 @@ struct LibraryRoute: View {
     private let makeEquipmentEditorViewModel: (EquipmentEditorTarget) -> EquipmentEditorViewModel
     private let makeExerciseEditorViewModel: (UUID) -> ExerciseEditorViewModel
     private let onOpenExercise: (UUID) -> Void
+    private let onOpenArchive: () -> Void
 
     init(
         viewModel: LibraryViewModel,
         makeAddExerciseViewModel: @escaping (AddExerciseTarget) -> AddExerciseViewModel,
         makeEquipmentEditorViewModel: @escaping (EquipmentEditorTarget) -> EquipmentEditorViewModel,
         makeExerciseEditorViewModel: @escaping (UUID) -> ExerciseEditorViewModel,
-        onOpenExercise: @escaping (UUID) -> Void
+        onOpenExercise: @escaping (UUID) -> Void,
+        onOpenArchive: @escaping () -> Void
     ) {
         _viewModel = State(initialValue: viewModel)
         self.makeAddExerciseViewModel = makeAddExerciseViewModel
         self.makeEquipmentEditorViewModel = makeEquipmentEditorViewModel
         self.makeExerciseEditorViewModel = makeExerciseEditorViewModel
         self.onOpenExercise = onOpenExercise
+        self.onOpenArchive = onOpenArchive
     }
 
     var body: some View {
@@ -36,6 +39,7 @@ struct LibraryRoute: View {
                     onQuickAdd: { quickExercise in addTarget = .quick(quickExercise) },
                     onAddCustom: { addTarget = .blank },
                     onOpenExercise: onOpenExercise,
+                    onOpenArchive: onOpenArchive,
                     onEdit: { exerciseId in editorTarget = ExerciseEditorTarget(exerciseId: exerciseId) },
                     onArchive: requestArchive,
                     onConfirmArchive: confirmArchive,
@@ -57,6 +61,9 @@ struct LibraryRoute: View {
         }
         .task {
             await viewModel.observe()
+        }
+        .task {
+            await viewModel.observeArchive()
         }
         .sheet(item: $addTarget) { target in
             return AddExerciseRoute(

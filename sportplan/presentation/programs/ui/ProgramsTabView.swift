@@ -21,7 +21,14 @@ struct ProgramsTabView: View {
                     },
                     makeEquipmentEditorViewModel: container.buildEquipmentEditorViewModel,
                     makeExerciseEditorViewModel: container.buildExerciseEditorViewModel,
-                    onOpenExercise: { exerciseId in router.push(ExerciseCardDestination(exerciseId: exerciseId)) }
+                    onOpenExercise: { exerciseId in router.push(ExerciseCardDestination(exerciseId: exerciseId)) },
+                    onOpenArchive: { router.push(ExerciseArchiveDestination()) }
+                )
+            }
+            .navigationDestination(for: ExerciseArchiveDestination.self) { _ in
+                return ExerciseArchiveRoute(
+                    viewModel: container.buildExerciseArchiveViewModel(),
+                    onEmptied: { router.pop() }
                 )
             }
             .navigationDestination(for: ExerciseCardDestination.self) { destination in
