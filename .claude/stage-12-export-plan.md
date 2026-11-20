@@ -1,7 +1,7 @@
 # Этап 12. Экспорт и импорт JSON — план
 
 ## Контекст
-Последний этап по roadmap. Объём — `docs/code-brief.md` §10: экспорт и импорт всех данных в JSON, в файле `schemaVersion`, импорт заменяет всё после подтверждения. Макет — `.design/screens/SettingsScreen.dc.html` (`main`, `import`, `ax`). Решения обсуждения — `decisions.ru.md`, «Этап 12: экспорт и импорт JSON (обсуждение)».
+Последний этап по roadmap. Объём — `docs/code-brief.md` §10: экспорт и импорт всех данных в JSON, в файле `schemaVersion`, импорт заменяет всё после подтверждения. Макет — `.design/screens/SettingsScreen.dc.html` (`main`, `import`, `ax`). Решения обсуждения — `decisions.md`, «Этап 12: экспорт и импорт JSON (обсуждение)».
 
 Коммиты по частям в `main`, push.
 

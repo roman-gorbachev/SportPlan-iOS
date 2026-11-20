@@ -1,6 +1,6 @@
 # Этап 4: программы — план
 
-Решения — в `.claude/decisions.ru.md` (раздел «Этап 4»), макеты — `.design/screens/ProgramsScreen`, `Prog*`, блок «В день A» в `ExerciseFlow`. Задачи дизайнеру — в `.design/design-brief.md` («Задачи после обсуждения этапа 4»).
+Решения — в `.claude/decisions.md` (раздел «Этап 4»), макеты — `.design/screens/ProgramsScreen`, `Prog*`, блок «В день A» в `ExerciseFlow`. Задачи дизайнеру — в `.design/design-brief.md` («Задачи после обсуждения этапа 4»).
 
 Этап делится на две части:
 - **4.1 — Domain и data программ.** Делается сейчас: от форм не зависит.

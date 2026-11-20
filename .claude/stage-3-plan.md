@@ -15,8 +15,8 @@
 - Тесты: use cases в пакете с фейковыми репозиториями, репозитории на in-memory GRDB, у ViewModel — только логика формы.
 
 ## Первым делом после одобрения
-- Скопировать этот план в `.claude/stage-3-plan.ru.md`.
-- Записать решения в `.claude/decisions.ru.md`.
+- Скопировать этот план в `.claude/stage-3-plan.md`.
+- Записать решения в `.claude/decisions.md`.
 - `docs/code-brief.md`, функция 1: блокировка вида оборудования, чипы частых упражнений, «Архив» с возвратом (ждёт дизайна).
 - `.design/design-brief.md`: две задачи дизайнеру — экран правки упражнения и раздел «Архив» в справочнике и в «Моём зале».
 
@@ -82,7 +82,7 @@
 - `AppDIContainer`: `private lazy var equipmentRepository` и use cases.
 - Фабрики `buildSettingsViewModel()`, `buildGymViewModel()`, `buildEquipmentEditorViewModel(target:)` — в extension внутри `di/AppDIContainer.swift`: `private lazy var` видны только в своём файле.
 
-## 3.2 Справочник упражнений (кратко; подробный план — `.claude/stage-3.2-plan.ru.md`)
+## 3.2 Справочник упражнений (кратко; подробный план — `.claude/stage-3.2-plan.md`)
 - Domain:
   - `ExerciseRepository`;
   - use cases: `ObserveExerciseLibrary` (группы «Свободный вес» / «Тренажёры» / «Собственный вес»), `CreateExercise` (название; оборудование обязательно для всех видов, кроме собственного веса; отдых), `ArchiveExercise` (в одной транзакции удаляет `planned_exercise`), `CountProgramDaysUsingExercise`;

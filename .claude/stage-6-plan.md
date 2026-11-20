@@ -39,7 +39,7 @@
 - Domain: `Model/RestPeriod.swift`, `Model/ActiveWorkout.swift`, `Repository/WorkoutRepository.swift`, `UseCase/Workout/{CompleteSet,StopTimedSet,FinishWorkout,CancelWorkout}UseCase.swift` + новые.
 - Data: `repositories/WorkoutRepositoryImpl.swift`, новый `notifications/RestNotificationCenter.swift`.
 - Presentation: `root/RootView.swift`, `workout/active/...`, новые `workout/common/ActiveWorkoutStore.swift`, `workout/rest/...`; `di/AppDIContainer.swift`.
-- Документы: этот план → `.claude/stage-6-plan.ru.md`; решения → `.claude/decisions.ru.md` («Этап 6»); `roadmap.ru.md` — вопрос «Как в прошлый раз» снят, в этап 8 — точная раскладка блинов.
+- Документы: этот план → `.claude/stage-6-plan.md`; решения → `.claude/decisions.md` («Этап 6»); `roadmap.md` — вопрос «Как в прошлый раз» снят, в этап 8 — точная раскладка блинов.
 
 ## Проверка
 - `swift test` в `Packages/SportplanKit` и `xcodebuild test` — зелёные, сборка без предупреждений.

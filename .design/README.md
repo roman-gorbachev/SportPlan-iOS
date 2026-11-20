@@ -1,38 +1,38 @@
-# .design — снимок дизайн-канваса
+# .design — design canvas snapshot
 
-Снимок исходников канваса «Трекер тренировок» на 17.11.2026. Бриф — `design-brief.md` в этой же папке.
-Живая версия (смотреть и править): https://claude.ai/artifact/HfYdf17DiKLv8MoVk1qzQJ
+A snapshot of the "Workout tracker" canvas sources as of 17.11.2026. The brief is `design-brief.md` in this same folder.
+Live version (to view and edit): https://claude.ai/artifact/HfYdf17DiKLv8MoVk1qzQJ
 
-## Что это за файлы
+## What these files are
 
-- `canvas.json` — раскладка канваса: какие доски есть, их размеры и порядок.
-- `*.dc.html` — доски в формате Design Component. Это HTML с инлайн-стилями плюс шаблоны (`{{t.surf}}`, `<sc-for>`, `<sc-if>`, `<dc-import>`), поэтому в обычном браузере они отображаются не полностью. Смотреть — по ссылке выше.
-- Значения для шаблонов лежат в конце каждого файла, в `renderVals()`. Для каждой темы там объект `light` / `dark` с цветами.
+- `canvas.json` — the canvas layout: which boards exist, their sizes and order.
+- `*.dc.html` — boards in the Design Component format. This is HTML with inline styles plus templates (`{{t.surf}}`, `<sc-for>`, `<sc-if>`, `<dc-import>`), so a regular browser does not render them fully. View them via the link above.
+- Template values are at the end of each file, in `renderVals()`. For each theme there is a `light` / `dark` object with the colors.
 
-## Где что
+## What is where
 
-| Папка / файл | Содержание |
+| Folder / file | Contents |
 |---|---|
-| `Main`, `Journal`, `Print` | Шаг 1: три концепции (история) |
-| `Hybrid` | Выбранное направление «Блины, крупно» |
-| `system/Color` | Цветовые токены светлой и тёмной темы, контраст, блины IWF, уровни heatmap |
-| `system/Type` | Шкала шрифтов (Sofia Sans Condensed + Onest, Dynamic Type), отступы 4pt, скругления, линии |
-| `system/FontChoice` | Выбор шрифта для цифр: Sofia Sans Condensed (выбран), альтернативы и почему не Unbounded |
-| `system/Foundations` | SF Symbols, движение и Reduce Motion, haptics |
-| `system/WorkoutKit` | Строка подхода, степпер, таймер отдыха, секундомер подхода, Live Activity и Dynamic Island на всю тренировку, подсказка прогрессии, заметка |
-| `system/LoadTypes` | Строка подхода по оборудованию и метрике |
-| `system/HistoryKit` | Heatmap (5 уровней по рабочим подходам), графики и рекорды для трёх типов упражнений, бейдж рекорда, пустые состояния |
-| `system/PlatesKit` | Настройки «Мой зал»: оборудование и блины |
-| `screens/WorkoutScreen` | Экран «Тренировка»: один компонент, параметры `dark` и `state` (active / start / empty / ax) |
-| `screens/*Light`, `*Dark` | Состояния экрана «Тренировка», собранные из `WorkoutScreen` |
-| `screens/ProgramsScreen` | Вкладка «Программы»: `state` list / listNoDays / menu / progDelete / empty / day / dayEmpty / dayEdit / dayDelete, `large` — крупный текст |
-| `screens/ProgramsFlow` | Листы программ: `state` create / dayNew / dayForm / goals / goalsTimed / picker, `large` |
-| `screens/ExerciseFlow` | Справочник и добавление: `state` library / libraryEmpty / libraryArchive / archive / archiveFree / type / details / detailsBody / edit |
-| `screens/HistoryScreen` | Вкладка «История»: `state` list / empty / workout / ax |
-| `screens/ExerciseCard` | Карточка упражнения: `state` weighted / bodyweight / timed / empty / ax |
-| `screens/SettingsScreen` | Настройки и «Мой зал»: `state` main / import / gym / gymEmpty / gymArchive / ax |
-| `screens/LiveActivity` | Live Activity на экране блокировки и Dynamic Island (компактный, минимальный, развёрнутый) в трёх состояниях |
-| `screens/AppIcon` | Три варианта иконки: обычная, тёмная, тонированная, мелкие размеры |
-| `screens/Prog*`, `Lib*`, `Add*`, `Archive*`, `Hist*`, `Card*`, `Set*`, `Flow*`, `Ex*` | Состояния этих экранов в светлой и тёмной теме |
+| `Main`, `Journal`, `Print` | Step 1: three concepts (history) |
+| `Hybrid` | The chosen direction, "Plates, large" |
+| `system/Color` | Color tokens for the light and dark themes, contrast, IWF plates, heatmap levels |
+| `system/Type` | Type scale (Sofia Sans Condensed + Onest, Dynamic Type), 4pt spacing, corner radii, lines |
+| `system/FontChoice` | Choice of the numeral font: Sofia Sans Condensed (chosen), alternatives and why not Unbounded |
+| `system/Foundations` | SF Symbols, motion and Reduce Motion, haptics |
+| `system/WorkoutKit` | Set row, stepper, rest timer, set stopwatch, Live Activity and Dynamic Island for the whole workout, progression hint, note |
+| `system/LoadTypes` | Set row by equipment and metric |
+| `system/HistoryKit` | Heatmap (5 levels by working sets), charts and records for the three exercise types, record badge, empty states |
+| `system/PlatesKit` | "My gym" settings: equipment and plates |
+| `screens/WorkoutScreen` | The "Workout" screen: one component, parameters `dark` and `state` (active / start / empty / ax) |
+| `screens/*Light`, `*Dark` | States of the "Workout" screen, assembled from `WorkoutScreen` |
+| `screens/ProgramsScreen` | The "Programs" tab: `state` list / listNoDays / menu / progDelete / empty / day / dayEmpty / dayEdit / dayDelete, `large` — large text |
+| `screens/ProgramsFlow` | Program sheets: `state` create / dayNew / dayForm / goals / goalsTimed / picker, `large` |
+| `screens/ExerciseFlow` | Library and adding: `state` library / libraryEmpty / libraryArchive / archive / archiveFree / type / details / detailsBody / edit |
+| `screens/HistoryScreen` | The "History" tab: `state` list / empty / workout / ax |
+| `screens/ExerciseCard` | Exercise card: `state` weighted / bodyweight / timed / empty / ax |
+| `screens/SettingsScreen` | Settings and "My gym": `state` main / import / gym / gymEmpty / gymArchive / ax |
+| `screens/LiveActivity` | Live Activity on the lock screen and Dynamic Island (compact, minimal, expanded) in three states |
+| `screens/AppIcon` | Three icon variants: default, dark, tinted, small sizes |
+| `screens/Prog*`, `Lib*`, `Add*`, `Archive*`, `Hist*`, `Card*`, `Set*`, `Flow*`, `Ex*` | States of these screens in the light and dark themes |
 
-Для кода главное — `system/Color` и `system/Type`: в них все токены (имена вроде `textPrimary`, `surfaceSunken`, `numeralL` совпадают с тем, что стоит завести в модуле дизайн-токенов).
+For code, what matters most is `system/Color` and `system/Type`: they hold all the tokens (names like `textPrimary`, `surfaceSunken`, `numeralL` match what should be defined in the design tokens module).

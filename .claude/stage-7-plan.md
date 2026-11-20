@@ -58,7 +58,7 @@
 - Проект: `sportplan.xcodeproj/project.xcproj`, новая папка `sportplanLiveActivity/`.
 - Пакет: `Package.swift`, `Sources/WorkoutActivity/…`, `Sources/Domain/Model/ActiveWorkout.swift`, `Tests/DomainTests/…`.
 - Приложение: `data/activity/`, `presentation/workout/activity/`, `presentation/root/RootView.swift`, `di/AppDIContainer.swift`, `Localizable.xcstrings`, `sportplanTests/presentation/…`.
-- Документы: `CLAUDE.md` (новый таргет и библиотека), `.claude/decisions.ru.md` («Этап 7: итоги»), `.claude/roadmap.ru.md`.
+- Документы: `CLAUDE.md` (новый таргет и библиотека), `.claude/decisions.md` («Этап 7: итоги»), `.claude/roadmap.md`.
 
 ## Проверка
 - `swift test` в пакете и `xcodebuild test` — зелёные, без предупреждений.

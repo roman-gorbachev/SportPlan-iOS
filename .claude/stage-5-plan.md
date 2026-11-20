@@ -1,6 +1,6 @@
 # Этап 5: активная тренировка — план
 
-Объём — `docs/code-brief.md`, раздел 3 «Активная тренировка и история подходов». Решения — `.claude/decisions.ru.md` («Этап 5»). Макеты — `.design/screens/WorkoutScreen` (состояния active / start / empty / ax), `ActiveDark`, `StartLight/Dark`, компоненты — `.design/system/WorkoutKit`.
+Объём — `docs/code-brief.md`, раздел 3 «Активная тренировка и история подходов». Решения — `.claude/decisions.md` («Этап 5»). Макеты — `.design/screens/WorkoutScreen` (состояния active / start / empty / ax), `ActiveDark`, `StartLight/Dark`, компоненты — `.design/system/WorkoutKit`.
 
 ## Решения обсуждения (18.11.2026)
 - Два блока: 5.1 — Domain и data, 5.2 — экраны. Коммиты отдельно, между ними можно остановиться.

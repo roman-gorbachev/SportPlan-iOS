@@ -1,6 +1,6 @@
 # Этап 3.2: справочник упражнений — план
 
-Решения — в `.claude/decisions.ru.md` (разделы «Этап 3» и «Этап 3.2»), макеты — `.design/screens/ExerciseFlow`, `Library*`, `LibEmpty*`, `AddType*`, `AddDetails*`, `ArchiveLight`. Паттерн и общие компоненты — из 3.1.
+Решения — в `.claude/decisions.md` (разделы «Этап 3» и «Этап 3.2»), макеты — `.design/screens/ExerciseFlow`, `Library*`, `LibEmpty*`, `AddType*`, `AddDetails*`, `ArchiveLight`. Паттерн и общие компоненты — из 3.1.
 
 ## Объём
 Входит:

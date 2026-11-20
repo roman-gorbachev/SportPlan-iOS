@@ -1,211 +1,211 @@
-# Бриф для дизайна: трекер тренировок (iOS)
+# Design brief: workout tracker (iOS)
 
-## Что это за продукт
+## What the product is
 
-Личный трекер силовых тренировок для iPhone. Без рекламы, без подписки, без калорий и соцсетей. Приложение решает три задачи:
+A personal strength-training tracker for iPhone. No ads, no subscription, no calories and no social networks. The app does three jobs:
 
-1. Хранит план-программу тренировок (программа → дни → упражнения).
-2. Быстро записывает подходы прямо в зале и показывает, что было в прошлый раз.
-3. Показывает историю: календарь, личные рекорды, прогресс по упражнению.
+1. Stores the training program plan (program → days → exercises).
+2. Records sets quickly right in the gym and shows what happened last time.
+3. Shows history: a calendar, personal records, progress per exercise.
 
-Главный принцип: **ничего лишнего**. Каждый элемент на экране должен быть оправдан. Если сомневаешься, нужен ли элемент, значит, он не нужен.
+Main principle: **nothing superfluous**. Every element on screen must be justified. If you doubt whether an element is needed, it isn't.
 
-Условия использования: зал, телефон в одной руке, иногда потные руки, яркий свет или полумрак, между подходами 30–60 секунд внимания. Экран читается с первого взгляда, с расстояния вытянутой руки.
-
----
-
-## Шаг 1. Дизайн-система (делаем первой)
-
-Прежде чем рисовать экраны, собираем собственную дизайн-систему. Она должна узнаваться и отличаться от конкурентов (Hevy, Strong, Fitbod и т.п.), а не выглядеть как очередной шаблон.
-
-### Требование №1: не выглядеть как работа нейросети
-
-Дизайн должен выглядеть так, будто его сделал живой дизайнер с характером и точкой зрения. Под запретом всё, что сразу выдаёт генерацию или шаблон:
-
-- фиолетово-синие и «закатные» градиенты, градиентный текст;
-- glassmorphism и размытие на всём подряд, светящиеся (glow) тени;
-- неоновый лайм или оранжевый на чёрном, агрессивные курсивные шрифты (главный штамп фитнес-приложений);
-- одинаковые карточки с одинаковой тенью и скруглением 16pt везде;
-- эмодзи вместо иконок, 3D-блобы, абстрактные «AI-иллюстрации», стоковые фото атлетов;
-- безликий системный вид, где кроме SF Pro и синего акцента ничего нет;
-- декоративные элементы, которые ничего не сообщают.
-
-### Что нужно вместо этого
-
-Сначала предложи **3 разных концепции** визуального направления. Для каждой: короткая идея (1–2 предложения), палитра, шрифтовая пара и один пример ключевого компонента (строка подхода). Выбираем одну и развиваем.
-
-Направления для старта (можно предложить свои, если они сильнее):
-
-- **Цвета олимпийских блинов.** Акцентная система по стандарту IWF: красный 25 кг, синий 20, жёлтый 15, зелёный 10, белый 5. Цвет несёт смысл, например в уровнях heatmap или рекордах. Основа нейтральная, цвет используется дозированно.
-- **Тренировочный журнал.** Ощущение бумажного дневника тренера: линейка, моноширинные или табличные цифры, плотная информативная типографика, пометки «от руки» только как редкий акцент.
-- **Спортивная полиграфия.** Швейцарская типографика, крупные цифры как главный визуальный элемент, строгая сетка, смелый масштаб шрифта и почти без декора.
-
-Цифры (вес, повторы, время) здесь главный контент. Они должны быть крупными, табличными (tabular figures) и красивыми сами по себе.
-
-### Состав дизайн-системы
-
-- **Цвет.** Токены для светлой и тёмной темы: фон, поверхности, текст (primary/secondary/tertiary), акцент, состояния (успех, рекорд, разминка, деструктивное действие). Контраст текста не ниже WCAG AA. Цвет никогда не единственный носитель смысла.
-- **Типографика.** Шкала стилей, совместимая с Dynamic Type. Можно взять свой шрифт для цифр и заголовков, но он должен масштабироваться. Отдельный стиль для крупных цифр.
-- **Отступы и сетка.** Шаг 4pt, ритм экранов.
-- **Формы.** Своя логика скруглений (не одно значение на всё), обводки, разделители.
-- **Иконки.** SF Symbols как основа (они нативно адаптируются под систему). Свои иконки только там, где их нет, в том же оптическом весе.
-- **Движение.** Короткие осмысленные анимации: запись подхода, старт таймера, новый рекорд. Учитывать Reduce Motion.
-- **Тактильная отдача.** Где использовать haptics (запись подхода, конец отдыха, рекорд).
-
-### Базовые компоненты
-
-1. Строка подхода: номер, значение, пометка «разминка», состояние (план / выполнено). Рядом прошлый результат. Варианты по оборудованию упражнения:
-   - штанга и тренажёр с блинами — вес × повторы, со стопкой блинов;
-   - блочный тренажёр — вес × повторы;
-   - гантели — вес одной гантели × повторы;
-   - собственный вес — повторы и необязательное отягощение («+10 × 8»);
-   - на время — длительность (метрика «время» возможна и у своего веса, например планка).
-2. Степпер веса и повторов (± шаг оборудования, например 2.5 кг; ±1 повтор) и кнопка «как предыдущий». Крупные зоны нажатия, удобно большим пальцем.
-3. **Секундомер подхода на время**: кнопка запускает счёт вверх, пользователь останавливает, записывается фактическое время. Это отдельный компонент, его нельзя путать с таймером отдыха.
-4. Таймер отдыха (обратный отсчёт): в приложении, в нижнем accessory над таб-баром, только во время отдыха.
-5. Live Activity / Dynamic Island **на всю тренировку**: текущее упражнение и подход; во время отдыха — обратный отсчёт; состояние «Отдых окончен», когда отдых истёк, а приложение свёрнуто. Кнопок нет.
-6. «Мой зал» в настройках:
-   - оборудование: грифы (олимпийский, EZ, Смит), гантели, тренажёры с блинами и блочные; у каждого название, вес грифа или платформы и шаг веса;
-   - набор блинов своего зала (цвет и вес каждого блина), редактирование блина, сброс к стандарту IWF.
-7. Ячейка heatmap и легенда, 5 уровней (0 / 1–6 / 7–12 / 13–18 / 19+ рабочих подходов за день).
-8. График прогресса по упражнению (стиль Swift Charts в нашей системе), вариант зависит от типа упражнения (см. «Структура приложения»).
-9. Бейдж нового рекорда.
-10. Подсказка прогрессии («В прошлый раз всё выполнено, попробуй 62.5 кг»), ненавязчивая. Только у упражнений с оборудованием.
-11. Поле заметки к тренировке.
-12. Пустые состояния: без иллюстраций-заглушек, через типографику и одну подсказку.
+Conditions of use: the gym, the phone in one hand, sometimes sweaty hands, bright light or dim light, 30–60 seconds of attention between sets. The screen reads at first glance, at arm's length.
 
 ---
 
-## Гайдлайны и лучшие практики Apple
+## Step 1. Design system (done first)
 
-Перед работой изучи Apple Human Interface Guidelines (developer.apple.com/design/human-interface-guidelines) и актуальные материалы по Liquid Glass. Ключевое:
+Before drawing screens, we build our own design system. It must be recognizable and different from competitors (Hevy, Strong, Fitbod and the like), not look like yet another template.
 
-- **Liquid Glass только на навигационном слое**: таб-бар, тулбары, плавающие кнопки. На контенте (строки подходов, карточки, графики) стекла нет. Наша уникальность живёт в контенте, а системная навигация остаётся нативной.
-- **Таб-бар нужен для навигации, а не для действий.** Он плавает над контентом и может сворачиваться при скролле.
-- **Bottom accessory над таб-баром** (как мини-плеер в Music) подходит для таймера отдыха. Показывается только во время отдыха.
-- **В iOS 27 Liquid Glass стал контрастнее**, и у пользователя появился ползунок прозрачности. Интерфейс должен оставаться читаемым при любой его настройке.
-- Минимальная зона нажатия 44×44pt. В зале лучше больше.
-- Dynamic Type, VoiceOver-лейблы, Reduce Motion, Increase Contrast.
-- Светлая и тёмная тема полноценны обе, тёмная не получается просто инверсией.
-- Нативные паттерны: sheets, контекстные меню, swipe actions. Не изобретать замену тому, что уже знакомо пользователю.
+### Requirement #1: don't look like AI output
+
+The design must look as if a living designer with character and a point of view made it. Everything that immediately gives away generation or a template is banned:
+
+- purple-blue and "sunset" gradients, gradient text;
+- glassmorphism and blur on everything, glowing shadows;
+- neon lime or orange on black, aggressive italic fonts (the main cliché of fitness apps);
+- identical cards with the same shadow and a 16pt radius everywhere;
+- emoji instead of icons, 3D blobs, abstract "AI illustrations", stock photos of athletes;
+- a faceless system look with nothing but SF Pro and a blue accent;
+- decorative elements that communicate nothing.
+
+### What is needed instead
+
+First propose **3 different concepts** for the visual direction. For each: a short idea (1–2 sentences), a palette, a font pair and one example of a key component (the set row). We pick one and develop it.
+
+Directions to start from (you can propose your own if they are stronger):
+
+- **Olympic plate colors.** An accent system based on the IWF standard: red 25 kg, blue 20, yellow 15, green 10, white 5. Color carries meaning, for example in heatmap levels or records. The base is neutral, color is used sparingly.
+- **Training log.** The feel of a coach's paper diary: ruled lines, monospaced or tabular numerals, dense informative typography, "handwritten" marks only as a rare accent.
+- **Sports print.** Swiss typography, large numerals as the main visual element, a strict grid, a bold type scale and almost no decoration.
+
+Numbers (weight, reps, time) are the main content here. They must be large, tabular (tabular figures) and beautiful in themselves.
+
+### Design system contents
+
+- **Color.** Tokens for the light and dark themes: background, surfaces, text (primary/secondary/tertiary), accent, states (success, record, warm-up, destructive action). Text contrast at least WCAG AA. Color is never the only carrier of meaning.
+- **Typography.** A style scale compatible with Dynamic Type. A custom font for numerals and headings is fine, but it must scale. A separate style for large numerals.
+- **Spacing and grid.** A 4pt step, screen rhythm.
+- **Shapes.** Its own corner radius logic (not one value for everything), strokes, dividers.
+- **Icons.** SF Symbols as the base (they adapt natively to the system). Custom icons only where SF Symbols has none, in the same optical weight.
+- **Motion.** Short meaningful animations: recording a set, starting the timer, a new record. Respect Reduce Motion.
+- **Haptics.** Where to use haptics (recording a set, end of rest, a record).
+
+### Base components
+
+1. Set row: number, value, "warm-up" mark, state (planned / done). The previous result next to it. Variants by the exercise's equipment:
+   - barbell and plate-loaded machine — weight × reps, with a plate stack;
+   - selectorized machine — weight × reps;
+   - dumbbells — weight of one dumbbell × reps;
+   - bodyweight — reps and optional added weight ("+10 × 8");
+   - timed — duration (the "time" metric is also possible for bodyweight, e.g. a plank).
+2. Weight and reps stepper (± the equipment step, e.g. 2.5 kg; ±1 rep) and a "same as previous" button. Large tap targets, easy with the thumb.
+3. **Timed set stopwatch**: a button starts counting up, the user stops it, the actual time is recorded. This is a separate component and must not be confused with the rest timer.
+4. Rest timer (countdown): in the app, in the bottom accessory above the tab bar, only during rest.
+5. Live Activity / Dynamic Island **for the whole workout**: the current exercise and set; during rest — a countdown; a "Rest is over" state when rest has expired and the app is in the background. No buttons.
+6. "My gym" in settings:
+   - equipment: bars (Olympic, EZ, Smith), dumbbells, plate-loaded and selectorized machines; each has a name, a bar or platform weight and a weight step;
+   - the plate set of your gym (color and weight of each plate), editing a plate, reset to the IWF standard.
+7. Heatmap cell and legend, 5 levels (0 / 1–6 / 7–12 / 13–18 / 19+ working sets per day).
+8. Exercise progress chart (Swift Charts style in our system); the variant depends on the exercise type (see "App structure").
+9. New record badge.
+10. Progression hint ("Last time everything was done, try 62.5 kg"), unobtrusive. Only for exercises with equipment.
+11. Workout note field.
+12. Empty states: no placeholder illustrations, typography and one hint instead.
 
 ---
 
-## Структура приложения
+## Apple guidelines and best practices
 
-Только iPhone, только портретная ориентация. Три вкладки, больше не нужно. У каждой вкладки своя навигация: открытый экран не перекрывает таб-бар, и таймер отдыха в accessory виден на любой глубине.
+Before starting, study the Apple Human Interface Guidelines (developer.apple.com/design/human-interface-guidelines) and the current Liquid Glass materials. The key points:
 
-1. **Тренировка.** Кнопка «Начать» с выбором дня программы или пустая тренировка. Активная тренировка: список упражнений с подходами, прошлый результат, степперы, таймер, заметка, кнопка «Завершить».
-   - При старте по дню строки подходов уже созданы по плану (состояние «план») и заполнены значениями прошлой тренировки. Разминку пользователь добавляет сам.
-   - При «Завершить» невыполненные строки исчезают.
-2. **Программы.** Список программ, дни, упражнения в дне: целевые подходы, **диапазон повторов** («8–12», одно число тоже допустимо), время отдыха.
-   - **Справочник упражнений.** У упражнения есть название, необязательное описание, оборудование (или «собственный вес») и метрика: повторы или время. При первом запуске справочник пустой, нужно пустое состояние с быстрым добавлением.
-   - Упражнения и оборудование не удаляются, а **архивируются**. Подтверждение звучит так: «Упражнение будет убрано из N дней программ. История сохранится».
-   - **Задача:** предложить сценарий добавления упражнения. Например: категория (свободный вес / тренажёр / собственный вес) → подтип → название, параметры подставляются по подтипу. Оборудование выбирается из «Моего зала» или создаётся тут же. Сценарий должен быть коротким, на пару экранов максимум.
-3. **История.** Сверху heatmap, ниже список тренировок. Детали тренировки. Карточка упражнения: график, рекорды, история подходов. Рекорды и график зависят от типа упражнения:
-   - с оборудованием: рекорды — макс. вес и расчётный 1ПМ; график — 1ПМ или макс. вес с переключателем;
-   - собственный вес: рекорды — макс. повторов и макс. отягощение × повторы; график — макс. повторов;
-   - на время: рекорд и график — макс. длительность.
-
-Дополнительно:
-- экран настроек: «Мой зал» (оборудование и блины), экспорт и импорт данных; глобальных «вес грифа» и «шаг веса» нет, они у оборудования;
-- Live Activity / Dynamic Island на всю тренировку;
-- иконка приложения.
+- **Liquid Glass only on the navigation layer**: tab bar, toolbars, floating buttons. There is no glass on content (set rows, cards, charts). Our uniqueness lives in the content, and the system navigation stays native.
+- **The tab bar is for navigation, not for actions.** It floats above the content and can collapse on scroll.
+- **The bottom accessory above the tab bar** (like the mini player in Music) suits the rest timer. It is shown only during rest.
+- **In iOS 27 Liquid Glass became more contrasty**, and the user got a transparency slider. The interface must stay readable at any setting of it.
+- Minimum tap target 44×44pt. Bigger is better in the gym.
+- Dynamic Type, VoiceOver labels, Reduce Motion, Increase Contrast.
+- Light and dark themes are both complete; the dark one is not just an inversion.
+- Native patterns: sheets, context menus, swipe actions. Don't invent replacements for what the user already knows.
 
 ---
 
-## Порядок работы
+## App structure
 
-1. Три концепции визуального направления, выбор одной.
-2. Дизайн-система: токены и базовые компоненты (см. выше).
-3. Экран активной тренировки. Он самый важный, на нём проверяем систему.
-4. Остальные экраны: Программы, История, карточка упражнения, настройки.
-5. Live Activity / Dynamic Island и иконка.
+iPhone only, portrait only. Three tabs, no more are needed. Each tab has its own navigation: an opened screen does not cover the tab bar, and the rest timer in the accessory is visible at any depth.
 
-Для каждого экрана: светлая и тёмная тема, пустое состояние, состояние с данными, крупный размер Dynamic Type.
+1. **Workout.** A "Start" button with a choice of program day, or an empty workout. Active workout: a list of exercises with sets, the previous result, steppers, timer, note, a "Finish" button.
+   - When starting from a day, the set rows are already created from the plan (the "planned" state) and filled with values from the previous workout. The user adds warm-ups themselves.
+   - On "Finish", rows that are not done disappear.
+2. **Programs.** The list of programs, days, exercises in a day: target sets, **rep range** ("8–12", a single number is also allowed), rest time.
+   - **Exercise library.** An exercise has a name, an optional description, equipment (or "bodyweight") and a metric: reps or time. On first launch the library is empty; an empty state with quick adding is needed.
+   - Exercises and equipment are not deleted but **archived**. The confirmation reads: "The exercise will be removed from N program days. History will be kept."
+   - **Task:** propose a flow for adding an exercise. For example: category (free weights / machine / bodyweight) → subtype → name, with parameters filled in from the subtype. Equipment is chosen from "My gym" or created right there. The flow must be short, a couple of screens at most.
+3. **History.** A heatmap at the top, the workout list below. Workout details. Exercise card: chart, records, set history. Records and the chart depend on the exercise type:
+   - with equipment: records — max weight and estimated 1RM; chart — 1RM or max weight with a toggle;
+   - bodyweight: records — max reps and max added weight × reps; chart — max reps;
+   - timed: record and chart — max duration.
 
-## Статус (17.11.2026)
+In addition:
+- a settings screen: "My gym" (equipment and plates), data export and import; there are no global "bar weight" and "weight step", they belong to equipment;
+- Live Activity / Dynamic Island for the whole workout;
+- the app icon.
 
-Канвас: https://claude.ai/artifact/HfYdf17DiKLv8MoVk1qzQJ · снимок исходников в `.design/` (см. `.design/README.md`).
+---
 
-- **Шаг 1 — готово.** Три концепции (Блины, Журнал, Полиграфия), выбран гибрид «Блины, крупно».
-- **Шаг 2 — готово.** Дизайн-система: цвет (токены светлой и тёмной темы, AA), типографика (Sofia Sans Condensed для цифр и заголовков + Onest для текста, Dynamic Type), отступы, скругления, линии, иконки, движение, haptics. Компоненты: строка подхода (5 состояний; варианты по оборудованию и метрике), степпер (шаг оборудования), таймер отдыха, секундомер подхода, Live Activity и Dynamic Island на всю тренировку, подсказка прогрессии, заметка, heatmap (5 уровней), графики и рекорды для трёх типов упражнений, бейдж рекорда, пустые состояния, «Мой зал».
-- **Шаг 3 — черновик, ждёт ревью.** Экран «Тренировка»: активная тренировка (светлая, тёмная, AX1), выбор дня, пустое состояние. Цели повторов — диапазон, плановые строки подходов. Настройки открываются шестерёнкой на этой вкладке, меню «…» — добавить упражнение / отменить тренировку.
-- **Шаг 4 — черновик, ждёт ревью.** Программы (список, пусто, день, AX1); справочник упражнений (список, пусто с быстрым добавлением, архивация, добавление в 2 шага); История (heatmap в стиле GitHub за 15 недель, список, детали тренировки, пусто, AX1); карточка упражнения (с оборудованием, свой вес, время, нет данных, AX1); настройки (главная, подтверждение импорта, «Мой зал» с данными и пустой, AX1).
-- **Шаг 5 — черновик, ждёт ревью.** Live Activity на экране блокировки (подход, отдых, отдых окончен; светлая и тёмная), Dynamic Island (компактный, минимальный, развёрнутый со стопкой блинов). Иконка: вторая итерация, рабочий вариант — A «Маленький шаг».
+## Order of work
 
-## Принятые решения (17.11.2026)
+1. Three concepts for the visual direction, pick one.
+2. Design system: tokens and base components (see above).
+3. The active workout screen. It is the most important one, the system is tested on it.
+4. The other screens: Programs, History, exercise card, settings.
+5. Live Activity / Dynamic Island and the icon.
 
-- Визуальное направление: гибрид «Блины, крупно» — смысловой цвет и стопка блинов из концепции «Блины», крупные цифры и подходы на линейках из «Полиграфии». Упражнение — один блок, а не карточка на каждый подход.
-- Цвет блинов — только графика (стопка на гриф). По умолчанию стандарт IWF, пользователь меняет цвет и вес блинов под свой зал. Состояния (рекорд, успех, разминка, удаление) — отдельные токены и от цвета блинов не зависят.
-- Музыки в приложении нет: её закрывает системный плеер на экране блокировки. Bottom accessory занят только таймером отдыха.
-- У упражнения две характеристики: **оборудование** (свободный вес: штанга, гантели; тренажёр: с блинами, блочный; или собственный вес) и **метрика** (повторы или время). Пять вариантов строки подхода остаются. Стопка блинов показывается только у штанги и тренажёра с блинами; у остальных справа в строке только кнопка.
-- Визуализации упражнений (иллюстраций, анимаций техники) нет: только текстовое описание.
-- Отдых по умолчанию у упражнения — 90 с для всех видов, по подтипу не подставляется. По подтипу подставляются только оборудование (фильтр «Моего зала») и метрика. Отдых в конкретном дне программы можно изменить.
-- Heatmap — сетка в стиле GitHub за последние 15 недель (колонки — недели, строки — дни с понедельника), без чисел дней. Рекорды отмечаются в списке тренировок, не в сетке.
-- Шрифт цифр и заголовков — Sofia Sans Condensed (OFL, родная кириллица): узкие цифры как маркировка на блинах и табло соревнований. Unbounded отклонён — выглядит как типичный «ИИ-шрифт». Текст интерфейса — Onest. Проверить табличные цифры (tnum) при подключении.
-- Рабочая иконка — A «Маленький шаг»: макро-кадр конца грифа с маленьким жёлтым блином 1,5 кг. Идею приложения и название продумать позже, затем довести иконку под них.
+For each screen: light and dark theme, empty state, state with data, large Dynamic Type size.
 
-## Изменения после обсуждения архитектуры (17.11.2026)
+## Status (17.11.2026)
 
-**Внесено на канвас 17.11.2026** (снимок в `.design/` обновлён). Что поправлено в готовых компонентах и черновике:
-- `system/LoadTypes`: варианты строки описаны через оборудование и метрику (см. выше). Подход на время — секундомер, а не обратный отсчёт.
+Canvas: https://claude.ai/artifact/HfYdf17DiKLv8MoVk1qzQJ · a snapshot of the sources in `.design/` (see `.design/README.md`).
+
+- **Step 1 — done.** Three concepts (Plates, Journal, Print); the hybrid "Plates, large" was chosen.
+- **Step 2 — done.** Design system: color (light and dark theme tokens, AA), typography (Sofia Sans Condensed for numerals and headings + Onest for text, Dynamic Type), spacing, corner radii, lines, icons, motion, haptics. Components: set row (5 states; variants by equipment and metric), stepper (equipment step), rest timer, set stopwatch, Live Activity and Dynamic Island for the whole workout, progression hint, note, heatmap (5 levels), charts and records for the three exercise types, record badge, empty states, "My gym".
+- **Step 3 — draft, awaiting review.** The "Workout" screen: active workout (light, dark, AX1), day picker, empty state. Rep targets are a range, planned set rows. Settings open from a gear on this tab; the "…" menu — add exercise / cancel workout.
+- **Step 4 — draft, awaiting review.** Programs (list, empty, day, AX1); exercise library (list, empty with quick adding, archiving, adding in 2 steps); History (GitHub-style heatmap over 15 weeks, list, workout details, empty, AX1); exercise card (with equipment, bodyweight, time, no data, AX1); settings (main, import confirmation, "My gym" with data and empty, AX1).
+- **Step 5 — draft, awaiting review.** Live Activity on the lock screen (set, rest, rest is over; light and dark), Dynamic Island (compact, minimal, expanded with a plate stack). Icon: second iteration, the working variant is A "Small step".
+
+## Decisions made (17.11.2026)
+
+- Visual direction: the hybrid "Plates, large" — meaningful color and the plate stack from the "Plates" concept, large numerals and sets on ruled lines from "Print". An exercise is one block, not a card per set.
+- Plate color is graphics only (the stack on the bar). The default is the IWF standard; the user changes plate colors and weights to match their gym. States (record, success, warm-up, destructive) are separate tokens and do not depend on plate colors.
+- There is no music in the app: the system player on the lock screen covers it. The bottom accessory is used only by the rest timer.
+- An exercise has two characteristics: **equipment** (free weights: barbell, dumbbells; machine: plate-loaded, selectorized; or bodyweight) and **metric** (reps or time). The five set row variants stay. The plate stack is shown only for the barbell and the plate-loaded machine; for the others only the button sits on the right of the row.
+- There is no visualization of exercises (illustrations, technique animations): only a text description.
+- The default exercise rest is 90 s for all kinds and is not filled in from the subtype. The subtype fills in only the equipment ("My gym" filter) and the metric. Rest can be changed in a specific program day.
+- Heatmap — a GitHub-style grid over the last 15 weeks (columns are weeks, rows are days starting Monday), without day numbers. Records are marked in the workout list, not in the grid.
+- The numeral and heading font is Sofia Sans Condensed (OFL, native Cyrillic): narrow numerals like the markings on plates and competition scoreboards. Unbounded was rejected — it looks like a typical "AI font". The interface text is Onest. Check tabular figures (tnum) when wiring it up.
+- The working icon is A "Small step": a macro shot of the bar end with a small yellow 1.5 kg plate. Think through the app idea and name later, then finish the icon to match them.
+
+## Changes after the architecture discussion (17.11.2026)
+
+**Applied to the canvas on 17.11.2026** (the snapshot in `.design/` is updated). What was fixed in the finished components and the draft:
+- `system/LoadTypes`: row variants are described through equipment and metric (see above). A timed set is a stopwatch, not a countdown.
 - `system/WorkoutKit`:
-  - Live Activity и Dynamic Island живут всю тренировку: показывают упражнение и подход, а во время отдыха — отсчёт; нужно состояние «Отдых окончен»; кнопок нет;
-  - нужен компонент секундомера подхода;
-  - степпер веса шагает на шаг оборудования.
-- `system/PlatesKit`: «Гриф и блины» превращается в «Мой зал». Вместо одного веса грифа — список оборудования (название, вид, вес грифа или платформы, шаг), блины остаются как есть.
-- `system/HistoryKit`: график и рекорды в трёх вариантах по типу упражнения; heatmap — 5 уровней.
-- Экран «Тренировка»: плановые строки подходов («план») создаются при старте по дню, невыполненные исчезают при «Завершить»; цели повторов — диапазон.
+  - the Live Activity and Dynamic Island live for the whole workout: they show the exercise and set, and during rest — the countdown; a "Rest is over" state is needed; no buttons;
+  - a set stopwatch component is needed;
+  - the weight stepper steps by the equipment step.
+- `system/PlatesKit`: "Bar and plates" becomes "My gym". Instead of a single bar weight — a list of equipment (name, kind, bar or platform weight, step); plates stay as they are.
+- `system/HistoryKit`: the chart and records in three variants by exercise type; heatmap — 5 levels.
+- The "Workout" screen: planned set rows ("planned") are created when starting from a day, rows that are not done disappear on "Finish"; rep targets are a range.
 
-## Задачи после обсуждения этапа 3 (18.11.2026)
+## Tasks after the stage 3 discussion (18.11.2026)
 
-**Сделано на канвасе 18.11.2026** (ряд «Справочник и добавление», блок «18.11», и «Мой зал»):
-- Правка упражнения — тот же лист, что шаг 2 добавления: название, описание, оборудование (только того же вида, с подписью почему), метрика заблокирована с замком, отдых по умолчанию, «Архивировать». Открывается тапом по строке справочника.
-- «Архив» в справочнике — строка внизу списка с числом, экран с кнопкой «Вернуть» и подписью, что в дни программ упражнение не возвращается. «Архив оборудования» — так же в «Моём зале». Пустой архив не показывается.
-- Picker вида в листе «Оборудование» неактивен, рядом «Используется в 4 упражнениях — вид не меняется».
-- Шаг 2 добавления: у штанги переключателя метрики нет, у «Собственного веса» есть (отдельный макет). Оборудование заранее не выбрано, «Добавить» неактивна до выбора.
-- Алерт архивации без дней программ: «Упражнение пропадёт из справочника. История сохранится.»
+**Done on the canvas on 18.11.2026** (the "Library and adding" row, the "18.11" block, and "My gym"):
+- Editing an exercise — the same sheet as step 2 of adding: name, description, equipment (only of the same kind, with a caption explaining why), metric locked with a lock icon, default rest, "Archive". Opened by tapping a library row.
+- "Archive" in the library — a row at the bottom of the list with a count, a screen with a "Restore" button and a caption saying the exercise does not return to program days. "Equipment archive" — the same in "My gym". An empty archive is not shown.
+- The kind Picker in the "Equipment" sheet is disabled, next to it "Used in 4 exercises — the kind can't change".
+- Step 2 of adding: the barbell has no metric toggle, "Bodyweight" has one (a separate mockup). Equipment is not preselected, "Add" is disabled until a choice is made.
+- The archive alert without program days: "The exercise will disappear from the library. History will be kept."
 
-Нужны макеты, без них этот код не начинаем:
-- **Правка упражнения.** Переименовать, поменять описание, отдых и оборудование. Вид упражнения не меняется. Если по упражнению уже есть подходы, метрику менять нельзя, а оборудование можно сменить только на оборудование того же вида. Можно взять шаг 2 добавления в режиме правки — решает дизайн. Откуда открывается: тап по строке справочника.
-- **Раздел «Архив».** В справочнике упражнений и в «Моём зале» показать заархивированное и дать вернуть его обратно. Возврат упражнения в дни программ не возвращает. Пустой архив не показывается.
+Mockups needed; this code does not start without them:
+- **Editing an exercise.** Rename, change the description, rest and equipment. The exercise kind does not change. If the exercise already has sets, the metric cannot change, and the equipment can only change to equipment of the same kind. Step 2 of adding in edit mode can be used — the design decides. Where it opens from: tapping a library row.
+- **The "Archive" section.** In the exercise library and in "My gym", show archived items and let the user restore them. Restoring an exercise does not return it to program days. An empty archive is not shown.
 
-Уточнения к готовым макетам:
-- Вид оборудования (Picker в sheet «Оборудование») неактивен, если оборудование используется хотя бы в одном упражнении. Рядом подпись «Используется в N упражнениях».
-- Шаг 2 добавления упражнения: переключатель «Повторы / Время» показывается только для «Собственного веса». У штанги, гантелей и тренажёров метрика всегда «Повторы» (в макете переключатель есть и у «Штанги»).
-- Нужен текст подтверждения архивации, когда упражнения нет ни в одном дне программ. Пока в коде: «Упражнение пропадёт из справочника. История сохранится.»
-- Если в «Моём зале» несколько единиц оборудования нужного вида, в шаге 2 ничего не выбрано заранее (в макете отмечен первый гриф).
+Clarifications to the finished mockups:
+- The equipment kind (the Picker in the "Equipment" sheet) is disabled if the equipment is used in at least one exercise. Next to it the caption "Used in N exercises".
+- Step 2 of adding an exercise: the "Reps / Time" toggle is shown only for "Bodyweight". Barbells, dumbbells and machines always have the "Reps" metric (in the mockup the toggle is also on "Barbell").
+- An archive confirmation text is needed for when the exercise is in no program day. For now the code says: "The exercise will disappear from the library. History will be kept."
+- If "My gym" has several items of the needed kind, nothing is preselected in step 2 (the mockup marks the first bar).
 
-## Задачи после обсуждения этапа 4 (18.11.2026)
+## Tasks after the stage 4 discussion (18.11.2026)
 
-**Сделано на канвасе 18.11.2026** (ряд «Программы», блок «18.11»; у каждого макета светлая, тёмная и AX1, у алертов — светлая и тёмная):
-- Создание программы — лист: название + первый день (метка и название). «Создать» в навбаре.
-- День — лист «Новый день» (из «+ День») и лист «День» для правки с «Удалить день». Правка дня открывается из режима «Править» на экране дня: строка «Название и метка». Алерт удаления дня: «День и его упражнения будут удалены из программы. История тренировок сохранится.» (текст предложен дизайном).
-- Метка дня показывается квадратным бейджем перед названием; у дней без метки бейджа нет.
-- Меню «…» программы — системное контекстное меню: «Переименовать», «Удалить». Алерт удаления — с текстом из брифа. Переименование — лист создания программы только с полем названия (отдельный макет не рисовали).
-- Цели упражнения в дне — лист со степперами: подходы, повторы «от / до», отдых (шаг 15 с), «Убрать из дня». Вариант для упражнения на время — без повторов.
-- Выбор упражнения — лист с поиском и группами; уже добавленные отмечены «в дне» и неактивны; «Новое» в навбаре открывает добавление в 2 шага.
-- Режим «Править» на экране дня — красный минус слева, ручка ≡ справа, «Готово» в навбаре.
-- Пустые состояния: день без упражнений (кнопка «Добавить упражнение»), программа без дней (текст в карточке и «+ День»).
+**Done on the canvas on 18.11.2026** (the "Programs" row, the "18.11" block; each mockup has light, dark and AX1, alerts have light and dark):
+- Creating a program — a sheet: name + first day (label and name). "Create" in the nav bar.
+- Day — a "New day" sheet (from "+ Day") and a "Day" sheet for editing with "Delete day". Editing a day opens from "Edit" mode on the day screen: the "Name and label" row. The day delete alert: "The day and its exercises will be removed from the program. Workout history will be kept." (text proposed by the design).
+- The day label is shown as a square badge before the name; days without a label have no badge.
+- The program "…" menu — a system context menu: "Rename", "Delete". The delete alert uses the text from the brief. Renaming — the program creation sheet with only the name field (no separate mockup was drawn).
+- Exercise targets in a day — a sheet with steppers: sets, reps "from / to", rest (15 s step), "Remove from day". A variant for a timed exercise — without reps.
+- Exercise picker — a sheet with search and groups; already added ones are marked "in day" and disabled; "New" in the nav bar opens adding in 2 steps.
+- "Edit" mode on the day screen — a red minus on the left, a ≡ handle on the right, "Done" in the nav bar.
+- Empty states: a day without exercises (an "Add exercise" button), a program without days (text in the card and "+ Day").
 
-В макетах «Программ» есть список, пустое состояние, экран дня и блок «В день A · Подходы / Повторы» в шаге 2 добавления упражнения. Экраны программ в код не идут, пока нет макетов ниже. Для каждого нужны светлая и тёмная тема и крупный Dynamic Type.
+The "Programs" mockups have the list, the empty state, the day screen and the "In day A · Sets / Reps" block in step 2 of adding an exercise. Program screens don't go into code until the mockups below exist. Each needs a light and dark theme and large Dynamic Type.
 
-Нужны макеты:
-1. **Создание программы.** Название и первый день: пустое состояние говорит «Начни с одного дня», поэтому программа создаётся сразу с днём. Открывается кнопкой «Создать программу» и «+» в навбаре.
-2. **Добавление и правка дня.** Название (обязательно, «Грудь и трицепс») и метка (необязательно, до 3 символов, «A»). Без метки везде показывается название. Добавление — кнопка «+ День» под программой. Откуда правка и удаление дня — решает дизайн, например «Править» на экране дня. Удаление — с подтверждением.
-3. **Меню «…» программы.** Переименовать и удалить. Подтверждение удаления: «Программа и её дни будут удалены. История тренировок сохранится.»
-4. **Цели упражнения в дне** (тап по строке на экране дня, подсказка уже есть в макете). Подходы, повторы «от – до» (одно число допустимо, «от» = «до»), отдых. У упражнений на время повторов нет — только подходы и отдых. Действие «Убрать из дня».
-5. **Выбор упражнения для дня** (кнопка «+ Упражнение»). Справочник с группами и поиском. Уже добавленные в этот день упражнения отмечены и неактивны. Внизу или в навбаре — «Новое упражнение», оно открывает добавление в 2 шага с блоком «В день A».
-6. **Режим «Править» на экране дня.** Перестановка и удаление строк.
-7. **Пустые состояния.** День без упражнений; программа без дней (если удалить последний день).
+Mockups needed:
+1. **Creating a program.** Name and first day: the empty state says "Start with one day", so a program is created right away with a day. Opened by the "Create program" button and "+" in the nav bar.
+2. **Adding and editing a day.** Name (required, "Chest and triceps") and label (optional, up to 3 characters, "A"). Without a label the name is shown everywhere. Adding — the "+ Day" button under the program. Where editing and deleting a day come from — the design decides, e.g. "Edit" on the day screen. Deletion — with confirmation.
+3. **The program "…" menu.** Rename and delete. Delete confirmation: "The program and its days will be deleted. Workout history will be kept."
+4. **Exercise targets in a day** (tap on a row on the day screen; the hint is already in the mockup). Sets, reps "from – to" (a single number is allowed, "from" = "to"), rest. Timed exercises have no reps — only sets and rest. A "Remove from day" action.
+5. **Picking an exercise for a day** (the "+ Exercise" button). The library with groups and search. Exercises already added to this day are marked and disabled. At the bottom or in the nav bar — "New exercise", which opens adding in 2 steps with the "In day A" block.
+6. **"Edit" mode on the day screen.** Reordering and deleting rows.
+7. **Empty states.** A day without exercises; a program without days (if the last day is deleted).
 
-Уточнения к готовым макетам:
-- Одно упражнение добавляется в день только один раз: прошлый результат и предзаполнение подходов считаются по упражнению, с дублем непонятно, чьи подходы.
-- Существующее упражнение из справочника добавляется в день сразу с целями 3 × 8–12 и отдыхом упражнения, без промежуточного экрана. Цели правятся тапом по строке.
-- Подписи «пн 16.11» у дня и «следующий — B» у программы появятся вместе с активной тренировкой. До первой тренировки по дню — «ещё не было».
-- Порядок дней и программ пока не меняется: дни обычно добавляют по порядку.
+Clarifications to the finished mockups:
+- An exercise is added to a day only once: the previous result and set prefill are computed per exercise, and with a duplicate it's unclear whose sets they are.
+- An existing exercise from the library is added to a day right away with targets 3 × 8–12 and the exercise's rest, without an intermediate screen. Targets are edited by tapping the row.
+- The captions "Mon 16.11" on a day and "next — B" on a program will appear together with the active workout. Before the first workout from a day — "not yet".
+- The order of days and programs doesn't change for now: days are usually added in order.
 
-## Чего в приложении нет (не добавлять)
+## What the app does not have (don't add)
 
-Музыкальный плеер и интеграция с Apple Music, иллюстрации и анимации техники упражнений, группы мышц, калории и питание, соцсети и лента, аккаунты и логины, подписки, реклама, AI-тренер, геймификация с ачивками, онбординг на несколько экранов, несколько залов, кнопки в Live Activity, подсчёт объёма (тоннажа), автоматический бэкап, iPad и горизонтальная ориентация.
+Music player and Apple Music integration, illustrations and animations of exercise technique, muscle groups, calories and nutrition, social networks and a feed, accounts and logins, subscriptions, ads, an AI coach, gamification with achievements, multi-screen onboarding, multiple gyms, buttons in the Live Activity, volume (tonnage) tracking, automatic backup, iPad and landscape.
