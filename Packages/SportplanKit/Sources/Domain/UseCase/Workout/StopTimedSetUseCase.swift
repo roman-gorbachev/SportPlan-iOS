@@ -4,6 +4,7 @@ public struct StopTimedSetUseCase: Sendable {
     private static let minimumDurationSeconds = 0
 
     private let repository: any WorkoutRepository
+    private let scheduler: any RestNotificationScheduler
     private let restStarter: RestStarter
     private let now: @Sendable () -> Date
 
@@ -13,6 +14,7 @@ public struct StopTimedSetUseCase: Sendable {
         now: @escaping @Sendable () -> Date
     ) {
         self.repository = repository
+        self.scheduler = scheduler
         self.restStarter = RestStarter(repository: repository, scheduler: scheduler, now: now)
         self.now = now
     }
@@ -28,6 +30,7 @@ public struct StopTimedSetUseCase: Sendable {
         stopped.durationSeconds = max(elapsed, Self.minimumDurationSeconds)
         stopped.completedAt = stoppedAt
         try await repository.updateSet(stopped)
+        await scheduler.cancelSetEnd()
         try await restStarter.startRest(afterSetId: setId)
     }
 }

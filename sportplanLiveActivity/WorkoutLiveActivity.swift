@@ -60,6 +60,7 @@ struct WorkoutLiveActivity: Widget {
 } contentStates: {
     WorkoutActivityPreviewData.set
     WorkoutActivityPreviewData.rest
+    WorkoutActivityPreviewData.timedSet
     WorkoutActivityPreviewData.finishedSets
 }
 
@@ -69,6 +70,7 @@ struct WorkoutLiveActivity: Widget {
 } contentStates: {
     WorkoutActivityPreviewData.set
     WorkoutActivityPreviewData.rest
+    WorkoutActivityPreviewData.timedSet
     WorkoutActivityPreviewData.finishedSets
 }
 
@@ -78,6 +80,7 @@ struct WorkoutLiveActivity: Widget {
 } contentStates: {
     WorkoutActivityPreviewData.set
     WorkoutActivityPreviewData.rest
+    WorkoutActivityPreviewData.timedSet
     WorkoutActivityPreviewData.finishedSets
 }
 

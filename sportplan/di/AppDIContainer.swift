@@ -74,13 +74,17 @@ final class AppDIContainer {
         scheduler: restNotificationCenter,
         now: { return Date() }
     )
-    private lazy var startTimedSetUseCase = StartTimedSetUseCase(repository: workoutRepository, now: { return Date() })
+    private lazy var startTimedSetUseCase = StartTimedSetUseCase(
+        repository: workoutRepository,
+        scheduler: restNotificationCenter,
+        now: { return Date() }
+    )
     private lazy var stopTimedSetUseCase = StopTimedSetUseCase(
         repository: workoutRepository,
         scheduler: restNotificationCenter,
         now: { return Date() }
     )
-    private lazy var removeSetUseCase = RemoveSetUseCase(repository: workoutRepository)
+    private lazy var removeSetUseCase = RemoveSetUseCase(repository: workoutRepository, scheduler: restNotificationCenter)
     private lazy var updateWorkoutNoteUseCase = UpdateWorkoutNoteUseCase(repository: workoutRepository)
     private lazy var finishWorkoutUseCase = FinishWorkoutUseCase(
         repository: workoutRepository,

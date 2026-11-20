@@ -10,11 +10,13 @@ struct WorkoutActivityCoordinatorTests {
     private static let pollInterval = Duration.milliseconds(10)
     private static let pollAttempts = 300
     private static let settleDelay = Duration.milliseconds(150)
+    private static let storedDatePrecision: TimeInterval = 0.001
     private static let loadedWeight = Weight(kilograms: 60)
     private static let twentyKilograms = 20.0
     private static let stackWithoutTwenty = [15.0, 5.0]
 
     private struct Fixture {
+        let database: AppDatabase
         let day: ProgramDay
         let workouts: WorkoutRepositoryImpl
         let plates: PlateRepositoryImpl
@@ -51,6 +53,7 @@ struct WorkoutActivityCoordinatorTests {
         try await StartWorkoutFromDayUseCase(workoutRepository: workouts, programRepository: programs, now: now)
             .execute(dayId: day.id)
         return Fixture(
+            database: database,
             day: day,
             workouts: workouts,
             plates: plates,
@@ -140,6 +143,56 @@ struct WorkoutActivityCoordinatorTests {
 
         try await FinishWorkoutUseCase(repository: fixture.workouts, scheduler: fixture.scheduler, now: fixture.now).execute()
         try await Self.waitForEnd(fixture, count: 1)
+    }
+
+    @Test func runningTimedSetCountsDownToItsTarget() async throws {
+        let fixture = try await Self.makeFixture()
+        var plank = DatabaseFixtures.makeExercise(load: .bodyweight)
+        plank.name = "Планка"
+        plank.metric = .duration
+        let insertedPlank = plank
+        try await fixture.database.writer.write { db in
+            try ExerciseRecord(insertedPlank).insert(db)
+        }
+        let workoutId = try #require(try await fixture.workouts.activeWorkout()).id
+        let item = WorkoutExercise(
+            id: UUID(),
+            workoutId: workoutId,
+            exerciseId: plank.id,
+            position: 1,
+            targetSets: 1,
+            targetReps: nil,
+            restSeconds: 60,
+            targetDurationSeconds: 45
+        )
+        let entry = SetEntry(
+            id: UUID(),
+            workoutExerciseId: item.id,
+            position: 0,
+            weight: .zero,
+            reps: nil,
+            durationSeconds: 45,
+            isWarmup: false,
+            startedAt: nil,
+            completedAt: nil
+        )
+        try await fixture.workouts.addExercise(item, sets: [entry])
+        let tasks = Self.startObserving(fixture)
+        defer {
+            tasks.forEach { task in task.cancel() }
+        }
+        _ = try await Self.shown(fixture) { shown in return shown.content.phase == .set }
+
+        try await StartTimedSetUseCase(repository: fixture.workouts, scheduler: fixture.scheduler, now: fixture.now)
+            .execute(setId: entry.id)
+        let timed = try await Self.shown(fixture) { shown in return shown.content.phase == .timedSet }
+        let startedAt = try #require(timed.content.setStartedAt)
+        #expect(timed.content.exerciseName == "Планка")
+        #expect(timed.content.setTargetEndsAt == startedAt.addingTimeInterval(45))
+        #expect(timed.staleDate == timed.content.setTargetEndsAt)
+        let scheduledEnd = try #require(fixture.scheduler.scheduledSetEnd?.endsAt)
+        let shownEnd = try #require(timed.content.setTargetEndsAt)
+        #expect(abs(scheduledEnd.timeIntervalSince(shownEnd)) < Self.storedDatePrecision)
     }
 
     @Test func unrelatedChangesAreNotSentAgain() async throws {

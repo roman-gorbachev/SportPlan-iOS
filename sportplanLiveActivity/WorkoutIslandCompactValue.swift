@@ -23,6 +23,22 @@ struct WorkoutIslandCompactValue: View {
             case .restOver:
                 Text("activity.ready")
                     .appStyle(Typography.callout)
+            case let .timedSet(interval):
+                Text(timerInterval: interval, countsDown: true)
+                    .appStyle(Typography.numeralS)
+                    .multilineTextAlignment(.trailing)
+                    .frame(width: Self.timerWidth, alignment: .trailing)
+            case let .timedSetOver(endedAt):
+                Text(endedAt, style: .timer)
+                    .appStyle(Typography.numeralS)
+                    .foregroundStyle(Palette.success)
+                    .multilineTextAlignment(.trailing)
+                    .frame(width: Self.timerWidth, alignment: .trailing)
+            case let .timedSetRunning(setStartedAt):
+                Text(setStartedAt, style: .timer)
+                    .appStyle(Typography.numeralS)
+                    .multilineTextAlignment(.trailing)
+                    .frame(width: Self.timerWidth, alignment: .trailing)
             case .finishedSets:
                 Text(startedAt, style: .timer)
                     .appStyle(Typography.numeralS)

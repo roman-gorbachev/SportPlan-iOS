@@ -21,6 +21,21 @@ struct WorkoutIslandExpandedBody: View {
                 restOverBody
             case .finishedSets:
                 EmptyView()
+            case let .timedSet(interval):
+                restBody(interval: interval)
+            case let .timedSetOver(endedAt):
+                HStack(alignment: .firstTextBaseline, spacing: Spacing.xs) {
+                    Text("activity.timed.overtime")
+                        .appStyle(Typography.footnote)
+                        .foregroundStyle(Palette.textSecondary)
+                    Text(endedAt, style: .timer)
+                        .appStyle(Typography.numeralL)
+                        .foregroundStyle(Palette.success)
+                }
+                .accessibilityElement(children: .combine)
+            case let .timedSetRunning(startedAt):
+                Text(startedAt, style: .timer)
+                    .appStyle(Typography.numeralL)
             }
         }
         .foregroundStyle(Palette.textPrimary)

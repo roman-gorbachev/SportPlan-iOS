@@ -73,7 +73,7 @@ final class WorkoutActivityCoordinator {
             let next = Shown.showing(
                 attributes: WorkoutActivityMapper.makeAttributes(workout: workout),
                 content: WorkoutActivityMapper.makeContent(workout: workout, rest: snapshot.rest, plates: plates),
-                staleDate: WorkoutActivityMapper.staleDate(rest: snapshot.rest)
+                staleDate: WorkoutActivityMapper.staleDate(workout: workout, rest: snapshot.rest)
             )
             guard next != shown, case let .showing(attributes, content, staleDate) = next else {
                 return

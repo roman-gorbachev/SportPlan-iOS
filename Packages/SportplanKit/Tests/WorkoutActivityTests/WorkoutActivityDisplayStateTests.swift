@@ -42,7 +42,30 @@ struct WorkoutActivityDisplayStateTests {
         #expect(state == .finishedSets)
     }
 
-    private static func content(phase: WorkoutActivityPhase, rest: (Date, Date)?) -> WorkoutActivityContent {
+    @Test
+    func timedSetCountsDownToTheTargetUntilStale() {
+        let content = Self.content(phase: .timedSet, rest: nil, timedSet: (Self.restStart, Self.restEnd))
+        #expect(WorkoutActivityDisplayState(content: content, isStale: false) == .timedSet(interval: Self.restStart...Self.restEnd))
+        #expect(WorkoutActivityDisplayState(content: content, isStale: true) == .timedSetOver(endedAt: Self.restEnd))
+    }
+
+    @Test
+    func timedSetWithoutTargetCountsUp() {
+        let content = Self.content(phase: .timedSet, rest: nil, timedSet: (Self.restStart, nil))
+        #expect(WorkoutActivityDisplayState(content: content, isStale: false) == .timedSetRunning(startedAt: Self.restStart))
+    }
+
+    @Test
+    func timedSetWithoutStartFallsBackToTheSet() {
+        let content = Self.content(phase: .timedSet, rest: nil)
+        #expect(WorkoutActivityDisplayState(content: content, isStale: false) == .set)
+    }
+
+    private static func content(
+        phase: WorkoutActivityPhase,
+        rest: (Date, Date)?,
+        timedSet: (Date, Date?)? = nil
+    ) -> WorkoutActivityContent {
         return WorkoutActivityContent(
             phase: phase,
             exerciseName: "Squat",
@@ -52,7 +75,9 @@ struct WorkoutActivityDisplayStateTests {
             readyText: "ready",
             restStartedAt: rest?.0,
             restEndsAt: rest?.1,
-            plates: []
+            plates: [],
+            setStartedAt: timedSet?.0,
+            setTargetEndsAt: timedSet?.1
         )
     }
 }

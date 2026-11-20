@@ -93,12 +93,58 @@ struct RestUseCaseTests {
     @Test func stoppingTheStopwatchStartsRest() async throws {
         let setup = try await Self.makeSetup(benchMetric: .duration)
         let entry = setup.benchSets[0]
-        try await StartTimedSetUseCase(repository: setup.workouts, now: setup.clock.now).execute(setId: entry.id)
+        try await StartTimedSetUseCase(repository: setup.workouts, scheduler: setup.scheduler, now: setup.clock.now).execute(setId: entry.id)
         setup.clock.advance(by: 45)
         try await StopTimedSetUseCase(repository: setup.workouts, scheduler: setup.scheduler, now: setup.clock.now)
             .execute(setId: entry.id)
         #expect(Self.rest(setup)?.startedAt == DomainFixtures.referenceDate.addingTimeInterval(45))
         #expect(setup.scheduler.scheduled != nil)
+    }
+
+    @Test func startingATimedSetSkipsRestAndSchedulesTheSetEnd() async throws {
+        let setup = try await Self.makeSetup(benchMetric: .duration)
+        try await Self.complete(setup.squatSets[0], in: setup)
+        #expect(Self.rest(setup) != nil)
+        var entry = setup.benchSets[1]
+        entry.durationSeconds = 60
+        try await setup.workouts.updateSet(entry)
+        setup.clock.advance(by: 20)
+
+        try await StartTimedSetUseCase(repository: setup.workouts, scheduler: setup.scheduler, now: setup.clock.now)
+            .execute(setId: entry.id)
+        #expect(Self.rest(setup) == nil)
+        #expect(setup.scheduler.scheduled == nil)
+        #expect(setup.scheduler.scheduledSetEnd == SetEndNotificationRequest(
+            endsAt: DomainFixtures.referenceDate.addingTimeInterval(80),
+            exerciseName: "Жим лёжа",
+            setNumber: 2
+        ))
+
+        setup.clock.advance(by: 70)
+        try await StopTimedSetUseCase(repository: setup.workouts, scheduler: setup.scheduler, now: setup.clock.now)
+            .execute(setId: entry.id)
+        #expect(setup.scheduler.scheduledSetEnd == nil)
+        #expect(setup.workouts.sets.first { set in return set.id == entry.id }?.durationSeconds == 70)
+    }
+
+    @Test func timedSetWithoutTargetSchedulesNothing() async throws {
+        let setup = try await Self.makeSetup(benchMetric: .duration)
+        try await StartTimedSetUseCase(repository: setup.workouts, scheduler: setup.scheduler, now: setup.clock.now)
+            .execute(setId: setup.benchSets[0].id)
+        #expect(setup.scheduler.scheduledSetEnd == nil)
+        #expect(setup.scheduler.cancelCount == 0)
+    }
+
+    @Test func removingARunningSetCancelsTheSetEnd() async throws {
+        let setup = try await Self.makeSetup(benchMetric: .duration)
+        var entry = setup.benchSets[0]
+        entry.durationSeconds = 30
+        try await setup.workouts.updateSet(entry)
+        try await StartTimedSetUseCase(repository: setup.workouts, scheduler: setup.scheduler, now: setup.clock.now)
+            .execute(setId: entry.id)
+        #expect(setup.scheduler.scheduledSetEnd != nil)
+        try await RemoveSetUseCase(repository: setup.workouts, scheduler: setup.scheduler).execute(setId: entry.id)
+        #expect(setup.scheduler.scheduledSetEnd == nil)
     }
 
     @Test func adjustingMovesTheEndAndReschedules() async throws {

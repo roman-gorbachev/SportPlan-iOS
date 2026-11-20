@@ -48,4 +48,11 @@ extension SetEntry {
     public var isCompleted: Bool {
         return completedAt != nil
     }
+
+    public var targetEndsAt: Date? {
+        guard state == .running, let startedAt, let durationSeconds, durationSeconds > .zero else {
+            return nil
+        }
+        return startedAt.addingTimeInterval(TimeInterval(durationSeconds))
+    }
 }

@@ -8,6 +8,9 @@ enum WorkoutActivityMapper {
     }
 
     static func makeContent(workout: ActiveWorkout, rest: RestPeriod?, plates: [Plate]) -> WorkoutActivityContent {
+        if let running = workout.runningSet {
+            return makeTimedSetContent(running)
+        }
         let current = workout.currentSet
         let loadText = current.map { current in
             return WorkoutFormatting.setSummary(current.entry, exercise: current.exercise.exercise)
@@ -25,8 +28,27 @@ enum WorkoutActivityMapper {
         )
     }
 
-    static func staleDate(rest: RestPeriod?) -> Date? {
+    static func staleDate(workout: ActiveWorkout, rest: RestPeriod?) -> Date? {
+        if let running = workout.runningSet {
+            return running.entry.targetEndsAt
+        }
         return rest?.endsAt
+    }
+
+    private static func makeTimedSetContent(_ running: WorkoutSetReference) -> WorkoutActivityContent {
+        return WorkoutActivityContent(
+            phase: .timedSet,
+            exerciseName: running.exercise.exercise.exercise.name,
+            setText: setText(running),
+            loadText: WorkoutFormatting.setSummary(running.entry, exercise: running.exercise.exercise),
+            nextText: "",
+            readyText: "",
+            restStartedAt: nil,
+            restEndsAt: nil,
+            plates: [],
+            setStartedAt: running.entry.startedAt,
+            setTargetEndsAt: running.entry.targetEndsAt
+        )
     }
 
     private static func phase(current: WorkoutSetReference?, rest: RestPeriod?) -> WorkoutActivityPhase {

@@ -4,6 +4,7 @@ import UserNotifications
 
 nonisolated final class RestNotificationCenter: NSObject, RestNotificationScheduler, UNUserNotificationCenterDelegate {
     private static let identifier = "rest.finished"
+    private static let setEndIdentifier = "set.finished"
     private static let authorizationOptions: UNAuthorizationOptions = [.alert, .sound]
     private static let minimumInterval: TimeInterval = 1
 
@@ -29,6 +30,28 @@ nonisolated final class RestNotificationCenter: NSObject, RestNotificationSchedu
         center.removeDeliveredNotifications(withIdentifiers: [Self.identifier])
     }
 
+    func scheduleSetEnd(_ request: SetEndNotificationRequest) async {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [Self.setEndIdentifier])
+        let interval = request.endsAt.timeIntervalSinceNow
+        guard interval >= Self.minimumInterval, await isAuthorized(center) else {
+            return
+        }
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
+        let notification = UNNotificationRequest(
+            identifier: Self.setEndIdentifier,
+            content: setEndContent(for: request),
+            trigger: trigger
+        )
+        try? await center.add(notification)
+    }
+
+    func cancelSetEnd() async {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [Self.setEndIdentifier])
+        center.removeDeliveredNotifications(withIdentifiers: [Self.setEndIdentifier])
+    }
+
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
@@ -43,6 +66,19 @@ nonisolated final class RestNotificationCenter: NSObject, RestNotificationSchedu
             content.body = String(localized: "rest.notification.next \(exerciseName) \(setNumber)")
         } else {
             content.body = String(localized: "rest.notification.finish")
+        }
+        content.sound = .default
+        content.interruptionLevel = .timeSensitive
+        return content
+    }
+
+    private func setEndContent(for request: SetEndNotificationRequest) -> UNNotificationContent {
+        let content = UNMutableNotificationContent()
+        content.title = String(localized: "set.notification.title")
+        if let setNumber = request.setNumber {
+            content.body = String(localized: "set.notification.body \(request.exerciseName) \(setNumber)")
+        } else {
+            content.body = String(localized: "set.notification.bodyWithoutNumber \(request.exerciseName)")
         }
         content.sound = .default
         content.interruptionLevel = .timeSensitive

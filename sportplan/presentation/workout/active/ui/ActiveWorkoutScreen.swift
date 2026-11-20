@@ -290,7 +290,7 @@ struct ActiveWorkoutScreen: View {
         SetRowItem(id: UUID(), number: 4, value: .weightReps(weight: "65", reps: "8"), valueAccessibility: "65 кг, 8 повторов", isWarmup: false, isRecord: false, state: .planned, caption: "план", plates: plates, isTimed: false, isEditable: true),
     ], restTimer: rest)
     let plank = ActiveExerciseItem(id: UUID(), name: "Планка", summary: "0 из 2", progression: nil, sets: [
-        SetRowItem(id: UUID(), number: 1, value: .duration(text: "1:15", runningSince: Date().addingTimeInterval(-47)), valueAccessibility: "1 минута 15 секунд", isWarmup: false, isRecord: false, state: .running, caption: "идёт · было 1:15", plates: nil, isTimed: true, isEditable: false),
+        SetRowItem(id: UUID(), number: 1, value: .duration(text: "1:15", runningSince: Date().addingTimeInterval(-47), targetEndsAt: Date().addingTimeInterval(28)), valueAccessibility: "1 минута 15 секунд", isWarmup: false, isRecord: false, state: .running, caption: "идёт · цель 1:15", plates: nil, isTimed: true, isEditable: false),
         SetRowItem(id: UUID(), number: 2, value: .bodyweightReps(addedWeight: nil, reps: "12"), valueAccessibility: "12 повторов", isWarmup: false, isRecord: false, state: .planned, caption: nil, plates: nil, isTimed: false, isEditable: true),
     ], restTimer: nil)
     let data = ActiveWorkoutUiData(

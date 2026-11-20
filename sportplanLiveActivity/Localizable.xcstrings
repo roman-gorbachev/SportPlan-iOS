@@ -67,6 +67,39 @@
         }
       }
     },
+    "activity.timed.left" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "До цели"
+          }
+        }
+      }
+    },
+    "activity.timed.over" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Время вышло"
+          }
+        }
+      }
+    },
+    "activity.timed.overtime" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "сверх цели"
+          }
+        }
+      }
+    },
     "activity.workout.elapsed" : {
       "extractionState" : "manual",
       "localizations" : {

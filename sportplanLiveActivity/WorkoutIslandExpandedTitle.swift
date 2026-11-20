@@ -19,8 +19,10 @@ struct WorkoutIslandExpandedTitle: View {
 
     private var title: Text {
         switch state {
-        case .set:
+        case .set, .timedSet, .timedSetRunning:
             return Text(content.exerciseName)
+        case .timedSetOver:
+            return Text("activity.timed.over")
         case .rest:
             return Text("activity.rest")
         case .restOver:

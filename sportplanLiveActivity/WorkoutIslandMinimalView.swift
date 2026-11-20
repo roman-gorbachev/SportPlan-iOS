@@ -9,7 +9,7 @@ struct WorkoutIslandMinimalView: View {
 
     var body: some View {
         return Group {
-            if case let .rest(interval) = state, !reduceMotion {
+            if let interval = countdownInterval, !reduceMotion {
                 ProgressView(timerInterval: interval, countsDown: true) {
                     return EmptyView()
                 } currentValueLabel: {
@@ -21,6 +21,15 @@ struct WorkoutIslandMinimalView: View {
             } else {
                 WorkoutIslandSymbol(state: state)
             }
+        }
+    }
+
+    private var countdownInterval: ClosedRange<Date>? {
+        switch state {
+        case let .rest(interval), let .timedSet(interval):
+            return interval
+        case .set, .restOver, .finishedSets, .timedSetOver, .timedSetRunning:
+            return nil
         }
     }
 }

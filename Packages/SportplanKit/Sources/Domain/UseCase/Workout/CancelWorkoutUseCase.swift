@@ -11,5 +11,6 @@ public struct CancelWorkoutUseCase: Sendable {
         let active = try await repository.requiredActiveWorkout()
         try await repository.cancel(workoutId: active.id)
         await scheduler.cancel()
+        await scheduler.cancelSetEnd()
     }
 }

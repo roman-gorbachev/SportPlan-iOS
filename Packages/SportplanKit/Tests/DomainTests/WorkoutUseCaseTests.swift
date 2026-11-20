@@ -157,7 +157,7 @@ struct WorkoutUseCaseTests {
         let entry = DomainFixtures.makeSet(workoutExerciseId: item.id, position: 0, kilograms: 0, reps: nil, completedAt: nil)
         try await workouts.addExercise(item, sets: [entry])
 
-        try await StartTimedSetUseCase(repository: workouts, now: clock.now).execute(setId: entry.id)
+        try await StartTimedSetUseCase(repository: workouts, scheduler: FakeRestNotificationScheduler(), now: clock.now).execute(setId: entry.id)
         #expect(workouts.sets.first?.state == .running)
         clock.advance(by: 74.6)
         try await StopTimedSetUseCase(repository: workouts, scheduler: FakeRestNotificationScheduler(), now: clock.now).execute(setId: entry.id)

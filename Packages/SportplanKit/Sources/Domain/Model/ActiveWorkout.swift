@@ -49,6 +49,15 @@ public struct ActiveWorkout: Identifiable, Hashable, Sendable {
         }
     }
 
+    public var runningSet: WorkoutSetReference? {
+        for item in exercises {
+            if let entry = item.sets.first(where: { entry in return entry.state == .running }) {
+                return WorkoutSetReference(exercise: item, entry: entry)
+            }
+        }
+        return nil
+    }
+
     public var restTrigger: WorkoutSetReference? {
         let completed = exercises.flatMap { item in
             return item.sets.compactMap { entry -> (WorkoutSetReference, Date)? in

@@ -2842,6 +2842,39 @@
         }
       }
     },
+    "set.notification.body %@ %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, подход %2$lld: цель выполнена, останови секундомер"
+          }
+        }
+      }
+    },
+    "set.notification.bodyWithoutNumber %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: цель выполнена, останови секундомер"
+          }
+        }
+      }
+    },
+    "set.notification.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Время вышло"
+          }
+        }
+      }
+    },
     "settings.gym.empty" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3728,6 +3761,17 @@
         }
       }
     },
+    "workout.set.overtime %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%@"
+          }
+        }
+      }
+    },
     "workout.set.planned" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3858,6 +3902,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "нажми, чтобы начать"
+          }
+        }
+      }
+    },
+    "workout.set.target %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "цель %@"
           }
         }
       }

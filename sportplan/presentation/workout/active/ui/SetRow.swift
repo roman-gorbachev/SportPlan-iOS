@@ -53,8 +53,9 @@ struct SetRow: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .disabled(!row.isEditable)
+            .allowsHitTesting(row.isEditable)
             .accessibilityElement(children: .ignore)
+            .accessibilityRemoveTraits(row.isEditable ? [] : .isButton)
             .accessibilityLabel(accessibilityLabel)
             .accessibilityHint(row.isEditable ? String(localized: "workout.set.edit.hint") : "")
             if !dynamicTypeSize.isAccessibilitySize, let plates = row.plates {
@@ -118,15 +119,16 @@ struct SetRow: View {
                     numeral(reps, style: Typography.numeralL)
                     unit(String(localized: "workout.set.repsUnit"))
                 }
-            case let .duration(text, runningSince):
-                if let runningSince {
+            case let .duration(text, runningSince, targetEndsAt):
+                if let runningSince, let targetEndsAt {
+                    TimedSetCountdown(startedAt: runningSince, endsAt: targetEndsAt)
+                } else if let runningSince {
                     Text(runningSince, style: .timer)
                         .appStyle(Typography.numeralL)
                         .foregroundStyle(Palette.textPrimary)
                 } else {
                     numeral(text, style: Typography.numeralL)
                 }
-                unit(String(localized: "workout.set.minutes"))
             }
         }
         .lineLimit(1)

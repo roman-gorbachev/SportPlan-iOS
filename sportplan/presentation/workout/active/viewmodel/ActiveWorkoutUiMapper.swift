@@ -176,7 +176,12 @@ enum ActiveWorkoutUiMapper {
         switch exercise.metric {
         case .duration:
             let text = entry.durationSeconds.map(WorkoutFormatting.duration(seconds:)) ?? String(localized: "workout.set.noDuration")
-            return .duration(text: text, runningSince: entry.state == .running ? entry.startedAt : nil)
+            let isRunning = entry.state == .running
+            return .duration(
+                text: text,
+                runningSince: isRunning ? entry.startedAt : nil,
+                targetEndsAt: isRunning ? entry.targetEndsAt : nil
+            )
         case .weightReps:
             guard exercise.equipment != nil else {
                 let added = entry.weight > .zero ? WorkoutFormatting.weightText(entry.weight, exercise: exercise) : nil
@@ -214,7 +219,9 @@ enum ActiveWorkoutUiMapper {
         if state == .running {
             parts.append(String(localized: "workout.set.running"))
         }
-        if let previous = item.previousResult(for: entry) {
+        if state == .running, let target = entry.durationSeconds, target > .zero {
+            parts.append(String(localized: "workout.set.target \(WorkoutFormatting.duration(seconds: target))"))
+        } else if let previous = item.previousResult(for: entry) {
             parts.append(String(localized: "workout.set.previous \(WorkoutFormatting.setSummary(previous, exercise: item.exercise))"))
         }
         if state == .current, item.exercise.metric == .duration {

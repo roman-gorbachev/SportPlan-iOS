@@ -69,9 +69,9 @@ struct WorkoutViewModelsTests {
             addSet: AddSetUseCase(repository: workouts),
             updateSet: UpdateSetUseCase(repository: workouts),
             completeSet: CompleteSetUseCase(repository: workouts, scheduler: scheduler, now: now),
-            startTimedSet: StartTimedSetUseCase(repository: workouts, now: now),
+            startTimedSet: StartTimedSetUseCase(repository: workouts, scheduler: scheduler, now: now),
             stopTimedSet: StopTimedSetUseCase(repository: workouts, scheduler: scheduler, now: now),
-            removeSet: RemoveSetUseCase(repository: workouts),
+            removeSet: RemoveSetUseCase(repository: workouts, scheduler: scheduler),
             updateWorkoutNote: UpdateWorkoutNoteUseCase(repository: workouts),
             finishWorkout: FinishWorkoutUseCase(repository: workouts, scheduler: scheduler, now: now),
             cancelWorkout: CancelWorkoutUseCase(repository: workouts, scheduler: scheduler),
@@ -353,11 +353,12 @@ struct WorkoutViewModelsTests {
         let running = try await Self.data(fixture.active) { data in
             return data.exercises.first?.sets.first?.state == .running
         }
-        guard case let .duration(_, runningSince)? = running.exercises.first?.sets.first?.value else {
+        guard case let .duration(_, runningSince, targetEndsAt)? = running.exercises.first?.sets.first?.value else {
             Issue.record("Timed row expected")
             return
         }
         #expect(runningSince != nil)
+        #expect(targetEndsAt == nil)
 
         await fixture.active.tapSetAction(setId: row.id)
         _ = try await Self.data(fixture.active) { data in

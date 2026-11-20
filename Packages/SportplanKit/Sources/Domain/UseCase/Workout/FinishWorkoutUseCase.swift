@@ -20,9 +20,11 @@ public struct FinishWorkoutUseCase: Sendable {
         guard active.hasCompletedSets else {
             try await repository.cancel(workoutId: active.id)
             await scheduler.cancel()
+            await scheduler.cancelSetEnd()
             return
         }
         try await repository.finish(workoutId: active.id, at: now())
         await scheduler.cancel()
+        await scheduler.cancelSetEnd()
     }
 }

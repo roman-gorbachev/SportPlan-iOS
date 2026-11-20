@@ -24,6 +24,10 @@ struct WorkoutIslandExpandedDetail: View {
                 .accessibilityElement(children: .combine)
             case .finishedSets:
                 WorkoutElapsedText(startedAt: startedAt)
+            case .timedSet, .timedSetRunning:
+                Text(content.setText)
+            case .timedSetOver:
+                Text(content.exerciseName)
             }
         }
         .appStyle(Typography.footnote)

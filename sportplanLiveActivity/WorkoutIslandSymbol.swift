@@ -6,6 +6,7 @@ struct WorkoutIslandSymbol: View {
     private static let setSymbol = "dumbbell.fill"
     private static let restSymbol = "timer"
     private static let finishedSymbol = "checkmark"
+    private static let timedSetSymbol = "stopwatch"
 
     let state: WorkoutActivityDisplayState
 
@@ -23,6 +24,8 @@ struct WorkoutIslandSymbol: View {
             return Self.restSymbol
         case .finishedSets:
             return Self.finishedSymbol
+        case .timedSet, .timedSetOver, .timedSetRunning:
+            return Self.timedSetSymbol
         }
     }
 
@@ -30,9 +33,9 @@ struct WorkoutIslandSymbol: View {
         switch state {
         case .set:
             return Palette.textPrimary
-        case .rest:
+        case .rest, .timedSet, .timedSetRunning:
             return Palette.accent
-        case .restOver, .finishedSets:
+        case .restOver, .finishedSets, .timedSetOver:
             return Palette.success
         }
     }
