@@ -69,9 +69,8 @@ final class ProgramDayViewModel {
         }
         return PlannedExerciseGoalsTarget(
             plannedExerciseId: item.id,
-            exerciseName: item.exercise.exercise.name,
+            exercise: item.exercise,
             dayTitle: ProgramFormatting.dayFullTitle(detail.day),
-            exerciseRestSeconds: item.exercise.exercise.restSeconds,
             targets: item.plannedExercise.targets
         )
     }

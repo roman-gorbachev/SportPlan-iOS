@@ -1,6 +1,4 @@
 public struct LibraryExercise: Identifiable, Hashable, Sendable {
-    private static let bodyweightWeightStep = Weight(grams: 2_500)
-
     public let exercise: Exercise
     public let equipment: Equipment?
 
@@ -28,15 +26,16 @@ public struct LibraryExercise: Identifiable, Hashable, Sendable {
         return RecordProfile(loadKind: loadKind, metric: metric)
     }
 
+    public var weightScale: WeightScale {
+        return WeightScale(equipment: equipment)
+    }
+
     public var weightStep: Weight {
-        return equipment?.weightStep ?? Self.bodyweightWeightStep
+        return weightScale.step
     }
 
     public var minimumWeight: Weight {
-        guard let equipment, equipment.kind.hasBaseWeight else {
-            return .zero
-        }
-        return equipment.baseWeight
+        return weightScale.minimum
     }
 
     public var usesPlates: Bool {

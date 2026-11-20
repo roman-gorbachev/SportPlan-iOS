@@ -8,6 +8,8 @@ public struct PlannedExercise: Identifiable, Hashable, Sendable {
     public var targetSets: Int
     public var targetReps: RepRange?
     public var restSeconds: Int
+    public var startWeight: Weight?
+    public var targetDurationSeconds: Int?
 
     public init(
         id: UUID,
@@ -16,7 +18,9 @@ public struct PlannedExercise: Identifiable, Hashable, Sendable {
         position: Int,
         targetSets: Int,
         targetReps: RepRange?,
-        restSeconds: Int
+        restSeconds: Int,
+        startWeight: Weight? = nil,
+        targetDurationSeconds: Int? = nil
     ) {
         self.id = id
         self.programDayId = programDayId
@@ -25,9 +29,17 @@ public struct PlannedExercise: Identifiable, Hashable, Sendable {
         self.targetSets = targetSets
         self.targetReps = targetReps
         self.restSeconds = restSeconds
+        self.startWeight = startWeight
+        self.targetDurationSeconds = targetDurationSeconds
     }
 
     public var targets: PlannedExerciseTargets {
-        return PlannedExerciseTargets(sets: targetSets, reps: targetReps, restSeconds: restSeconds)
+        return PlannedExerciseTargets(
+            sets: targetSets,
+            reps: targetReps,
+            restSeconds: restSeconds,
+            startWeight: startWeight,
+            durationSeconds: targetDurationSeconds
+        )
     }
 }

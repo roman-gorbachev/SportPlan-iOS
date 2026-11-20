@@ -13,6 +13,7 @@ nonisolated struct WorkoutExerciseRecord: AppRecord {
     var targetRepsMin: Int?
     var targetRepsMax: Int?
     var restSec: Int
+    var targetDurationSec: Int?
 
     init(_ workoutExercise: WorkoutExercise) {
         id = workoutExercise.id
@@ -23,6 +24,7 @@ nonisolated struct WorkoutExerciseRecord: AppRecord {
         targetRepsMin = workoutExercise.targetReps?.min
         targetRepsMax = workoutExercise.targetReps?.max
         restSec = workoutExercise.restSeconds
+        targetDurationSec = workoutExercise.targetDurationSeconds
     }
 
     func toDomainModel() throws -> WorkoutExercise {
@@ -33,7 +35,8 @@ nonisolated struct WorkoutExerciseRecord: AppRecord {
             position: position,
             targetSets: targetSets,
             targetReps: try RepRange.fromColumns(min: targetRepsMin, max: targetRepsMax, table: Self.databaseTableName),
-            restSeconds: restSec
+            restSeconds: restSec,
+            targetDurationSeconds: targetDurationSec
         )
     }
 }

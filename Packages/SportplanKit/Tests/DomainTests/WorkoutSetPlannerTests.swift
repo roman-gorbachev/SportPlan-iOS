@@ -157,4 +157,49 @@ struct WorkoutSetPlannerTests {
         #expect(Self.values([entry]) == ["55.0×9/-"])
         #expect(entry.position == 0)
     }
+
+    @Test func firstWorkoutUsesTheStartWeightAndTargetDuration() {
+        let sets = WorkoutSetPlanner.plannedSets(
+            for: Self.bench,
+            workoutExerciseId: UUID(),
+            targetSets: 2,
+            targetReps: RepRange(min: 8, max: 12),
+            startWeight: Weight(kilograms: 40),
+            previousSets: []
+        )
+        #expect(Self.values(sets) == ["40.0×8/-", "40.0×8/-"])
+        let timed = WorkoutSetPlanner.plannedSets(
+            for: Self.plank,
+            workoutExerciseId: UUID(),
+            targetSets: 2,
+            targetReps: nil,
+            targetDurationSeconds: 75,
+            previousSets: []
+        )
+        #expect(Self.values(timed) == ["0.0×-/75", "0.0×-/75"])
+    }
+
+    @Test func historyWinsOverTheStartWeight() {
+        let sets = WorkoutSetPlanner.plannedSets(
+            for: Self.bench,
+            workoutExerciseId: UUID(),
+            targetSets: 1,
+            targetReps: RepRange(min: 8, max: 12),
+            startWeight: Weight(kilograms: 40),
+            previousSets: [DomainFixtures.makeSet(position: 0, kilograms: 55, reps: 9)]
+        )
+        #expect(Self.values(sets) == ["55.0×9/-"])
+    }
+
+    @Test func startWeightBelowTheBarFallsBackToTheBar() {
+        let sets = WorkoutSetPlanner.plannedSets(
+            for: Self.bench,
+            workoutExerciseId: UUID(),
+            targetSets: 1,
+            targetReps: RepRange(min: 8, max: 12),
+            startWeight: Weight(kilograms: 10),
+            previousSets: []
+        )
+        #expect(Self.values(sets) == ["20.0×8/-"])
+    }
 }

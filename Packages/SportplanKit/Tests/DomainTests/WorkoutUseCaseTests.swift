@@ -55,6 +55,35 @@ struct WorkoutUseCaseTests {
         #expect(active.incompleteSetCount == 6)
     }
 
+    @Test func startFromDayUsesStartWeightAndCopiesTargetDuration() async throws {
+        let bench = DomainFixtures.makeLibraryExercise()
+        let plank = DomainFixtures.makeLibraryExercise(name: "Планка", kind: nil, metric: .duration)
+        let day = ProgramDay(id: UUID(), programId: UUID(), name: "Грудь", label: nil, position: 0)
+        let items = [
+            PlannedExerciseItem(plannedExercise: PlannedExercise(
+                id: UUID(), programDayId: day.id, exerciseId: bench.id, position: 0, targetSets: 2,
+                targetReps: RepRange(min: 8, max: 12), restSeconds: 120, startWeight: Weight(kilograms: 50)
+            ), exercise: bench),
+            PlannedExerciseItem(plannedExercise: PlannedExercise(
+                id: UUID(), programDayId: day.id, exerciseId: plank.id, position: 1, targetSets: 2,
+                targetReps: nil, restSeconds: 60, targetDurationSeconds: 45
+            ), exercise: plank),
+        ]
+        let detail = ProgramDayDetail(day: day, programName: "Сила", exercises: items)
+        let workouts = FakeWorkoutRepository(library: [bench, plank])
+        let useCase = StartWorkoutFromDayUseCase(
+            workoutRepository: workouts,
+            programRepository: FakeProgramRepository(dayDetails: [detail]),
+            now: TestClock().now
+        )
+        try await useCase.execute(dayId: day.id)
+
+        let active = try await Self.active(workouts)
+        #expect(active.exercises[0].sets.map(\.weight) == [Weight(kilograms: 50), Weight(kilograms: 50)])
+        #expect(active.exercises[1].workoutExercise.targetDurationSeconds == 45)
+        #expect(active.exercises[1].sets.map(\.durationSeconds) == [45, 45])
+    }
+
     @Test func startIsRejectedWhileAnotherWorkoutIsActive() async throws {
         let workouts = FakeWorkoutRepository()
         try await Self.startEmpty(workouts)

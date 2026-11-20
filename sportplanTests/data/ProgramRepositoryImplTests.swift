@@ -116,7 +116,7 @@ struct ProgramRepositoryImplTests {
         let day = Self.makeDay(programId: program.id, name: "Грудь и трицепс", label: "A")
         _ = try await repository.createProgram(program, firstDay: day)
         let planned = try await repository.addPlannedExercise(Self.makePlanned(dayId: day.id, exerciseId: exercise.id))
-        let targets = PlannedExerciseTargets(sets: 5, reps: RepRange(min: 5, max: 5), restSeconds: 180)
+        let targets = PlannedExerciseTargets(sets: 5, reps: RepRange(min: 5, max: 5), restSeconds: 180, startWeight: Weight(kilograms: 7.5))
 
         try await repository.renameProgram(id: program.id, name: "Сила 4×")
         try await repository.updateDay(id: day.id, name: "Жимовой день", label: nil)
@@ -135,6 +135,26 @@ struct ProgramRepositoryImplTests {
         await #expect(throws: ProgramError.notFound) {
             _ = try await repository.addDay(Self.makeDay(programId: UUID(), name: "День", label: nil))
         }
+    }
+
+    @Test func storesStartWeightAndTargetDuration() async throws {
+        let database = try DatabaseFixtures.makeDatabase()
+        let repository = ProgramRepositoryImpl(database: database)
+        var plank = DatabaseFixtures.makeExercise(load: .bodyweight)
+        plank.metric = .duration
+        try await Self.insertExercises([plank], equipment: [], into: database)
+        let program = DatabaseFixtures.makeProgram()
+        let day = Self.makeDay(programId: program.id, name: "Кор", label: nil)
+        _ = try await repository.createProgram(program, firstDay: day)
+        var planned = Self.makePlanned(dayId: day.id, exerciseId: plank.id)
+        planned.targetReps = nil
+        planned.targetDurationSeconds = 45
+        let stored = try await repository.addPlannedExercise(planned)
+        #expect(try await repository.plannedExercise(id: stored.id)?.targetDurationSeconds == 45)
+
+        let targets = PlannedExerciseTargets(sets: 2, reps: nil, restSeconds: 60, durationSeconds: 90)
+        try await repository.updateTargets(plannedExerciseId: stored.id, targets: targets)
+        #expect(try await repository.plannedExercise(id: stored.id)?.targets == targets)
     }
 
     @Test func removingFromDayKeepsOtherExercises() async throws {

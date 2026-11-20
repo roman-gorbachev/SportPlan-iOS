@@ -7,4 +7,8 @@ enum PlannedExerciseTargetsStep {
     case decrementMaximumReps
     case incrementRest
     case decrementRest
+    case incrementStartWeight
+    case decrementStartWeight
+    case incrementDuration
+    case decrementDuration
 }

@@ -14,4 +14,10 @@ struct PlannedExerciseTargetsUiData {
     let restAccessibilityText: String
     let canIncrementRest: Bool
     let canDecrementRest: Bool
+    let startWeight: PlannedExerciseStartWeightUiData?
+    let showsDuration: Bool
+    let durationText: String
+    let durationAccessibilityText: String
+    let canIncrementDuration: Bool
+    let canDecrementDuration: Bool
 }

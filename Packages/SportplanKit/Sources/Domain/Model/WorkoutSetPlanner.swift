@@ -6,6 +6,8 @@ public enum WorkoutSetPlanner {
         workoutExerciseId: UUID,
         targetSets: Int?,
         targetReps: RepRange?,
+        startWeight: Weight? = nil,
+        targetDurationSeconds: Int? = nil,
         previousSets: [SetEntry]
     ) -> [SetEntry] {
         let previousWorking = previousSets.filter { entry in
@@ -19,14 +21,26 @@ public enum WorkoutSetPlanner {
                 return plannedDraft(copying: source, metric: exercise.metric)
             }
         case let (count?, nil):
-            let draft = defaultDraft(for: exercise, targetReps: targetReps)
+            let draft = defaultDraft(
+                for: exercise,
+                targetReps: targetReps,
+                startWeight: startWeight,
+                durationSeconds: targetDurationSeconds
+            )
             drafts = Array(repeating: draft, count: count)
         case (nil, .some):
             drafts = previousWorking.map { entry in
                 return plannedDraft(copying: entry, metric: exercise.metric)
             }
         case (nil, nil):
-            drafts = [defaultDraft(for: exercise, targetReps: targetReps)]
+            drafts = [
+                defaultDraft(
+                    for: exercise,
+                    targetReps: targetReps,
+                    startWeight: startWeight,
+                    durationSeconds: targetDurationSeconds
+                ),
+            ]
         }
         return drafts.enumerated().map { position, draft in
             return makeEntry(draft: draft, workoutExerciseId: workoutExerciseId, position: position, isWarmup: false)
@@ -43,7 +57,11 @@ public enum WorkoutSetPlanner {
         } else if !isWarmup, let previous = item.previousWorkingSets.first {
             draft = plannedDraft(copying: previous, metric: item.exercise.metric)
         } else {
-            draft = defaultDraft(for: item.exercise, targetReps: item.workoutExercise.targetReps)
+            draft = defaultDraft(
+                for: item.exercise,
+                targetReps: item.workoutExercise.targetReps,
+                durationSeconds: item.workoutExercise.targetDurationSeconds
+            )
         }
         return makeEntry(
             draft: draft,
@@ -53,13 +71,19 @@ public enum WorkoutSetPlanner {
         )
     }
 
-    public static func defaultDraft(for exercise: LibraryExercise, targetReps: RepRange?) -> SetEntryDraft {
+    public static func defaultDraft(
+        for exercise: LibraryExercise,
+        targetReps: RepRange?,
+        startWeight: Weight? = nil,
+        durationSeconds: Int? = nil
+    ) -> SetEntryDraft {
         switch exercise.metric {
         case .weightReps:
             let reps = targetReps ?? PlannedExerciseTargets(defaultsFor: exercise.exercise).reps
-            return SetEntryDraft(weight: exercise.minimumWeight, reps: reps?.min, durationSeconds: nil)
+            let weight = Swift.max(startWeight ?? exercise.minimumWeight, exercise.minimumWeight)
+            return SetEntryDraft(weight: weight, reps: reps?.min, durationSeconds: nil)
         case .duration:
-            return SetEntryDraft(weight: exercise.minimumWeight, reps: nil, durationSeconds: nil)
+            return SetEntryDraft(weight: exercise.minimumWeight, reps: nil, durationSeconds: durationSeconds)
         }
     }
 

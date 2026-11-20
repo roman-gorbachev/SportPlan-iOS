@@ -29,7 +29,9 @@ public struct AddExerciseToDayUseCase: Sendable {
             position: 0,
             targetSets: resolvedTargets.sets,
             targetReps: resolvedTargets.reps,
-            restSeconds: resolvedTargets.restSeconds
+            restSeconds: resolvedTargets.restSeconds,
+            startWeight: resolvedTargets.startWeight,
+            targetDurationSeconds: resolvedTargets.durationSeconds
         )
         return try await programRepository.addPlannedExercise(plannedExercise)
     }

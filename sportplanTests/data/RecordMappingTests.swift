@@ -42,7 +42,8 @@ struct RecordMappingTests {
         let exercise = DatabaseFixtures.makeExercise(load: .bodyweight)
         let program = DatabaseFixtures.makeProgram()
         let day = DatabaseFixtures.makeDay(programId: program.id)
-        let planned = DatabaseFixtures.makePlannedExercise(dayId: day.id, exerciseId: exercise.id)
+        var planned = DatabaseFixtures.makePlannedExercise(dayId: day.id, exerciseId: exercise.id)
+        planned.startWeight = Weight(kilograms: 42.5)
         let fetched = try database.writer.write { db in
             try ExerciseRecord(exercise).insert(db)
             try ProgramRecord(program).insert(db)
@@ -65,7 +66,16 @@ struct RecordMappingTests {
         let program = DatabaseFixtures.makeProgram()
         let day = DatabaseFixtures.makeDay(programId: program.id)
         let workout = DatabaseFixtures.makeWorkout(day: day, finishedAt: nil)
-        let workoutExercise = DatabaseFixtures.makeWorkoutExercise(workoutId: workout.id, exerciseId: exercise.id)
+        let workoutExercise = WorkoutExercise(
+            id: UUID(),
+            workoutId: workout.id,
+            exerciseId: exercise.id,
+            position: 0,
+            targetSets: 2,
+            targetReps: nil,
+            restSeconds: Exercise.defaultRestSeconds,
+            targetDurationSeconds: 45
+        )
         let entry = DatabaseFixtures.makeSet(workoutExerciseId: workoutExercise.id)
         let fetched = try database.writer.write { db in
             try ExerciseRecord(exercise).insert(db)

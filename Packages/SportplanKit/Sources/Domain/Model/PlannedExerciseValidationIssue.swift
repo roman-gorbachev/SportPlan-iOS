@@ -4,4 +4,8 @@ public enum PlannedExerciseValidationIssue: Hashable, Sendable {
     case repsOutOfRange
     case repsNotAllowed
     case restOutOfRange
+    case startWeightNotAllowed
+    case startWeightOutOfRange
+    case durationOutOfRange
+    case durationNotAllowed
 }

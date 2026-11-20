@@ -96,21 +96,45 @@ struct ProgramDayViewModelsTests {
         ))
         let target = PlannedExerciseGoalsTarget(
             plannedExerciseId: planned.id,
-            exerciseName: fixture.plank.name,
+            exercise: LibraryExercise(exercise: fixture.plank, equipment: nil),
             dayTitle: "A · Грудь и трицепс",
-            exerciseRestSeconds: fixture.plank.restSeconds,
             targets: planned.targets
         )
         let viewModel = Self.makeGoals(target: target, database: fixture.database)
-        #expect(try Self.goalsData(viewModel).targets.showsReps == false)
+        let data = try Self.goalsData(viewModel)
+        #expect(data.targets.showsReps == false)
+        #expect(data.targets.startWeight == nil)
+        #expect(data.targets.showsDuration)
+        #expect(data.targets.durationText == "1:00")
 
         viewModel.step(.incrementSets)
         viewModel.step(.incrementRest)
+        viewModel.step(.incrementDuration)
         #expect(await viewModel.save())
         let stored = try await ProgramRepositoryImpl(database: fixture.database).plannedExercise(id: planned.id)
         #expect(stored?.targetSets == 4)
         #expect(stored?.restSeconds == 75)
         #expect(stored?.targetReps == nil)
+        #expect(stored?.targetDurationSeconds == 65)
+    }
+
+    @Test func goalsStoreTheStartWeight() async throws {
+        let fixture = try await Self.makeFixture()
+        let repository = ProgramRepositoryImpl(database: fixture.database)
+        let planned = try await repository.addPlannedExercise(DatabaseFixtures.makePlannedExercise(dayId: fixture.day.id, exerciseId: fixture.bench.id))
+        let target = PlannedExerciseGoalsTarget(
+            plannedExerciseId: planned.id,
+            exercise: LibraryExercise(exercise: fixture.bench, equipment: nil),
+            dayTitle: "A · Грудь и трицепс",
+            targets: planned.targets
+        )
+        let viewModel = Self.makeGoals(target: target, database: fixture.database)
+        #expect(try Self.goalsData(viewModel).targets.startWeight?.canDecrement == false)
+        viewModel.step(.incrementStartWeight)
+        viewModel.step(.incrementStartWeight)
+        #expect(try Self.goalsData(viewModel).targets.startWeight?.valueText == "5 кг")
+        #expect(await viewModel.save())
+        #expect(try await repository.plannedExercise(id: planned.id)?.startWeight == Weight(kilograms: 5))
     }
 
     @Test func goalsRepBoundsPullEachOtherAndRemoveWorks() async throws {
@@ -119,9 +143,8 @@ struct ProgramDayViewModelsTests {
         let planned = try await repository.addPlannedExercise(DatabaseFixtures.makePlannedExercise(dayId: fixture.day.id, exerciseId: fixture.bench.id))
         let target = PlannedExerciseGoalsTarget(
             plannedExerciseId: planned.id,
-            exerciseName: fixture.bench.name,
+            exercise: LibraryExercise(exercise: fixture.bench, equipment: nil),
             dayTitle: "A · Грудь и трицепс",
-            exerciseRestSeconds: fixture.bench.restSeconds,
             targets: PlannedExerciseTargets(sets: 3, reps: RepRange(min: 8, max: 8), restSeconds: 90)
         )
         let viewModel = Self.makeGoals(target: target, database: fixture.database)

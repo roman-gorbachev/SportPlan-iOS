@@ -28,6 +28,28 @@ struct PlannedExerciseTargetsSteppers: View {
                     }
                 }
             }
+            if data.showsDuration {
+                ValueStepper(
+                    title: String(localized: "goals.duration"),
+                    value: data.durationText,
+                    accessibilityValue: data.durationAccessibilityText,
+                    canDecrement: data.canDecrementDuration,
+                    canIncrement: data.canIncrementDuration,
+                    onDecrement: { onStep(.decrementDuration) },
+                    onIncrement: { onStep(.incrementDuration) }
+                )
+            }
+            if let startWeight = data.startWeight {
+                ValueStepper(
+                    title: startWeight.title,
+                    value: startWeight.valueText,
+                    accessibilityValue: startWeight.accessibilityText,
+                    canDecrement: startWeight.canDecrement,
+                    canIncrement: startWeight.canIncrement,
+                    onDecrement: { onStep(.decrementStartWeight) },
+                    onIncrement: { onStep(.incrementStartWeight) }
+                )
+            }
         }
     }
 

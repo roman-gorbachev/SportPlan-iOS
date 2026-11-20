@@ -32,18 +32,24 @@ enum ProgramFormatting {
     }
 
     static func targetText(_ targets: PlannedExerciseTargets) -> String {
-        guard let reps = targets.reps else {
-            return setsText(targets.sets)
+        if let reps = targets.reps {
+            return String(localized: "plannedExercise.target \(targets.sets) \(repsText(reps))")
         }
-        return String(localized: "plannedExercise.target \(targets.sets) \(repsText(reps))")
+        if let durationSeconds = targets.durationSeconds {
+            return String(localized: "plannedExercise.target \(targets.sets) \(RestFormatting.clock(seconds: durationSeconds))")
+        }
+        return setsText(targets.sets)
     }
 
     static func targetSpokenText(_ targets: PlannedExerciseTargets) -> String {
         let sets = setsText(targets.sets)
-        guard let reps = targets.reps else {
-            return sets
+        if let reps = targets.reps {
+            return String(localized: "plannedExercise.target.spoken \(sets) \(repsText(reps))")
         }
-        return String(localized: "plannedExercise.target.spoken \(sets) \(repsText(reps))")
+        if let durationSeconds = targets.durationSeconds {
+            return String(localized: "plannedExercise.target.duration.spoken \(sets) \(RestFormatting.spoken(seconds: durationSeconds))")
+        }
+        return sets
     }
 
     static func detailText(_ item: PlannedExerciseItem) -> String {
@@ -53,6 +59,11 @@ enum ProgramFormatting {
             return String(localized: "format.dotSeparated \(timed) \(rest)")
         }
         let load = item.exercise.equipment?.name ?? String(localized: "plannedExercise.bodyweight")
-        return String(localized: "format.dotSeparated \(rest) \(load)")
+        let restAndLoad = String(localized: "format.dotSeparated \(rest) \(load)")
+        guard let startWeight = item.plannedExercise.startWeight else {
+            return restAndLoad
+        }
+        let start = String(localized: "plannedExercise.startWeight \(WeightFormatting.kilograms(startWeight))")
+        return String(localized: "format.dotSeparated \(start) \(restAndLoad)")
     }
 }

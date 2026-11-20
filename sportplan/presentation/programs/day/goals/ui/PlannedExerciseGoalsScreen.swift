@@ -12,7 +12,12 @@ struct PlannedExerciseGoalsScreen: View {
             Section {
                 PlannedExerciseTargetsSteppers(data: data.targets, onStep: onStep)
             } footer: {
-                hint(data.targets.showsReps ? String(localized: "goals.reps.hint") : String(localized: "goals.timed.hint"))
+                VStack(alignment: .leading, spacing: Spacing.xxs) {
+                    hint(data.targets.showsReps ? String(localized: "goals.reps.hint") : String(localized: "goals.timed.hint"))
+                    if data.targets.startWeight != nil {
+                        hint(String(localized: "goals.startWeight.hint"))
+                    }
+                }
             }
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets())

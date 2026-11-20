@@ -41,7 +41,8 @@ public struct StartWorkoutFromDayUseCase: Sendable {
                 position: position,
                 targetSets: planned.targetSets,
                 targetReps: planned.targetReps,
-                restSeconds: planned.restSeconds
+                restSeconds: planned.restSeconds,
+                targetDurationSeconds: planned.targetDurationSeconds
             )
             let previousSets = try await workoutRepository.previousSets(exerciseId: item.exercise.id)
             exercises.append(workoutExercise)
@@ -50,6 +51,8 @@ public struct StartWorkoutFromDayUseCase: Sendable {
                 workoutExerciseId: workoutExercise.id,
                 targetSets: planned.targetSets,
                 targetReps: planned.targetReps,
+                startWeight: planned.startWeight,
+                targetDurationSeconds: planned.targetDurationSeconds,
                 previousSets: previousSets
             )
         }

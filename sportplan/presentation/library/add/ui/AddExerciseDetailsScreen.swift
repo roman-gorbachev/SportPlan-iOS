@@ -73,6 +73,12 @@ struct AddExerciseDetailsScreen: View {
                     PlannedExerciseTargetsSteppers(data: dayTargets, onStep: onDayTargetsStep)
                 } header: {
                     ListSectionHeader(title: dayContextTitle)
+                } footer: {
+                    if dayTargets.startWeight != nil {
+                        Text(String(localized: "goals.startWeight.hint"))
+                            .appStyle(Typography.footnote)
+                            .foregroundStyle(Palette.textSecondary)
+                    }
                 }
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets())

@@ -21,12 +21,12 @@ final class PlannedExerciseGoalsViewModel {
         self.target = target
         self.updateTargets = updateTargets
         self.removePlannedExercise = removePlannedExercise
-        targets = target.targets
+        targets = target.targets.normalized(for: target.exercise.metric)
         publish()
     }
 
     func step(_ step: PlannedExerciseTargetsStep) {
-        targets.apply(step)
+        targets.apply(step, scale: target.exercise.weightScale)
         publish()
     }
 
@@ -72,11 +72,11 @@ final class PlannedExerciseGoalsViewModel {
     }
 
     private func publish() {
-        let exerciseRest = RestFormatting.clock(seconds: target.exerciseRestSeconds)
+        let exerciseRest = RestFormatting.clock(seconds: target.exercise.exercise.restSeconds)
         goalsUiState = .success(data: PlannedExerciseGoalsUiData(
-            exerciseName: target.exerciseName,
+            exerciseName: target.exercise.exercise.name,
             subtitle: String(localized: "goals.subtitle \(target.dayTitle)"),
-            targets: targets.uiData,
+            targets: targets.uiData(for: target.exercise.metric, scale: target.exercise.weightScale),
             restHint: String(localized: "goals.rest.hint \(exerciseRest)"),
             canSave: !isSaving,
             isShowingError: isShowingError

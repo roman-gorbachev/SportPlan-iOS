@@ -31,7 +31,9 @@ final class AddExerciseViewModel {
         self.observeEquipmentChoices = observeEquipmentChoices
         self.createExercise = createExercise
         self.addExerciseToDay = addExerciseToDay
-        dayTargets = PlannedExerciseTargets(defaultsFor: .weightReps, restSeconds: Exercise.defaultRestSeconds)
+        var dayTargets = PlannedExerciseTargets(defaultsFor: .weightReps, restSeconds: Exercise.defaultRestSeconds)
+        dayTargets.durationSeconds = PlannedExerciseTargets.defaultDurationSeconds
+        self.dayTargets = dayTargets
         switch target {
         case .blank:
             draft = ExerciseDraft(loadKind: Self.placeholderLoadKind)
@@ -121,7 +123,7 @@ final class AddExerciseViewModel {
     }
 
     func stepDayTargets(_ step: PlannedExerciseTargetsStep) {
-        dayTargets.apply(step)
+        dayTargets.apply(step, scale: weightScale)
         publish()
     }
 
@@ -153,10 +155,23 @@ final class AddExerciseViewModel {
     private var resolvedDayTargets: PlannedExerciseTargets {
         var targets = dayTargets
         targets.restSeconds = draft.restSeconds
-        if draft.metric == .duration {
-            targets.reps = nil
+        if let weightScale, let startWeight = targets.startWeight, startWeight > weightScale.minimum {
+            targets.startWeight = startWeight
+        } else {
+            targets.startWeight = nil
         }
-        return targets
+        return targets.normalized(for: draft.metric)
+    }
+
+    private var weightScale: WeightScale? {
+        guard draft.loadKind.equipmentKind != nil else {
+            return WeightScale(equipment: nil)
+        }
+        return equipmentChoices.first { equipment in
+            return equipment.id == draft.equipmentId
+        }.map { equipment in
+            return WeightScale(equipment: equipment)
+        }
     }
 
     private func publish() {
@@ -183,7 +198,7 @@ final class AddExerciseViewModel {
                 return String(localized: "addExercise.dayContext \(context.title)")
             },
             dayTargets: dayContext.map { _ in
-                return resolvedDayTargets.uiData
+                return resolvedDayTargets.uiData(for: draft.metric, scale: weightScale)
             },
             canSave: !isSaving && draft.isValid,
             isShowingSaveError: isShowingSaveError

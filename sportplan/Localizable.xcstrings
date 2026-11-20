@@ -973,6 +973,17 @@
         }
       }
     },
+    "goals.duration" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Время подхода"
+          }
+        }
+      }
+    },
     "goals.remove" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1072,6 +1083,50 @@
         }
       }
     },
+    "goals.startWeight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Стартовый вес"
+          }
+        }
+      }
+    },
+    "goals.startWeight.added" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доп. вес"
+          }
+        }
+      }
+    },
+    "goals.startWeight.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вес для первой тренировки, пока нет прошлых подходов. Дальше подставляется прошлый результат."
+          }
+        }
+      }
+    },
+    "goals.startWeight.value %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ кг"
+          }
+        }
+      }
+    },
     "goals.subtitle %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1089,7 +1144,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Упражнение на время: повторов нет, длительность записывает секундомер на тренировке."
+            "value" : "Упражнение на время: повторов нет. Время подхода — цель для таймера на тренировке."
           }
         }
       }
@@ -1215,6 +1270,17 @@
         }
       }
     },
+    "gym.row.platformPair %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Платформа %1$@ кг · шаг %2$@ кг"
+          }
+        }
+      }
+    },
     "gym.row.platformWeights %@ %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1243,7 +1309,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "шаг %@"
+            "value" : "шаг %@ кг"
           }
         }
       }
@@ -1254,7 +1320,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ · %2$@"
+            "value" : "Гриф %1$@ кг · шаг %2$@ кг"
           }
         }
       }
@@ -1692,6 +1758,17 @@
         }
       }
     },
+    "plannedExercise.startWeight %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "старт %@ кг"
+          }
+        }
+      }
+    },
     "plannedExercise.target %lld %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1699,6 +1776,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$lld × %2$@"
+          }
+        }
+      }
+    },
+    "plannedExercise.target.duration.spoken %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, время подхода: %2$@"
           }
         }
       }
@@ -2094,7 +2182,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Тап — подходы, повторы и отдых в этом дне. Свайп влево — убрать из дня, порядок — «Править»."
+            "value" : "Тап — подходы, повторы, стартовый вес и отдых в этом дне. Свайп влево — убрать из дня, порядок — «Править»."
           }
         }
       }

@@ -60,4 +60,42 @@ struct MigrationTests {
         }
         #expect(storedId == equipment.id.uuidString.lowercased())
     }
+
+    @Test func versionTwoKeepsPlannedRowsAndAddsEmptyTargets() throws {
+        let queue = try DatabaseQueue()
+        try AppDatabase.migrator.migrate(queue, upTo: "v1")
+        let ids = (exercise: UUID().databaseText, program: UUID().databaseText, day: UUID().databaseText, planned: UUID().databaseText)
+        try queue.write { db in
+            try db.execute(
+                sql: "INSERT INTO exercise (id, name, metric, created_at) VALUES (?, 'Жим', 'weight_reps', '2026-11-20 10:00:00.000')",
+                arguments: [ids.exercise]
+            )
+            try db.execute(
+                sql: "INSERT INTO program (id, name, position, created_at) VALUES (?, 'Сила', 0, '2026-11-20 10:00:00.000')",
+                arguments: [ids.program]
+            )
+            try db.execute(sql: "INSERT INTO program_day (id, program_id, name, position) VALUES (?, ?, 'A', 0)", arguments: [ids.day, ids.program])
+            try db.execute(
+                sql: """
+                    INSERT INTO planned_exercise (id, program_day_id, exercise_id, position, target_sets, target_reps_min, target_reps_max, rest_sec)
+                    VALUES (?, ?, ?, 0, 3, 8, 12, 90)
+                    """,
+                arguments: [ids.planned, ids.day, ids.exercise]
+            )
+        }
+        try AppDatabase.migrator.migrate(queue)
+        try queue.write { db in
+            let record = try #require(try PlannedExerciseRecord.fetchOne(db, sql: "SELECT * FROM planned_exercise"))
+            let planned = try record.toDomainModel()
+            #expect(planned.targetSets == 3)
+            #expect(planned.startWeight == nil)
+            #expect(planned.targetDurationSeconds == nil)
+            #expect(throws: DatabaseError.self) {
+                try db.execute(sql: "UPDATE planned_exercise SET start_weight_g = 0")
+            }
+            #expect(throws: DatabaseError.self) {
+                try db.execute(sql: "UPDATE planned_exercise SET target_duration_sec = 0")
+            }
+        }
+    }
 }

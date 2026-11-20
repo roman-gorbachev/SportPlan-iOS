@@ -8,6 +8,9 @@ enum EquipmentFormatting {
             return String(localized: "gym.row.stepShort \(step)")
         }
         let base = WeightFormatting.kilograms(equipment.baseWeight)
+        if equipment.kind == .plateLoadedMachine {
+            return String(localized: "gym.row.platformPair \(base) \(step)")
+        }
         return String(localized: "gym.row.weightsPair \(base) \(step)")
     }
 

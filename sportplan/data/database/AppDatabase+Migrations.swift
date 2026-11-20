@@ -4,6 +4,7 @@ import GRDB
 
 nonisolated extension AppDatabase {
     private static let schemaV1 = "v1"
+    private static let schemaV2 = "v2"
     private static let defaultRestSeconds = 90
     private static let minimumReps = 1
     private static let minimumSets = 1
@@ -15,6 +16,9 @@ nonisolated extension AppDatabase {
         migrator.registerMigration(schemaV1) { db in
             try createSchemaV1(db)
             try seedStandardPlates(db)
+        }
+        migrator.registerMigration(schemaV2) { db in
+            try addPlannedStartWeightAndDuration(db)
         }
         return migrator
     }
@@ -123,6 +127,14 @@ nonisolated extension AppDatabase {
                 weight_g INTEGER NOT NULL UNIQUE CHECK (weight_g BETWEEN \(plateMinimumGrams) AND \(plateMaximumGrams)),
                 color_hex TEXT NOT NULL CHECK (color_hex GLOB '#[0-9A-F][0-9A-F][0-9A-F][0-9A-F][0-9A-F][0-9A-F]')
             );
+            """)
+    }
+
+    private static func addPlannedStartWeightAndDuration(_ db: Database) throws {
+        try db.execute(sql: """
+            ALTER TABLE planned_exercise ADD COLUMN start_weight_g INTEGER CHECK (start_weight_g IS NULL OR start_weight_g > 0);
+            ALTER TABLE planned_exercise ADD COLUMN target_duration_sec INTEGER CHECK (target_duration_sec IS NULL OR target_duration_sec > 0);
+            ALTER TABLE workout_exercise ADD COLUMN target_duration_sec INTEGER CHECK (target_duration_sec IS NULL OR target_duration_sec > 0);
             """)
     }
 

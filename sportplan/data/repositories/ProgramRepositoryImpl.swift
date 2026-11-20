@@ -137,7 +137,9 @@ nonisolated final class ProgramRepositoryImpl: ProgramRepository {
                     Column("target_sets").set(to: targets.sets),
                     Column("target_reps_min").set(to: targets.reps?.min),
                     Column("target_reps_max").set(to: targets.reps?.max),
-                    Column("rest_sec").set(to: targets.restSeconds)
+                    Column("rest_sec").set(to: targets.restSeconds),
+                    Column("start_weight_g").set(to: targets.startWeight?.grams),
+                    Column("target_duration_sec").set(to: targets.durationSeconds)
                 )
             guard updated > 0 else {
                 throw ProgramError.notFound

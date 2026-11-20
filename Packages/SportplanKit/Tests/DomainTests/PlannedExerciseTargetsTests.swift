@@ -84,4 +84,61 @@ struct PlannedExerciseTargetsTests {
         targets.decrementRest()
         #expect(targets.restSeconds == Exercise.maximumRestSeconds - Exercise.restStepSeconds)
     }
+
+    @Test func durationDefaultsToOneMinuteAndStepsByFiveSeconds() {
+        var targets = PlannedExerciseTargets(defaultsFor: .duration, restSeconds: 60)
+        #expect(targets.durationSeconds == 60)
+        targets.incrementDuration()
+        #expect(targets.durationSeconds == 65)
+        targets = PlannedExerciseTargets(sets: 3, reps: nil, restSeconds: 60, durationSeconds: 5)
+        #expect(targets.canDecrementDuration == false)
+        targets.decrementDuration()
+        #expect(targets.durationSeconds == 5)
+        targets = PlannedExerciseTargets(sets: 3, reps: nil, restSeconds: 60, durationSeconds: 600)
+        #expect(targets.canIncrementDuration == false)
+    }
+
+    @Test func durationAndStartWeightDependOnMetric() {
+        let reps = RepRange(min: 8, max: 12)
+        let weight = Weight(kilograms: 40)
+        #expect(PlannedExerciseTargets(sets: 3, reps: reps, restSeconds: 90, startWeight: weight).validationIssues(for: .weightReps).isEmpty)
+        #expect(PlannedExerciseTargets(sets: 3, reps: reps, restSeconds: 90, durationSeconds: 60).validationIssues(for: .weightReps) == [.durationNotAllowed])
+        #expect(PlannedExerciseTargets(sets: 3, reps: nil, restSeconds: 90, startWeight: weight).validationIssues(for: .duration) == [.startWeightNotAllowed])
+        #expect(PlannedExerciseTargets(sets: 3, reps: nil, restSeconds: 90, durationSeconds: 4).validationIssues(for: .duration) == [.durationOutOfRange])
+        #expect(PlannedExerciseTargets(sets: 3, reps: nil, restSeconds: 90, durationSeconds: 601).validationIssues(for: .duration) == [.durationOutOfRange])
+        #expect(PlannedExerciseTargets(sets: 3, reps: reps, restSeconds: 90, startWeight: .zero).validationIssues(for: .weightReps) == [.startWeightOutOfRange])
+    }
+
+    @Test func normalizedKeepsOnlyTheFieldsOfTheMetric() {
+        let mixed = PlannedExerciseTargets(sets: 3, reps: nil, restSeconds: 90, startWeight: Weight(kilograms: 40), durationSeconds: nil)
+        let timed = mixed.normalized(for: .duration)
+        #expect(timed.startWeight == nil)
+        #expect(timed.durationSeconds == PlannedExerciseTargets.defaultDurationSeconds)
+        #expect(timed.validationIssues(for: .duration).isEmpty)
+        let lifted = timed.normalized(for: .weightReps)
+        #expect(lifted.durationSeconds == nil)
+        #expect(lifted.reps == RepRange(min: 8, max: 12))
+    }
+
+    @Test func startWeightStepsByTheEquipmentFromTheBar() {
+        let scale = DomainFixtures.makeLibraryExercise().weightScale
+        var targets = PlannedExerciseTargets(sets: 3, reps: RepRange(min: 8, max: 12), restSeconds: 90)
+        #expect(targets.startWeight(on: scale) == Weight(kilograms: 20))
+        #expect(targets.canDecrementStartWeight(on: scale) == false)
+        targets.incrementStartWeight(on: scale)
+        targets.incrementStartWeight(on: scale)
+        #expect(targets.startWeight == Weight(kilograms: 25))
+        targets.decrementStartWeight(on: scale)
+        targets.decrementStartWeight(on: scale)
+        #expect(targets.startWeight == nil)
+    }
+
+    @Test func bodyweightStartWeightIsAddedWeightFromZero() {
+        let scale = DomainFixtures.makeLibraryExercise(name: "Подтягивания", kind: nil).weightScale
+        var targets = PlannedExerciseTargets(sets: 3, reps: RepRange(min: 5, max: 8), restSeconds: 90)
+        #expect(scale.isAddedWeight)
+        #expect(targets.startWeight(on: scale) == .zero)
+        targets.incrementStartWeight(on: scale)
+        #expect(targets.startWeight == Weight(kilograms: 2.5))
+    }
 }
