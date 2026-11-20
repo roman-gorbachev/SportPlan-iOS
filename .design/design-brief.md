@@ -132,7 +132,7 @@ Canvas: https://claude.ai/artifact/HfYdf17DiKLv8MoVk1qzQJ · a snapshot of the s
 - **Step 2 — done.** Design system: color (light and dark theme tokens, AA), typography (Sofia Sans Condensed for numerals and headings + Onest for text, Dynamic Type), spacing, corner radii, lines, icons, motion, haptics. Components: set row (5 states; variants by equipment and metric), stepper (equipment step), rest timer, set stopwatch, Live Activity and Dynamic Island for the whole workout, progression hint, note, heatmap (5 levels), charts and records for the three exercise types, record badge, empty states, "My gym".
 - **Step 3 — draft, awaiting review.** The "Workout" screen: active workout (light, dark, AX1), day picker, empty state. Rep targets are a range, planned set rows. Settings open from a gear on this tab; the "…" menu — add exercise / cancel workout.
 - **Step 4 — draft, awaiting review.** Programs (list, empty, day, AX1); exercise library (list, empty with quick adding, archiving, adding in 2 steps); History (GitHub-style heatmap over 15 weeks, list, workout details, empty, AX1); exercise card (with equipment, bodyweight, time, no data, AX1); settings (main, import confirmation, "My gym" with data and empty, AX1).
-- **Step 5 — draft, awaiting review.** Live Activity on the lock screen (set, rest, rest is over; light and dark), Dynamic Island (compact, minimal, expanded with a plate stack). Icon: variant A "Small step" was shipped as a placeholder; on 20.11.2026 the app was named **Žym** and a new icon is briefed in `icon-brief.md` (awaiting design).
+- **Step 5 — draft, awaiting review.** Live Activity on the lock screen (set, rest, rest is over; light and dark), Dynamic Island (compact, minimal, expanded with a plate stack). Icon: variant A "Small step" was shipped as a placeholder; on 20.11.2026 the app was named **Dužy** and a new icon is briefed in `icon-brief.md` (awaiting design).
 
 ## Decisions made (17.11.2026)
 
@@ -144,7 +144,7 @@ Canvas: https://claude.ai/artifact/HfYdf17DiKLv8MoVk1qzQJ · a snapshot of the s
 - The default exercise rest is 90 s for all kinds and is not filled in from the subtype. The subtype fills in only the equipment ("My gym" filter) and the metric. Rest can be changed in a specific program day.
 - Heatmap — a GitHub-style grid over the last 15 weeks (columns are weeks, rows are days starting Monday), without day numbers. Records are marked in the workout list, not in the grid.
 - The numeral and heading font is Sofia Sans Condensed (OFL, native Cyrillic): narrow numerals like the markings on plates and competition scoreboards. Unbounded was rejected — it looks like a typical "AI font". The interface text is Onest. Check tabular figures (tnum) when wiring it up.
-- The app name is **Žym** (20.11.2026): Belarusian Łacinka for «жым», the press, read close to *gym*. Variant A "Small step" (the bar end with a small plate) reads as a plunger at small sizes and is replaced; the new icon — the háček over the Z drawn as a bending loaded bar — is briefed in `icon-brief.md`.
+- The app name is **Dužy** (20.11.2026): Belarusian Łacinka for «дужы», strong, read like *doozy* in English. Variant A "Small step" (the bar end with a small plate) reads as a plunger at small sizes and is replaced; the new icon — a loaded barbell bending under its weight, no letters — is briefed in `icon-brief.md`.
 
 ## Changes after the architecture discussion (17.11.2026)
 

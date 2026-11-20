@@ -447,11 +447,12 @@ plate              id, weight_g UNIQUE CHECK(250…50000), color_hex
 - A new canvas export into `.design/` may overwrite the translated `design-brief.md` and `README.md`; check them after an export.
 
 ## App name and icon idea (20.11.2026)
-- The app is named **Žym**: Belarusian Łacinka for «жым», the press («žym ležačy» — bench press). To an English reader it sounds almost like *gym*, so one syllable ties the app to the gym and to the Belarusian language. Rejected: Dužy (strong / *doozy*, weaker link to the gym), Krok (step, no Belarusian trace in the spelling), Žaleza (iron, long and hard to say in English).
-- Spelled with the háček everywhere a person reads it (home screen, App Store); `zym` in file names, URLs and search.
-- App Store check: no app is named exactly "Zym"; close ones are Zymmechanix ("Zym" in its subtitle), ZymFit and ZYM Mobile.
+- The app is named **Dužy**: Belarusian Łacinka for «дужы», strong. To an English reader it sounds like *doozy* — something outstanding — so the name plays on both languages and fits a strength tracker.
+- First choice was **Žym** («жым», the press, read close to *gym*). Dropped the same day: a lone Z on the icon reads as the Russian military "Z" symbol, and Ž at the start of the name recalls the slogan "Žyve Belarus". A training tracker should carry neither association. In Dužy the ž sits lowercase in the middle of the word. Also rejected: Krok (step, no Belarusian trace in the spelling), Žaleza (iron, long and hard to say in English).
+- Spelled with the háček everywhere a person reads it (home screen, App Store); `duzy` in file names, URLs and search.
+- App Store check: no app is named "Dužy" or "Duzy"; the closest is Doozy — Daily To Do's, a to-do list.
+- The icon has no letters: a loaded barbell bending under its weight, seen whole with both plates so it no longer reads as a plunger. Variant A "Small step" reads as a toilet plunger at small sizes and has no link to the name. The brief for the designer is `.design/icon-brief.md`; Claude writes the brief and does not draw the icon.
 - The renaming waits for the new icon. The bundle id and target names never change: on a free account a new bundle id is a new app, and the data on the phone would be lost. The GitHub repository stays `SportPlan-iOS`.
-- Icon variant A "Small step" reads as a toilet plunger at small sizes and has no link to the name. The new icon is briefed for the designer in `.design/icon-brief.md`: the háček over the Z is a loaded barbell bending under weight. Claude writes the brief and does not draw the icon.
 
 ## Этапы
 0. Решения ✔
