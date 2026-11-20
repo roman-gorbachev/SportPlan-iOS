@@ -50,6 +50,28 @@ nonisolated final class ExerciseRepositoryImpl: ExerciseRepository {
         }
     }
 
+    func update(_ exercise: Exercise) async throws {
+        try await database.writer.write { db in
+            try ExerciseRecord(exercise).update(db)
+        }
+    }
+
+    func hasCompletedSets(exerciseId: UUID) async throws -> Bool {
+        return try await database.reader.read { db in
+            return try Bool.fetchOne(
+                db,
+                sql: """
+                    SELECT EXISTS (
+                        SELECT 1 FROM set_entry
+                        JOIN workout_exercise ON workout_exercise.id = set_entry.workout_exercise_id
+                        WHERE workout_exercise.exercise_id = ? AND set_entry.completed_at IS NOT NULL
+                    )
+                    """,
+                arguments: [exerciseId.databaseText]
+            ) ?? false
+        }
+    }
+
     func programDayCount(usingExerciseId id: UUID) async throws -> Int {
         return try await database.reader.read { db in
             return try Int.fetchOne(

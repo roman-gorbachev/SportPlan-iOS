@@ -8,6 +8,7 @@ struct LibraryScreen: View {
     let onQuickAdd: (QuickExercise) -> Void
     let onAddCustom: () -> Void
     let onOpenExercise: (UUID) -> Void
+    let onEdit: (UUID) -> Void
     let onArchive: (UUID) -> Void
     let onConfirmArchive: (UUID) -> Void
     let onCancelArchive: () -> Void
@@ -49,6 +50,14 @@ struct LibraryScreen: View {
                                 DestructiveSwipeButton(title: String(localized: "library.archive"), systemImage: "archivebox") {
                                     onArchive(item.id)
                                 }
+                                Button {
+                                    onEdit(item.id)
+                                } label: {
+                                    return Label(String(localized: "exercise.edit"), systemImage: "pencil")
+                                }
+                                .labelStyle(.iconOnly)
+                                .tint(Palette.accent)
+                                .accessibilityLabel(String(localized: "exercise.edit"))
                             }
                             .confirmationDialog(
                                 archiveTitle,
@@ -120,6 +129,7 @@ struct LibraryScreen: View {
             onQuickAdd: { _ in },
             onAddCustom: {},
             onOpenExercise: { _ in },
+            onEdit: { _ in },
             onArchive: { _ in },
             onConfirmArchive: { _ in },
             onCancelArchive: {},
@@ -139,6 +149,7 @@ struct LibraryScreen: View {
             onQuickAdd: { _ in },
             onAddCustom: {},
             onOpenExercise: { _ in },
+            onEdit: { _ in },
             onArchive: { _ in },
             onConfirmArchive: { _ in },
             onCancelArchive: {},

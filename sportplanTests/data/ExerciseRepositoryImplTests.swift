@@ -107,4 +107,42 @@ struct ExerciseRepositoryImplTests {
         #expect(counts.2 == 1)
         #expect(counts.3 == true)
     }
+
+    @Test func updateRewritesTheExercise() async throws {
+        let database = try DatabaseFixtures.makeDatabase()
+        let repository = ExerciseRepositoryImpl(database: database)
+        var exercise = DatabaseFixtures.makeExercise(load: .bodyweight)
+        try await repository.create(exercise)
+        exercise.name = "Подтягивания с паузой"
+        exercise.description = "Пауза вверху"
+        exercise.metric = .duration
+        exercise.restSeconds = Exercise.maximumRestSeconds
+        try await repository.update(exercise)
+        #expect(try await repository.exercise(id: exercise.id) == exercise)
+    }
+
+    @Test func completedSetsCountOnlyWhenCompleted() async throws {
+        let database = try DatabaseFixtures.makeDatabase()
+        let repository = ExerciseRepositoryImpl(database: database)
+        let exercise = DatabaseFixtures.makeExercise(load: .bodyweight)
+        let workout = DatabaseFixtures.makeWorkout(day: nil, finishedAt: nil)
+        let workoutExercise = DatabaseFixtures.makeWorkoutExercise(workoutId: workout.id, exerciseId: exercise.id)
+        var plannedSet = DatabaseFixtures.makeSet(workoutExerciseId: workoutExercise.id)
+        plannedSet.completedAt = nil
+        let pendingSet = plannedSet
+        try await database.writer.write { db in
+            try ExerciseRecord(exercise).insert(db)
+            try WorkoutRecord(workout).insert(db)
+            try WorkoutExerciseRecord(workoutExercise).insert(db)
+            try SetEntryRecord(pendingSet).insert(db)
+        }
+        #expect(try await repository.hasCompletedSets(exerciseId: exercise.id) == false)
+        var completedSet = DatabaseFixtures.makeSet(workoutExerciseId: workoutExercise.id)
+        completedSet.position = 1
+        let finishedSet = completedSet
+        try await database.writer.write { db in
+            try SetEntryRecord(finishedSet).insert(db)
+        }
+        #expect(try await repository.hasCompletedSets(exerciseId: exercise.id))
+    }
 }

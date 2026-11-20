@@ -34,6 +34,24 @@ public struct ExerciseDraft: Hashable, Sendable {
         self.description = description
     }
 
+    public init(exercise: Exercise, loadKind: ExerciseLoadKind) {
+        let equipmentId: UUID?
+        switch exercise.load {
+        case .bodyweight:
+            equipmentId = nil
+        case let .equipment(id):
+            equipmentId = id
+        }
+        self.init(
+            name: exercise.name,
+            loadKind: loadKind,
+            equipmentId: equipmentId,
+            metric: exercise.metric,
+            restSeconds: exercise.restSeconds,
+            description: exercise.description ?? ""
+        )
+    }
+
     public init(quickExercise: QuickExercise, name: String) {
         self.init(name: name, loadKind: quickExercise.loadKind, metric: quickExercise.metric)
     }

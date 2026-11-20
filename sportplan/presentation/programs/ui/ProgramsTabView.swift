@@ -20,11 +20,17 @@ struct ProgramsTabView: View {
                         return container.buildAddExerciseViewModel(target: target, dayContext: nil)
                     },
                     makeEquipmentEditorViewModel: container.buildEquipmentEditorViewModel,
+                    makeExerciseEditorViewModel: container.buildExerciseEditorViewModel,
                     onOpenExercise: { exerciseId in router.push(ExerciseCardDestination(exerciseId: exerciseId)) }
                 )
             }
             .navigationDestination(for: ExerciseCardDestination.self) { destination in
-                return ExerciseCardRoute(viewModel: container.buildExerciseCardViewModel(exerciseId: destination.exerciseId))
+                return ExerciseCardRoute(
+                    viewModel: container.buildExerciseCardViewModel(exerciseId: destination.exerciseId),
+                    exerciseId: destination.exerciseId,
+                    makeEditorViewModel: container.buildExerciseEditorViewModel,
+                    onArchived: { router.pop() }
+                )
             }
             .navigationDestination(for: ProgramDayDestination.self) { destination in
                 return ProgramDayRoute(

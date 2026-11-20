@@ -619,6 +619,17 @@
         }
       }
     },
+    "exercise.edit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Править"
+          }
+        }
+      }
+    },
     "exercise.metric.duration" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -925,6 +936,105 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "exerciseEditor.equipment.header.barbell" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оборудование · только грифы"
+          }
+        }
+      }
+    },
+    "exerciseEditor.equipment.header.dumbbell" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оборудование · только гантели"
+          }
+        }
+      }
+    },
+    "exerciseEditor.equipment.header.plateLoadedMachine" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оборудование · только тренажёры с блинами"
+          }
+        }
+      }
+    },
+    "exerciseEditor.equipment.header.selectorizedMachine" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оборудование · только блочные тренажёры"
+          }
+        }
+      }
+    },
+    "exerciseEditor.equipment.locked.barbell" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "По упражнению уже есть подходы, поэтому гриф можно сменить только на другой гриф."
+          }
+        }
+      }
+    },
+    "exerciseEditor.equipment.locked.dumbbell" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "По упражнению уже есть подходы, поэтому гантели можно сменить только на другие гантели."
+          }
+        }
+      }
+    },
+    "exerciseEditor.equipment.locked.plateLoadedMachine" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "По упражнению уже есть подходы, поэтому тренажёр можно сменить только на другой тренажёр с блинами."
+          }
+        }
+      }
+    },
+    "exerciseEditor.equipment.locked.selectorizedMachine" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "По упражнению уже есть подходы, поэтому тренажёр можно сменить только на другой блочный тренажёр."
+          }
+        }
+      }
+    },
+    "exerciseEditor.metric.locked.accessibility %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Метрика: %@, нельзя изменить — есть подходы"
           }
         }
       }

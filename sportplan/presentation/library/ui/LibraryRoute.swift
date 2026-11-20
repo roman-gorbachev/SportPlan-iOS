@@ -4,19 +4,23 @@ import SwiftUI
 struct LibraryRoute: View {
     @State private var viewModel: LibraryViewModel
     @State private var addTarget: AddExerciseTarget?
+    @State private var editorTarget: ExerciseEditorTarget?
     private let makeAddExerciseViewModel: (AddExerciseTarget) -> AddExerciseViewModel
     private let makeEquipmentEditorViewModel: (EquipmentEditorTarget) -> EquipmentEditorViewModel
+    private let makeExerciseEditorViewModel: (UUID) -> ExerciseEditorViewModel
     private let onOpenExercise: (UUID) -> Void
 
     init(
         viewModel: LibraryViewModel,
         makeAddExerciseViewModel: @escaping (AddExerciseTarget) -> AddExerciseViewModel,
         makeEquipmentEditorViewModel: @escaping (EquipmentEditorTarget) -> EquipmentEditorViewModel,
+        makeExerciseEditorViewModel: @escaping (UUID) -> ExerciseEditorViewModel,
         onOpenExercise: @escaping (UUID) -> Void
     ) {
         _viewModel = State(initialValue: viewModel)
         self.makeAddExerciseViewModel = makeAddExerciseViewModel
         self.makeEquipmentEditorViewModel = makeEquipmentEditorViewModel
+        self.makeExerciseEditorViewModel = makeExerciseEditorViewModel
         self.onOpenExercise = onOpenExercise
     }
 
@@ -32,6 +36,7 @@ struct LibraryRoute: View {
                     onQuickAdd: { quickExercise in addTarget = .quick(quickExercise) },
                     onAddCustom: { addTarget = .blank },
                     onOpenExercise: onOpenExercise,
+                    onEdit: { exerciseId in editorTarget = ExerciseEditorTarget(exerciseId: exerciseId) },
                     onArchive: requestArchive,
                     onConfirmArchive: confirmArchive,
                     onCancelArchive: viewModel.cancelArchive,
@@ -58,6 +63,13 @@ struct LibraryRoute: View {
                 viewModel: makeAddExerciseViewModel(target),
                 makeEquipmentEditorViewModel: makeEquipmentEditorViewModel,
                 onClose: { addTarget = nil }
+            )
+        }
+        .sheet(item: $editorTarget) { target in
+            return ExerciseEditorRoute(
+                viewModel: makeExerciseEditorViewModel(target.exerciseId),
+                onClose: { editorTarget = nil },
+                onArchived: { editorTarget = nil }
             )
         }
     }

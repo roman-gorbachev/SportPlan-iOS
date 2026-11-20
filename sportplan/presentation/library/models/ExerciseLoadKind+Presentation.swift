@@ -44,4 +44,34 @@ extension ExerciseLoadKind {
             return nil
         }
     }
+
+    var editorEquipmentHeader: String? {
+        switch self {
+        case .equipment(.barbell):
+            return String(localized: "exerciseEditor.equipment.header.barbell")
+        case .equipment(.dumbbell):
+            return String(localized: "exerciseEditor.equipment.header.dumbbell")
+        case .equipment(.plateLoadedMachine):
+            return String(localized: "exerciseEditor.equipment.header.plateLoadedMachine")
+        case .equipment(.selectorizedMachine):
+            return String(localized: "exerciseEditor.equipment.header.selectorizedMachine")
+        case .bodyweight:
+            return nil
+        }
+    }
+
+    var editorEquipmentLockHint: String? {
+        switch self {
+        case .equipment(.barbell):
+            return String(localized: "exerciseEditor.equipment.locked.barbell")
+        case .equipment(.dumbbell):
+            return String(localized: "exerciseEditor.equipment.locked.dumbbell")
+        case .equipment(.plateLoadedMachine):
+            return String(localized: "exerciseEditor.equipment.locked.plateLoadedMachine")
+        case .equipment(.selectorizedMachine):
+            return String(localized: "exerciseEditor.equipment.locked.selectorizedMachine")
+        case .bodyweight:
+            return nil
+        }
+    }
 }
