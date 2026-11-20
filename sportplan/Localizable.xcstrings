@@ -3777,7 +3777,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Файл из более новой версии приложения — обнови Sportplan."
+            "value" : "Файл из более новой версии приложения — обнови Dužy."
           }
         }
       }
@@ -3799,7 +3799,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Не удалось прочитать файл. Нужен JSON, экспортированный из Sportplan."
+            "value" : "Не удалось прочитать файл. Нужен JSON, экспортированный из Dužy."
           }
         }
       }
@@ -3832,7 +3832,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Данные Sportplan"
+            "value" : "Данные Dužy"
           }
         }
       }

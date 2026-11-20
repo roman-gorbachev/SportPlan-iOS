@@ -1,11 +1,11 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/icon-dark.png">
-    <img src="docs/assets/icon-light.png" width="128" height="128" alt="Sportplan app icon">
+    <img src="docs/assets/icon-light.png" width="128" height="128" alt="Dužy app icon">
   </picture>
 </p>
 
-<h1 align="center">Sportplan</h1>
+<h1 align="center">Dužy</h1>
 
 <p align="center">
   A minimalist offline strength-training tracker for iPhone.<br>
@@ -24,7 +24,9 @@
 
 ## Why
 
-Most workout apps grow into social feeds, calorie counters and subscription funnels. Sportplan does three things and tries to do them well in a gym: hold your training program, record sets fast with one hand between sets, and show how you are progressing. Everything else stays out.
+*Dužy* is Belarusian (Łacinka) for «дужы» — strong; in English it sounds like *doozy*.
+
+Most workout apps grow into social feeds, calorie counters and subscription funnels. Dužy does three things and tries to do them well in a gym: hold your training program, record sets fast with one hand between sets, and show how you are progressing. Everything else stays out.
 
 ## Features
 
@@ -98,6 +100,6 @@ To run on your own iPhone, set your team in Signing & Capabilities. The app uses
 
 ## License
 
-Sportplan is source-available under the [PolyForm Noncommercial License 1.0.0](LICENSE.md): you can read, build, modify and use it for any noncommercial purpose. Selling it or publishing it to an app store is not allowed. For other uses, open an issue.
+Dužy is source-available under the [PolyForm Noncommercial License 1.0.0](LICENSE.md): you can read, build, modify and use it for any noncommercial purpose. Selling it or publishing it to an app store is not allowed. For other uses, open an issue.
 
 Bundled third-party parts keep their own licenses: the Sofia Sans Condensed and Onest fonts are under the SIL Open Font License (see `Packages/SportplanKit/Sources/DesignSystem/Resources/Fonts`), and GRDB is under the MIT License.

@@ -20,17 +20,17 @@ The order comes from `docs/code-brief.md` ("Stages"). The DB schema for the whol
 - Review 2 fixes, block 7: creating an exercise from the picker as steps in the stack (C1), editing an exercise from the library and the card, the exercise menu in a workout, "Archive" with "Restore" (C2).
 - 11 — history and heatmap: a 15-week heatmap, a list by month with records, a day screen, workout details with deletion.
 - 12 — JSON export and import: "Data" in settings, export via the share sheet, import with validation and confirmation, blocked during a workout.
-- App icon placeholder: variant A "Small step" — default, dark and tinted (dark and tinted not checked on a device); to be replaced by the Dužy icon.
+- App icon: the bending loaded bar from `screens/AppIcon` — default, dark and tinted; the app is renamed to Dužy.
 
 All stages from `docs/code-brief.md` are implemented.
 
 ## Remaining
 | # | Block | Scope | Status |
 |---|---|---|---|
-| — | Rename to Dužy | Home-screen name `Dužy`, the three «Sportplan» strings in `Localizable.xcstrings`, backup file prefix `sportplan-` → `duzy-` in `ExportBackupUseCase` and `BackupUseCaseTests`, the new icon in `AppIcon`, README and docs. Bundle id, targets and the repository stay. | After the new icon |
+| ✓ | Rename to Dužy | Home-screen name `Dužy`, the three «Sportplan» strings in `Localizable.xcstrings`, backup file prefix `sportplan-` → `duzy-` in `ExportBackupUseCase` and `BackupUseCaseTests`, the new icon in `AppIcon`, README and docs. Bundle id, targets and the repository stay. | Done |
 
 ## Waiting for mockups
-- The app icon for Dužy — `.design/icon-brief.md`.
+- None.
 
 ## After the app is implemented
 Small fixes — once all stages are done.

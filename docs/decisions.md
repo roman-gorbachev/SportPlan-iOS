@@ -454,6 +454,10 @@ plate              id, weight_g UNIQUE CHECK(250…50000), color_hex
 - The icon has no letters: a loaded barbell bending under its weight, seen whole with both plates so it no longer reads as a plunger. Variant A "Small step" reads as a toilet plunger at small sizes and has no link to the name. The brief for the designer is `.design/icon-brief.md`; Claude writes the brief and does not draw the icon.
 - The renaming waits for the new icon. The bundle id and target names never change: on a free account a new bundle id is a new app, and the data on the phone would be lost. The GitHub repository stays `SportPlan-iOS`.
 
+## Rename to Dužy (20.11.2026)
+- The icon is the main direction from `screens/AppIcon`: the bent bar with red plates on paper, light, dark and tinted; PNGs are rendered from the board's SVG coordinates.
+- The home screen name is `Dužy` (`INFOPLIST_KEY_CFBundleDisplayName`), the three user-facing «Sportplan» strings say Dužy, backups are named `duzy-YYYY-MM-DD.json`. Targets, bundle id, the `SportplanKit` package and the repository keep the old name.
+
 ## Этапы
 0. Решения ✔
 1. Каркас: проект, таргеты, пакет, DI, заглушки токенов, локализация, три вкладки.

@@ -1,7 +1,7 @@
 import Foundation
 
 public struct ExportBackupUseCase: Sendable {
-    private static let fileNamePrefix = "sportplan-"
+    private static let fileNamePrefix = "duzy-"
     private static let fileExtension = "json"
     private static let dateFormat = "%04d-%02d-%02d"
 

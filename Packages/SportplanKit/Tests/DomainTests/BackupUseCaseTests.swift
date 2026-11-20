@@ -24,7 +24,7 @@ struct BackupUseCaseTests {
         clock.advance(by: Self.eveningOffset)
         let calendar = try Self.makeCalendar(timeZone: "Pacific/Kiritimati")
         let export = try await ExportBackupUseCase(repository: repository, now: clock.now, calendar: calendar).execute()
-        #expect(export.fileName == "sportplan-2027-01-16.json")
+        #expect(export.fileName == "duzy-2027-01-16.json")
         #expect(export.contents == Self.contents)
         #expect(repository.exportDates == [clock.now()])
     }
@@ -33,7 +33,7 @@ struct BackupUseCaseTests {
         let repository = FakeBackupRepository()
         let calendar = try Self.makeCalendar(timeZone: "Pacific/Honolulu")
         let export = try await ExportBackupUseCase(repository: repository, now: TestClock().now, calendar: calendar).execute()
-        #expect(export.fileName == "sportplan-2027-01-14.json")
+        #expect(export.fileName == "duzy-2027-01-14.json")
     }
 
     @Test func readPassesTheCandidateThrough() async throws {
