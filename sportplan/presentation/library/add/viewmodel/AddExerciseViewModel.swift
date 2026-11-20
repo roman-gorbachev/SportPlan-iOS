@@ -132,9 +132,9 @@ final class AddExerciseViewModel {
         publish()
     }
 
-    func save() async -> Bool {
+    func save() async -> Exercise? {
         guard !isSaving, draft.isValid else {
-            return false
+            return nil
         }
         isSaving = true
         publish()
@@ -143,12 +143,12 @@ final class AddExerciseViewModel {
             if let dayContext {
                 _ = try await addExerciseToDay.execute(exerciseId: exercise.id, dayId: dayContext.dayId, targets: resolvedDayTargets)
             }
-            return true
+            return exercise
         } catch {
             isSaving = false
             isShowingSaveError = true
             publish()
-            return false
+            return nil
         }
     }
 

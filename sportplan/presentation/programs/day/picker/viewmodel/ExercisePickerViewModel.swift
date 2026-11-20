@@ -100,6 +100,14 @@ final class ExercisePickerViewModel {
         }
     }
 
+    func addCreatedExercise(id: UUID) async -> Bool {
+        guard case .workout = target.destination else {
+            return false
+        }
+        await add(exerciseId: id)
+        return !isShowingError
+    }
+
     func dismissError() {
         isShowingError = false
         publish()

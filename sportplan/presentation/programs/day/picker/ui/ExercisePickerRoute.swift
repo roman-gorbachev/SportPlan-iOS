@@ -1,8 +1,11 @@
+import Domain
+import Observation
 import SwiftUI
 
 struct ExercisePickerRoute: View {
     @State private var viewModel: ExercisePickerViewModel
-    @State private var addTarget: AddExerciseTarget?
+    @State private var path: [AddExerciseStep] = []
+    @State private var creation = PickerCreation()
     private let makeAddExerciseViewModel: (AddExerciseTarget) -> AddExerciseViewModel
     private let makeEquipmentEditorViewModel: (EquipmentEditorTarget) -> EquipmentEditorViewModel
     private let onClose: () -> Void
@@ -20,7 +23,7 @@ struct ExercisePickerRoute: View {
     }
 
     var body: some View {
-        return NavigationStack {
+        return NavigationStack(path: $path) {
             return Group {
                 switch viewModel.pickerUiState {
                 case .loading:
@@ -30,7 +33,7 @@ struct ExercisePickerRoute: View {
                         data: data,
                         onSearchQueryChange: viewModel.updateSearchQuery,
                         onAdd: add,
-                        onCreate: { addTarget = .blank },
+                        onCreate: startCreating,
                         onDismissError: viewModel.dismissError
                     )
                 case .error:
@@ -41,12 +44,24 @@ struct ExercisePickerRoute: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    return Button(String(localized: "picker.new"), systemImage: "plus") {
-                        addTarget = .blank
-                    }
+                    return Button(String(localized: "picker.new"), systemImage: "plus", action: startCreating)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     return Button(String(localized: "common.done"), action: onClose)
+                }
+            }
+            .navigationDestination(for: AddExerciseStep.self) { step in
+                return Group {
+                    if let addViewModel = creation.viewModel {
+                        AddExerciseStepDestination(
+                            step: step,
+                            viewModel: addViewModel,
+                            makeEquipmentEditorViewModel: makeEquipmentEditorViewModel,
+                            onCancel: nil,
+                            onContinue: { path.append(.details) },
+                            onSaved: finishCreating
+                        )
+                    }
                 }
             }
         }
@@ -56,13 +71,6 @@ struct ExercisePickerRoute: View {
         .task {
             await viewModel.observeAddedExercises()
         }
-        .sheet(item: $addTarget) { target in
-            return AddExerciseRoute(
-                viewModel: makeAddExerciseViewModel(target),
-                makeEquipmentEditorViewModel: makeEquipmentEditorViewModel,
-                onClose: { addTarget = nil }
-            )
-        }
     }
 
     private func add(_ exerciseId: UUID) {
@@ -70,4 +78,24 @@ struct ExercisePickerRoute: View {
             await viewModel.add(exerciseId: exerciseId)
         }
     }
+
+    private func startCreating() {
+        creation.viewModel = makeAddExerciseViewModel(.blank)
+        path = [.type]
+    }
+
+    private func finishCreating(_ exercise: Exercise) {
+        Task {
+            if await viewModel.addCreatedExercise(id: exercise.id) {
+                onClose()
+            } else {
+                path = []
+            }
+        }
+    }
+}
+
+@Observable
+private final class PickerCreation {
+    var viewModel: AddExerciseViewModel?
 }

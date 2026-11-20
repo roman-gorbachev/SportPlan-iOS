@@ -209,7 +209,7 @@ struct AddExerciseViewModelTests {
                 return try record.toDomainModel()
             }
         }
-        #expect(saved)
+        #expect(saved?.name == QuickExercise.dip.title)
         #expect(exercises.map(\.name) == [QuickExercise.dip.title])
         #expect(exercises.first?.load == .bodyweight)
         #expect(exercises.first?.description == nil)
@@ -234,7 +234,7 @@ struct AddExerciseViewModelTests {
 
         let data = try Self.data(of: viewModel)
         #expect(data.dayTargets?.showsReps == false)
-        #expect(await viewModel.save())
+        #expect(await viewModel.save() != nil)
 
         let planned = try await database.reader.read { db in
             return try PlannedExerciseRecord.fetchAll(db).map { record in

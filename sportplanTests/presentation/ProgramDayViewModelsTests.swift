@@ -46,15 +46,28 @@ struct ProgramDayViewModelsTests {
     }
 
     private static func makePicker(dayId: UUID, database: AppDatabase) -> ExercisePickerViewModel {
+        let workouts = WorkoutRepositoryImpl(database: database)
+        return makePicker(
+            destination: .day(id: dayId, shortTitle: "A", fullTitle: "A · Грудь и трицепс"),
+            database: database,
+            store: ActiveWorkoutStore(observeActiveWorkout: ObserveActiveWorkoutUseCase(repository: workouts))
+        )
+    }
+
+    private static func makePicker(
+        destination: ExercisePickerDestination,
+        database: AppDatabase,
+        store: ActiveWorkoutStore
+    ) -> ExercisePickerViewModel {
         let programs = ProgramRepositoryImpl(database: database)
         let exercises = ExerciseRepositoryImpl(database: database)
         let workouts = WorkoutRepositoryImpl(database: database)
         return ExercisePickerViewModel(
-            target: ExercisePickerTarget(destination: .day(id: dayId, shortTitle: "A", fullTitle: "A · Грудь и трицепс")),
+            target: ExercisePickerTarget(destination: destination),
             observeExerciseLibrary: ObserveExerciseLibraryUseCase(repository: exercises),
             observeProgramDay: ObserveProgramDayUseCase(repository: programs),
             addExerciseToDay: AddExerciseToDayUseCase(programRepository: programs, exerciseRepository: exercises),
-            workoutStore: ActiveWorkoutStore(observeActiveWorkout: ObserveActiveWorkoutUseCase(repository: workouts)),
+            workoutStore: store,
             addExerciseToWorkout: AddExerciseToWorkoutUseCase(
                 workoutRepository: workouts,
                 exerciseRepository: exercises,
@@ -190,5 +203,42 @@ struct ProgramDayViewModelsTests {
             return try PlannedExerciseRecord.fetchCount(db)
         }
         #expect(plannedCount == 2)
+    }
+
+    @Test func exerciseCreatedFromTheWorkoutPickerJoinsTheWorkout() async throws {
+        let fixture = try await Self.makeFixture()
+        let workouts = WorkoutRepositoryImpl(database: fixture.database)
+        try await StartEmptyWorkoutUseCase(repository: workouts, now: { return Date() }).execute()
+        let workoutId = try #require(try await workouts.activeWorkout()?.workout.id)
+        let store = ActiveWorkoutStore(observeActiveWorkout: ObserveActiveWorkoutUseCase(repository: workouts))
+        let viewModel = Self.makePicker(destination: .workout(id: workoutId), database: fixture.database, store: store)
+        let tasks = [
+            Task {
+                await store.observe()
+            },
+            Task {
+                await viewModel.observeLibrary()
+            },
+            Task {
+                await viewModel.observeAddedExercises()
+            },
+        ]
+        defer {
+            tasks.forEach { task in task.cancel() }
+        }
+        _ = try #require(try await Self.pickerUntil(viewModel) { data in
+            return !data.sections.isEmpty
+        })
+
+        #expect(await viewModel.addCreatedExercise(id: fixture.plank.id))
+        let exerciseIds = try await workouts.activeWorkout()?.exercises.map(\.exercise.id)
+        #expect(exerciseIds == [fixture.plank.id])
+    }
+
+    @Test func exerciseCreatedFromTheDayPickerKeepsThePickerOpen() async throws {
+        let fixture = try await Self.makeFixture()
+        let viewModel = Self.makePicker(dayId: fixture.day.id, database: fixture.database)
+
+        #expect(await viewModel.addCreatedExercise(id: fixture.plank.id) == false)
     }
 }
