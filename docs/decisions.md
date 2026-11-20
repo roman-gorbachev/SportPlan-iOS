@@ -446,6 +446,13 @@ plate              id, weight_g UNIQUE CHECK(250…50000), color_hex
 - The `.dc.html` mockups and the app UI strings (`Localizable.xcstrings`, source language `ru`) stay Russian.
 - A new canvas export into `.design/` may overwrite the translated `design-brief.md` and `README.md`; check them after an export.
 
+## App name and icon idea (20.11.2026)
+- The app is named **Žym**: Belarusian Łacinka for «жым», the press («žym ležačy» — bench press). To an English reader it sounds almost like *gym*, so one syllable ties the app to the gym and to the Belarusian language. Rejected: Dužy (strong / *doozy*, weaker link to the gym), Krok (step, no Belarusian trace in the spelling), Žaleza (iron, long and hard to say in English).
+- Spelled with the háček everywhere a person reads it (home screen, App Store); `zym` in file names, URLs and search.
+- App Store check: no app is named exactly "Zym"; close ones are Zymmechanix ("Zym" in its subtitle), ZymFit and ZYM Mobile.
+- The renaming waits for the new icon. The bundle id and target names never change: on a free account a new bundle id is a new app, and the data on the phone would be lost. The GitHub repository stays `SportPlan-iOS`.
+- Icon variant A "Small step" reads as a toilet plunger at small sizes and has no link to the name. The new icon is briefed for the designer in `.design/icon-brief.md`: the háček over the Z is a loaded barbell bending under weight. Claude writes the brief and does not draw the icon.
+
 ## Этапы
 0. Решения ✔
 1. Каркас: проект, таргеты, пакет, DI, заглушки токенов, локализация, три вкладки.

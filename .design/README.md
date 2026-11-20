@@ -1,6 +1,6 @@
 # .design — design canvas snapshot
 
-A snapshot of the "Workout tracker" canvas sources as of 17.11.2026. The brief is `design-brief.md` in this same folder.
+A snapshot of the "Workout tracker" canvas sources as of 17.11.2026. The brief is `design-brief.md` in this same folder; the app icon has its own `icon-brief.md`.
 Live version (to view and edit): https://claude.ai/artifact/HfYdf17DiKLv8MoVk1qzQJ
 
 ## What these files are
